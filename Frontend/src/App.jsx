@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Components/LandingDoc/Landing';
 import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
-
+import Footer from './Components/Footer.jsx';
 
 // Routes handler : saurabh sharma
 const App = () => {
@@ -13,8 +13,6 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log("App render");
-
     return () => {
       console.log("unmount");
       localStorage.removeItem("firstTime");
@@ -28,6 +26,7 @@ const App = () => {
         <Route path='/landing' element={<Landing />} />
         <Route path='/check/landing' element={<Landing />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }
