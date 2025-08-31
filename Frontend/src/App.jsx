@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Components/LandingDoc/Landing';
 import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
 import Footer from './Components/Footer.jsx';
@@ -20,14 +20,14 @@ const App = () => {
   }, [])
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path='/' element={<GemnaLogoDisplay />} />
         <Route path='/landing' element={<Landing />} />
         <Route path='/check/landing' element={<Landing />} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
