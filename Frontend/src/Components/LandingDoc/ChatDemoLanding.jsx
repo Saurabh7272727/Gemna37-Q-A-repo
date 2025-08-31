@@ -30,7 +30,7 @@ const ChatDemoLanding = () => {
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <h1 className='text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Connect with Gemna.ai</h1>
+                                    <h1 className='text-white text-[10px] md:text-[19px] font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Connect with Gemna.ai</h1>
                                 </TimelineContent>
                             </TimelineItem>
                             <TimelineItem>
@@ -39,7 +39,7 @@ const ChatDemoLanding = () => {
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <h1 className='text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Select role</h1>
+                                    <h1 className='text-white text-[10px] md:text-[19px] font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Select role</h1>
                                 </TimelineContent>
                             </TimelineItem>
                             <TimelineItem>
@@ -48,7 +48,7 @@ const ChatDemoLanding = () => {
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <h1 className='text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>join classes</h1>
+                                    <h1 className='text-white text-[10px] md:text-[19px] font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>join classes</h1>
                                 </TimelineContent>
                             </TimelineItem>
                             <TimelineItem>
@@ -56,7 +56,7 @@ const ChatDemoLanding = () => {
                                     <TimelineDot />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <h1 className='text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>select team</h1>
+                                    <h1 className='text-white text-[10px] md:text-[19px] font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>select team</h1>
                                 </TimelineContent>
                             </TimelineItem>
                             <TimelineItem>
@@ -64,7 +64,7 @@ const ChatDemoLanding = () => {
                                     <TimelineDot />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <h1 className='text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>share task and issuse</h1>
+                                    <h1 className='text-white text-[10px] md:text-[19px] font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>share task and issuse</h1>
                                 </TimelineContent>
                             </TimelineItem>
                         </Timeline>

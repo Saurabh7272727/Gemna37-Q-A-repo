@@ -24,7 +24,6 @@ const App = () => {
       <Routes>
         <Route path='/' element={<GemnaLogoDisplay />} />
         <Route path='/landing' element={<Landing />} />
-        <Route path='/check/landing' element={<Landing />} />
       </Routes>
       <Footer />
     </HashRouter>
