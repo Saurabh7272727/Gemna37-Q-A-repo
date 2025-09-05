@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import ShowSectionList from './ShowSectionList';
+import HeroSection from './Lists/HeroSection';
+import ProblemSection from './Lists/ProblemSection.jsx';
+import SolutionSection from './Lists/SolutionSection.jsx';
+import FeaturesSection from './Lists/FeaturesSection.jsx';
+import HowItWorksSection from './Lists/HowItWorkSection.jsx';
 const Product = () => {
     const { pathname } = useLocation();
     // set querys on tap bar
@@ -47,7 +52,26 @@ const Product = () => {
 
 
 
+    const SwitchHandlerFunction = () => {
+        switch (section.queryData) {
+            case "Hero Section":
+                return <HeroSection />
+                break;
+            case "The Problem Section":
+                return <ProblemSection />
+                break;
+            case "The Solution Section":
+                return <SolutionSection />
+                break;
+            case "Core Features Section(The Pillars of Gemna":
+                return <FeaturesSection />
+                break;
+            case "How it Works Section":
+                return <HowItWorksSection />
+                break;
 
+        }
+    }
     return (
         <>
             <div className='w-[100vw] md:h-[100vh] h-auto  pt-[100px] bg-gray-900 flex justify-center items-center gap-x-4 md:pt-8'>
@@ -63,8 +87,14 @@ const Product = () => {
                     }
                 </div>
                 <div className='md:w-[60%] h-[90%] hidden md:inline bg-white rounded-md'>
-                    <div></div>
-                    <div></div>
+                    <div className='w-[100%] h-[30px] border border-b-2 border-gray-500 pl-3'>
+                        <span>{`Folder: ${pathname}`}</span>
+                    </div>
+                    <div className='w-[100%] h-[97%]'>
+                        {
+                            SwitchHandlerFunction()
+                        }
+                    </div>
                 </div>
             </div>
         </>
