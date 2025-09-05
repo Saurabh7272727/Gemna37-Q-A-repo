@@ -161,10 +161,10 @@ const Feature = () => {
                 <div className="mt-32 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold mb-12">Trusted by Global Leaders</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        <StatItem number="10M+" label="Daily Users" />
+                        <StatItem number="Q&A Test" label="Daily Users" />
                         <StatItem number="99.9%" label="Uptime" />
-                        <StatItem number="150+" label="Countries" />
-                        <StatItem number="24/7" label="Support" />
+                        <StatItem number="India" label="Countries" />
+                        <StatItem number="24/7" label="Live access" />
                     </div>
                 </div>
             </div>

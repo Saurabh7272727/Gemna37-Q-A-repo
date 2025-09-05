@@ -8,6 +8,8 @@ import Header from './Components/Header.jsx';
 // import Feature from './Components/Feature.jsx';
 
 const Feature = lazy(() => import('./Components/Feature.jsx'));
+const Product = lazy(() => import('./Components/Product/Product.jsx'));
+
 
 // Routes handler : saurabh sharma
 const App = () => {
@@ -33,6 +35,11 @@ const App = () => {
         <Route path='/Features' element={
           <Suspense fallback={<LazyLaodingDemo />}>
             <Feature />
+          </Suspense>
+        } />
+        <Route path='/Product' element={
+          <Suspense fallback={<LazyLaodingDemo />}>
+            <Product />
           </Suspense>
         } />
         {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
