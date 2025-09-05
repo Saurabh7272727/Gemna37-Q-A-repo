@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { lazy, Suspense, useEffect } from 'react'
 import Home from '../../Pages/Home.jsx';
-import ShowFeatureInLanding from './ShowFeatureInLanding.jsx';
-import ChatDemoLanding from './ChatDemoLanding.jsx';
+// import ShowFeatureInLanding from './ShowFeatureInLanding.jsx';
+// lazy approach 
+const ShowFeatureInLanding = lazy(() => import('./ShowFeatureInLanding.jsx'));
+const ChatDemoLanding = lazy(() => import('./ChatDemoLanding.jsx'));
 
 const Landing = () => {
     const dataSet = [
@@ -21,7 +23,7 @@ const Landing = () => {
             text: "Keep every detail of a project centralized in real time so up-to-date info can flow freely across people, teams, and tools."
         },
         {
-            pictureSource: "../../../gg.png",
+            pictureSource: "https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922285/gg_lw9l3e.png",
             title: "Gemna.ai , Know your feeling about us",
             text: "We are supporting your goal and provide a enivorment to work with real world problem"
         }
@@ -33,8 +35,10 @@ const Landing = () => {
     return (
         <>
             <Home />
-            <ShowFeatureInLanding dataSet={dataSet} />
-            <ChatDemoLanding />
+            <Suspense fallback={<div style={{ color: "red", padding: "2px" }}>loading Gemna.AI log source-data</div>}>
+                <ShowFeatureInLanding dataSet={dataSet} />
+                <ChatDemoLanding />
+            </Suspense>
         </>
     )
 }
