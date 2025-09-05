@@ -72,7 +72,7 @@ const ChatDemoLanding = () => {
                         {
                             gallery?.map((pic, index) => {
                                 return (
-                                    <img className={`${index == 3 ? 'col-span-2' : ''}`} src={pic} alt="gallery image" />
+                                    <img key={pic} className={`${index == 3 ? 'col-span-2' : ''}`} src={pic} alt="gallery image" />
                                 )
                             })
                         }

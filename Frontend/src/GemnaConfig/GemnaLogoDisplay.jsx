@@ -11,7 +11,6 @@ const GemnaLogoDisplay = () => {
         navi('/landing');
     }, 3000);
 
-
     // to clear the setTimer and remove the key form local storage , when component are unmound;
     useEffect(() => {
 
