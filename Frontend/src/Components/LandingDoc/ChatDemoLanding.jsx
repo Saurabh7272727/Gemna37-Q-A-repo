@@ -9,11 +9,10 @@ import TimelineDot from '@mui/lab/TimelineDot';
 
 const ChatDemoLanding = () => {
     const gallery = [
-        '../../../public/2680195.jpg',
-        '../../../public/62352.jpg',
-        '../../../public/6nd2_y04y_230125.jpg',
-        '../../../public/full-shot-friends-reading-messages.jpg',
-        '../../../public/two-young-entrepreneurs-working-coffee-shop.jpg'
+        "https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922289/two-young-entrepreneurs-working-coffee-shop_f9feuc.jpg",
+        "https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922288/6nd2_y04y_230125_xf0dyy.jpg",
+        "https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922287/62352_dyqged.jpg",
+        "https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922287/2680195_zizuzf.jpg"
     ]
     return (
         <>

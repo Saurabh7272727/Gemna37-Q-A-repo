@@ -33,7 +33,7 @@ const GemnaLogoDisplay = () => {
         <>
             <div className="w-screen h-screen bg-white flex justify-center items-start pt-10 md:items-center md:pt-0 flex-col">
                 <img
-                    src="../../gg.png"
+                    src="https://res.cloudinary.com/dqbjfmyce/image/upload/v1756922285/gg_lw9l3e.png"
                     alt="logo of company"
                     className="w-full max-w-md mx-auto md:max-w-lg md:h-3/5"
                 />
