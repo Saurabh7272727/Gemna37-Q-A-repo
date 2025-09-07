@@ -5,6 +5,7 @@ import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
 import Footer from './Components/Footer.jsx';
 import LazyLaodingDemo from './Components/LodingSpinners/LazyLaodingDemo.jsx';
 import Header from './Components/Header.jsx';
+import ConnectGemnaPage from './Pages/ConnectGemnaPage.jsx';
 // import Feature from './Components/Feature.jsx';
 
 const Feature = lazy(() => import('./Components/Feature.jsx'));
@@ -43,6 +44,8 @@ const App = () => {
           </Suspense>
         } />
         {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
+
+        <Route path='connectGemnaPage' element={<ConnectGemnaPage />} />
       </Routes>
       <Footer />
     </HashRouter>
