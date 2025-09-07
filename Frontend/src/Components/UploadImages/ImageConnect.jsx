@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { FaIdCard } from 'react-icons/fa';
-import takeImageShower from '../../ImageProcessing/takeImageShower.js'
+import takeImageShower from '../../ImageProcessing/takeImageShower.js';
+import takeImageShowerMobileFriendly from '../../ImageProcessing/Testing.js';
+
 const ImageConnect = () => {
     const [preview, setPreview] = useState(null);
     const [show, setShow] = useState({
@@ -12,7 +14,7 @@ const ImageConnect = () => {
         setShow((e) => {
             return { ...e, loading: true }
         })
-        const result = await takeImageShower(image.target.files[0], setPreview)
+        const result = await takeImageShowerMobileFriendly(image.target.files[0], setPreview)
         console.log(result);
 
         //  { message: "upload successfully", status: 200, success: true };
