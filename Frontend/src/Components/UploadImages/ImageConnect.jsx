@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { FaIdCard } from 'react-icons/fa';
 import takeImageShower from '../../ImageProcessing/takeImageShower.js';
-import takeImageShowerMobileFriendly from '../../ImageProcessing/Testing.js';// for mobile users
+// import takeImageShowerMobileFriendly from '../../ImageProcessing/Testing.js';// for mobile users
+import { ToastContainer } from 'react-toastify';
+import Message from '../../MessageGemnaCenter/toast.js';
+
 
 const ImageConnect = () => {
     const [preview, setPreview] = useState(null);
@@ -14,18 +17,23 @@ const ImageConnect = () => {
         setShow((e) => {
             return { ...e, loading: true }
         })
-        const result = await takeImageShower(image.target.files[0], setPreview)
-        console.log(result);
 
-        //  { message: "upload successfully", status: 200, success: true };
+        const result = await takeImageShower(image.target.files[0], setPreview)
+        // console.log(result);
+
+        const message = new Message(result);
+        message.setMessage();
 
         if (result.success) {
-            //  show messages // handles result output;;;
             setShow((e) => {
                 return { ...e, complete: true }
             })
         } else {
             setPreview(null);
+            setShow({
+                complete: false,
+                loading: false
+            })
         }
     }
 
@@ -49,7 +57,7 @@ const ImageConnect = () => {
                     Upload a clear photo of your student ID card to automatically fill your information.
                 </p>
                 {
-                    preview && <img className='md:w-[40%] md:h-[20%] w-[100%] h-[30%] object-contain' src={preview} alt='uploaded image (only share jpeg & png formate)' />
+                    preview && <img className='md:w-[40%] md:h-[10%] w-[100%] h-[30%] object-contain overflow-hidden' src={preview} alt='uploaded image' />
                 }
                 <div
                     className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 transition-colors"
@@ -59,7 +67,7 @@ const ImageConnect = () => {
                         </button> :
                             <input
                                 type="file"
-                                accept="image/jpg"
+                                accept="image/jpeg image/png"
                                 className=""
                                 onChange={(e) => handlerImageShow(e)}
                                 disabled={false}
@@ -70,6 +78,9 @@ const ImageConnect = () => {
                 </div>
 
                 <div className="mt-4 text-xs text-gray-500">
+                    <p><mark>Caution : </mark>All student first are convert PDF into <mark>JPEG/PNG </mark>
+                        format '500kb' then upload at Gemna.upload <mark>Gemna PDF has not supported</mark>
+                    </p>
                     <p className='flex gap-x-3 md:flex-row flex-col'>✓ We'll extract your name, ID number, and other details automatically
                         {
                             show.complete && <button onClick={ClearHandler} className='px-6 hover:bg-green-400 text-white font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>
@@ -78,11 +89,13 @@ const ImageConnect = () => {
                         }
 
                     </p>
+
                     <p>✓ Your ID is only used for verification and is stored securely</p>
                 </div>
 
 
             </div>
+            <ToastContainer />
         </>
     )
 }
