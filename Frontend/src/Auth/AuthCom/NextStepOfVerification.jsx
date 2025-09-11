@@ -39,7 +39,7 @@ const StudentDetailsDisplay = ({ responseData }) => {
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-t-2xl p-6 text-white text-center">
                 <div className="flex items-center justify-center mb-3">
                     <FaCheckCircle className="text-3xl mr-3" />
-                    <h1 className="text-2xl font-bold">GEMID Found Successfully!</h1>
+                    <h1 className="md:text-2xl text-[17px] font-bold">GEMID Found Successfully!</h1>
                 </div>
                 <p className="text-green-100">{message}</p>
             </div>
