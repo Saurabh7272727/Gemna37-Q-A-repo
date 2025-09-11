@@ -1,0 +1,224 @@
+{
+    "ParsedResults": [
+        {
+            "TextOverlay": {
+                "Lines": [
+                    {
+                        "LineText": "GEMID - 2313054GEM453255",
+                        "Words": [
+                            {
+                                "WordText": "GEMID",
+                                "Left": 302.0,
+                                "Top": 314.0,
+                                "Height": 29.0,
+                                "Width": 127.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 440.0,
+                                "Top": 328.0,
+                                "Height": 4.0,
+                                "Width": 24.0
+                            },
+                            {
+                                "WordText": "2313054GEM453255",
+                                "Left": 476.0,
+                                "Top": 314.0,
+                                "Height": 29.0,
+                                "Width": 387.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 314.0
+                    },
+                    {
+                        "LineText": "NAME - SAURABH SHARMA",
+                        "Words": [
+                            {
+                                "WordText": "NAME",
+                                "Left": 304.0,
+                                "Top": 526.0,
+                                "Height": 29.0,
+                                "Width": 111.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 427.0,
+                                "Top": 540.0,
+                                "Height": 4.0,
+                                "Width": 24.0
+                            },
+                            {
+                                "WordText": "SAURABH",
+                                "Left": 462.0,
+                                "Top": 526.0,
+                                "Height": 29.0,
+                                "Width": 178.0
+                            },
+                            {
+                                "WordText": "SHARMA",
+                                "Left": 654.0,
+                                "Top": 526.0,
+                                "Height": 29.0,
+                                "Width": 165.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 526.0
+                    },
+                    {
+                        "LineText": "FATHER NAME - ANIL SHARMA",
+                        "Words": [
+                            {
+                                "WordText": "FATHER",
+                                "Left": 304.0,
+                                "Top": 632.0,
+                                "Height": 29.0,
+                                "Width": 140.0
+                            },
+                            {
+                                "WordText": "NAME",
+                                "Left": 460.0,
+                                "Top": 632.0,
+                                "Height": 29.0,
+                                "Width": 111.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 583.0,
+                                "Top": 646.0,
+                                "Height": 4.0,
+                                "Width": 24.0
+                            },
+                            {
+                                "WordText": "ANIL",
+                                "Left": 619.0,
+                                "Top": 632.0,
+                                "Height": 29.0,
+                                "Width": 85.0
+                            },
+                            {
+                                "WordText": "SHARMA",
+                                "Left": 715.0,
+                                "Top": 632.0,
+                                "Height": 29.0,
+                                "Width": 166.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 632.0
+                    },
+                    {
+                        "LineText": "MOTHER NAME - SANGITA SHARMA",
+                        "Words": [
+                            {
+                                "WordText": "MOTHER",
+                                "Left": 304.0,
+                                "Top": 739.0,
+                                "Height": 29.0,
+                                "Width": 162.0
+                            },
+                            {
+                                "WordText": "NAME",
+                                "Left": 482.0,
+                                "Top": 739.0,
+                                "Height": 29.0,
+                                "Width": 111.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 605.0,
+                                "Top": 753.0,
+                                "Height": 4.0,
+                                "Width": 24.0
+                            },
+                            {
+                                "WordText": "SANGITA",
+                                "Left": 640.0,
+                                "Top": 739.0,
+                                "Height": 29.0,
+                                "Width": 165.0
+                            },
+                            {
+                                "WordText": "SHARMA",
+                                "Left": 817.0,
+                                "Top": 739.0,
+                                "Height": 29.0,
+                                "Width": 165.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 739.0
+                    },
+                    {
+                        "LineText": "COURSE - B.TECH",
+                        "Words": [
+                            {
+                                "WordText": "COURSE",
+                                "Left": 302.0,
+                                "Top": 844.0,
+                                "Height": 29.0,
+                                "Width": 148.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 462.0,
+                                "Top": 858.0,
+                                "Height": 4.0,
+                                "Width": 24.0
+                            },
+                            {
+                                "WordText": "B.TECH",
+                                "Left": 500.0,
+                                "Top": 844.0,
+                                "Height": 29.0,
+                                "Width": 127.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 844.0
+                    },
+                    {
+                        "LineText": "BRANCH - IT",
+                        "Words": [
+                            {
+                                "WordText": "BRANCH",
+                                "Left": 696.0,
+                                "Top": 844.0,
+                                "Height": 29.0,
+                                "Width": 151.0
+                            },
+                            {
+                                "WordText": "-",
+                                "Left": 862.0,
+                                "Top": 860.0,
+                                "Height": 3.0,
+                                "Width": 12.0
+                            },
+                            {
+                                "WordText": "IT",
+                                "Left": 889.0,
+                                "Top": 844.0,
+                                "Height": 29.0,
+                                "Width": 30.0
+                            }
+                        ],
+                        "MaxHeight": 29.0,
+                        "MinTop": 844.0
+                    }
+                ],
+                "HasOverlay": true,
+                "Message": "Total lines: 6"
+            },
+            "TextOrientation": "0",
+            "FileParseExitCode": 1,
+            "ParsedText": "GEMID - 2313054GEM453255\r\nNAME - SAURABH SHARMA\r\nFATHER NAME - ANIL SHARMA\r\nMOTHER NAME - SANGITA SHARMA\r\nCOURSE - B.TECH\r\nBRANCH - IT\r\n",
+            "ErrorMessage": "",
+            "ErrorDetails": ""
+        }
+    ],
+    "OCRExitCode": 1,
+    "IsErroredOnProcessing": false,
+    "ProcessingTimeInMilliseconds": "390",
+    "SearchablePDFURL": "Searchable PDF not generated as it was not requested."
+}

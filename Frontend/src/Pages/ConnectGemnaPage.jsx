@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Radio from '@mui/material/Radio';
 import ImageConnect from '../Components/UploadImages/ImageConnect';
+import Message from '../MessageGemnaCenter/toast.js';
+import { ToastContainer } from 'react-toastify';
 const ConnectGemnaPage = () => {
     const [selectedValue, setSelectedValue] = React.useState(null);
 
@@ -8,6 +10,16 @@ const ConnectGemnaPage = () => {
         setSelectedValue(event.target.value);
     };
 
+
+    useEffect(() => {
+        const messageLocal = localStorage.getItem("message_local");
+        if (messageLocal) {
+            const message = new Message({ success: false, message: messageLocal });
+            message.setMessage();
+            console.log(messageLocal)
+        }
+        return () => localStorage.removeItem("message_local")
+    }, [])
     return (
         <>
             <div className='w-screen h-auto bg-gray-900 bg-red flex justify-center items-center flex-col'>
@@ -53,6 +65,7 @@ const ConnectGemnaPage = () => {
                 }
 
             </div>
+            <ToastContainer />
         </>
     )
 }
