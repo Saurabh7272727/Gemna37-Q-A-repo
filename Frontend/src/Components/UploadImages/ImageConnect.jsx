@@ -51,6 +51,7 @@ const ImageConnect = () => {
     }
 
     const UploadImageToServer = async () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         const encypte = encryptData({
             time: new Date(),
             image: preview.result,
