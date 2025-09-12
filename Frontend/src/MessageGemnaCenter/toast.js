@@ -8,9 +8,9 @@ class Message {
 
     setMessage() {
         if (this.message?.success) {
-            return toast.success(this.message.message);
+            return toast.success(this.message?.message);
         } else {
-            return toast.error(this.message.message)
+            return toast.error(this.message?.message)
         }
     }
 }

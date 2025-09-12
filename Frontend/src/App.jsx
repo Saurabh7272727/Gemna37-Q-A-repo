@@ -8,6 +8,7 @@ import Header from './Components/Header.jsx';
 import ConnectGemnaPage from './Pages/ConnectGemnaPage.jsx';
 // import Feature from './Components/Feature.jsx';
 import GemIDValidation from './Auth/AuthCom/GemIDValidation.jsx';
+import Login from './Auth/LoginUser/LoginUser.jsx'
 
 const Feature = lazy(() => import('./Components/Feature.jsx'));
 const Product = lazy(() => import('./Components/Product/Product.jsx'));
@@ -81,6 +82,7 @@ const App = () => {
         <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
         <Route path='/test' element={<Test />} />
         <Route path='/validation' element={<GemIDValidation />} />
+        <Route path='/login' element={<Login />} />
         <Route path='/error_page' element={<div>Error page</div>} />
       </Routes>
       <Footer />
