@@ -69,28 +69,22 @@ const Product = () => {
             case "How it Works Section":
                 return <HowItWorksSection />
                 break;
-
+            default:
+                return <HeroSection />
         }
     }
     return (
         <>
-            <div className='w-[100vw] md:h-[100vh] h-auto  pt-[100px] bg-gray-900 flex justify-center items-center gap-x-4 md:pt-8'>
+            <div className='w-[100vw] md:h-auto h-auto  pt-[100px] bg-gray-900 flex justify-center items-center gap-x-4 px-7 md:pt-8'>
                 <div className='md:w-[28%] w-[100%] h-[90%] md:h-[90%]  
-                rounded-md flex justify-center items-center flex-col gap-7 md:gap-6 '>
-                    {
-                        sectionData?.map((sec, index) => {
-                            return (
-                                <ShowSectionList key={sec} index={index}
-                                    sectionName={sec} setQuery={setQuery} ChangeSections={setSection} section={section} />
-                            )
-                        })
-                    }
+                rounded-md flex justify-center items-end flex-col gap-7 md:gap-6 sticky top-[300px] left-[100px] '>
+                    <ShowSectionList sectionData={sectionData} setSection={setSection} />
                 </div>
-                <div className='md:w-[60%] h-[90%] hidden md:inline bg-white rounded-md'>
+                <div className='md:w-[60%] h-auto mt-[100px] hidden md:inline bg-white rounded-md'>
                     <div className='w-[100%] h-[30px] border border-b-2 border-gray-500 pl-3'>
                         <span>{`Folder: ${pathname}`}</span>
                     </div>
-                    <div className='w-[100%] h-[97%]'>
+                    <div className='w-[100%] h-auto'>
                         {
                             SwitchHandlerFunction()
                         }

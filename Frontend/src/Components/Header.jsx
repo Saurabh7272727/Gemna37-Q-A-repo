@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { FaBarsStaggered } from "react-icons/fa6";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ImCross } from "react-icons/im";
 const navigation = [
     { name: 'Product', href: '#' },
@@ -55,9 +55,9 @@ const Header = () => {
                     ))}
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <a href="#" className="text-sm/6 font-semibold text-white">
+                    <Link to="/login" className="text-sm/6 font-semibold text-white">
                         Log in <span aria-hidden="true">&rarr;</span>
-                    </a>
+                    </Link>
                 </div>
             </nav>
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -94,12 +94,12 @@ const Header = () => {
                                 ))}
                             </div>
                             <div className="py-6">
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
                                 >
                                     Log in
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

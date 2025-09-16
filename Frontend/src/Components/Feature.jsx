@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+
 import {
     FaUserGraduate,
     FaChalkboardTeacher,
@@ -193,7 +195,11 @@ const FeatureCard = ({ feature, index }) => {
     const Icon = feature.icon;
 
     return (
-        <div className="group relative cursor-not-allowed">
+        <motion.div
+            initial={{ opacity: 0.2, x: 150 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9 }}
+            className="group relative cursor-not-allowed">
             <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl ${feature.gradient} blur-xl"></div>
 
             <div className="relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 h-full border border-gray-700/50 group-hover:border-transparent transition-all duration-500 group-hover:scale-105">
@@ -218,7 +224,7 @@ const FeatureCard = ({ feature, index }) => {
                 {/* Animated border effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

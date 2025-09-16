@@ -1,69 +1,60 @@
-import React, { lazy, useState, Suspense } from 'react'
-import { FaArrowLeft } from "react-icons/fa";
-import { FaCaretDown } from "react-icons/fa";
-import { FaCaretUp } from "react-icons/fa";
-// import { lazy } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-const HeroSection = lazy(() => import('./Lists/HeroSection.jsx'));
-const ProblemSection = lazy(() => import('./Lists/ProblemSection.jsx'))
-const SolutionSection = lazy(() => import('./Lists/SolutionSection.jsx'));
-const FeaturesSection = lazy(() => import('./Lists/FeaturesSection.jsx'))
-const ShowSectionList = ({ sectionName, setQuery, ChangeSections, index, section }) => {
+const ShowSectionList = ({ sectionData, setSection }) => {
+    const [query, setQuery] = useSearchParams();
+    const [isMobile, setIsMobile] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-    const [showSlider, setShowSlider] = useState(false);
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
-    const ShowSliderMain = () => {
-        setShowSlider(!showSlider);
-    }
-    const SwitchHandlerFunction = () => {
-        switch (section.queryData) {
-            case "Hero Section":
-                return <HeroSection />
-                break;
-            case "The Problem Section":
-                return <ProblemSection />
-                break;
-            case "The Solution Section":
-                return <SolutionSection />
-                break;
-            case "Core Features Section(The Pillars of Gemna":
-                return <FeaturesSection />
-                break;
-            case "How it Works Section":
-                return <HowItWorksSection />
-                break;
+    const handleSectionClick = (sectionName) => {
+        setQuery({ querySection: sectionName });
+        setSection((prev) => ({ ...prev, queryData: sectionName }));
 
+        // Optional: Scroll to preview on mobile
+        if (isMobile) {
+            const preview = document.getElementById('section-preview');
+            if (preview) {
+                preview.scrollIntoView({ behavior: 'smooth' });
+            }
+            setIsOpen(false); // Close mobile menu
         }
-    }
-    return (
-        <>
-            <div onClick={() => ChangeSections((sec) => {
-                setQuery({
-                    querySection: sectionName
-                })
-                return { ...sec, queryData: sectionName }
-            })}
-                className='w-[90%] md:h-[50px] h-auto rounded-md font-inter text-gray-900 subpixel-antialiased
-                 flex items-center flex-col pl-4 odd:bg-gray-200 even:bg-slate-300 cursor-pointer hover:bg-white' >
-                <div className='w-[100%] h-[45px] flex justify-between items-center'>
-                    <h1 className='md:text-[16px] text-[14px] font-semibold tracking-wide'>{`${index + 1})  ${sectionName}`}</h1>
-                    <span className='text-2xl md:w-[30%] h-[100%] text-gray-600 flex justify-end items-center pr-2'>
-                        {section.queryData === sectionName ? <FaArrowLeft /> : ""}
-                        <span onClick={() => ShowSliderMain()} className='text-2xl md:hidden'>{showSlider ? <FaCaretDown /> : <FaCaretUp />}</span>
-                    </span>
-                </div>
-                {
-                    showSlider && <div className='w-[90%] h-auto'>
-                        <Suspense fallback={<div>loading....</div>}>
-                            {
-                                SwitchHandlerFunction()
-                            }
-                        </Suspense>
-                    </div>
-                }
-            </div>
-        </>
-    )
-}
+    };
 
-export default ShowSectionList
+    return (
+        <div className="w-full">
+            {isMobile && (
+                <button
+                    className="bg-indigo-600 text-white w-full py-2 rounded-md mb-4"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    {isOpen ? 'Support in desktop' : 'Open Sections'}
+                </button>
+            )}
+
+            {(isOpen || !isMobile) && (
+                <ul className="w-full space-y-2 overflow-y-auto max-h-[70vh] px-2">
+                    {sectionData?.map((section, index) => (
+                        <li
+                            key={index}
+                            className="cursor-pointer bg-white w-full text-gray-700 hover:bg-indigo-100 py-2 px-3 rounded transition duration-150 ease-in-out text-sm text-start md:text-left"
+                            onClick={() => handleSectionClick(section)}
+                        >
+                            {section}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+};
+
+export default ShowSectionList;
