@@ -1,9 +1,10 @@
-# Project Name
+# Gemna.ai
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-A brief description of your project that explains what it does and why it’s useful.
+All Your Campus Tools. One Unified Platform.
+Streamline student profiles, attendance tracking, live classes, and team collaboration from a single dashboard.
 
 ---
 
@@ -21,7 +22,17 @@ A brief description of your project that explains what it does and why it’s us
 
 ## Description
 
-This project is a [short description]. It helps users to [key benefit]. The main goal of this project is to [objective].
+### Customize how your team’s work flows
+Set up, clean up, and automate even the most complicated project workflows.
+
+### Stay on track – even when the track changes
+Use the timeline view to map out the big picture, communicate updates to stakeholders, and ensure your team stays on the same page
+
+### Gemna.ai , Know your feeling about us
+We are supporting your goal and provide a enivorment to work with real world problem
+
+### Our Goal
+Imagine a platform where every aspect of college management—student profiles, attendance, performance tracking, live classes, team collaboration, and task scheduling—is seamlessly integrated into one intuitive system. That’s what Gemna is all abou
 
 ---
 
