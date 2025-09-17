@@ -77,12 +77,6 @@ Imagine a platform where every aspect of college management—student profiles, 
     #### OCR_KEY = *here we using OCR system (key from OCR.orgs)*
 
 
-
- ---
- ---
- ---
- ---   
-
 #  🚀 Features Overview
 
 Our system offers a wide range of features for managing and enhancing educational environments. Below is a categorized list of all features, along with their current status.
