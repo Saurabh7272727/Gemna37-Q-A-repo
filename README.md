@@ -62,5 +62,16 @@ Imagine a platform where every aspect of college management—student profiles, 
    ```bash 
    npm i --dev-save nodemon
 
+5. share a .env file structure in Frontend 
+   VITE_APP_JSON_SECRET_KEY = *your secret key (random)*
+   VITE_APP_BACKEND_URL = enter your backend URL or *example:http://localhost:PORT*
+
+6. share a .env file structure in Backend
+    PORT = *your choose*
+    CLOUD_NAME = *here we using cloudinary*
+    CLOUD_API_KEY = *API key get from cloudinary*
+    CLOUD_SECRET_KEY = *API secret key get from cloudinary*
+    OCR_KEY = *here we using OCR system (key from OCR.orgs)*
+
 
    
