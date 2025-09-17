@@ -1,4 +1,7 @@
 # Gemna.ai
+```bash
+## show demo link under the development
+https://gemna37-q-a-repo.vercel.app/
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -75,7 +78,12 @@ Imagine a platform where every aspect of college management—student profiles, 
 
 
 
-# 🚀 Features Overview
+ ---
+ ---
+ ---
+ ---   
+
+#  🚀 Features Overview
 
 Our system offers a wide range of features for managing and enhancing educational environments. Below is a categorized list of all features, along with their current status.
 
