@@ -40,6 +40,27 @@ Imagine a platform where every aspect of college management—student profiles, 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/project-name.git
+   git clone https://github.com/username/project-name.git .
+
+2. fork the repo on local machine with the help of clone then you see two folder
+   1. Frontend
+   2. Backend
+
+3. In side the Frontend folder you run in terminal
+   ```bash
+   npm install
+
+   ```bash
+   npm run dev
+
+4. then open folder Backend runs commands in terminal("dev": "nodemon ./server.js")
+   ```bash 
+   npm i 
+   ```bash 
+   npm run dev
+   ## insure that to install already nodemon if not install nodemon you can try
+   ```bash 
+   npm i --dev-save nodemon
+
 
    
