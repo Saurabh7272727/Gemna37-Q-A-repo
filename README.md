@@ -1,21 +1,23 @@
-# Gemna.ai
-```bash
-## show demo link under the development
-https://gemna37-q-a-repo.vercel.app/
+# 📌 Gemna.ai
+
+> show demo link under the development
+> https://gemna37-q-a-repo.vercel.app/
+
+> All Your Campus Tools. One Unified Platform.
+> Streamline student profiles, attendance tracking, live classes, and team collaboration from a single dashboard.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-All Your Campus Tools. One Unified Platform.
-Streamline student profiles, attendance tracking, live classes, and team collaboration from a single dashboard.
-
 ---
 
-## Table of Contents
-- [Description](#description)
+## 📖 Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Contributing](#contributing)
 - [License](#license)
@@ -23,7 +25,7 @@ Streamline student profiles, attendance tracking, live classes, and team collabo
 
 ---
 
-## Description
+## About
 
 ### Customize how your team’s work flows
 Set up, clean up, and automate even the most complicated project workflows.
@@ -75,6 +77,7 @@ Imagine a platform where every aspect of college management—student profiles, 
     #### CLOUD_API_KEY = *API key get from cloudinary*
     #### CLOUD_SECRET_KEY = *API secret key get from cloudinary*
     #### OCR_KEY = *here we using OCR system (key from OCR.orgs)*
+---
 
 
 # 🚀 Features Overview
@@ -134,6 +137,3 @@ Each feature includes a Tailwind CSS gradient value used for designing the UI ca
 ---
 
 
-
-
-   
