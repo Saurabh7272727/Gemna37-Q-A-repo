@@ -13,7 +13,7 @@ import { LoginUser as Login } from './Auth/LoginUser/LoginUser.jsx'
 const Feature = lazy(() => import('./Components/Feature.jsx'));
 const Product = lazy(() => import('./Components/Product/Product.jsx'));
 const Error404Page = lazy(() => import('./Components/ErrorPages/Error404.jsx'))
-
+const Admin = lazy(() => import('./Admin/Admin.jsx'));
 
 // Routes handler : saurabh sharma
 const App = () => {
@@ -53,6 +53,7 @@ const App = () => {
         {/* <Route path='/test' element={<Test />} /> */}
         <Route path='/validation' element={<GemIDValidation />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/admin/registeration' element={<Admin />} />
         <Route path='/error_page' element={<Error404Page />} />
       </Routes>
       <Footer />

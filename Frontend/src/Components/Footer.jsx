@@ -7,8 +7,9 @@ import {
     FaHeart,
     FaArrowUp
 } from 'react-icons/fa';
-
+import { useNavigate } from 'react-router-dom';
 const Footer = () => {
+    const navi = useNavigate();
     const currentYear = new Date().getFullYear();
 
     const scrollToTop = () => {
@@ -74,7 +75,7 @@ const Footer = () => {
                             <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500"></span>
                         </h4>
                         <ul className="space-y-3">
-                            {['Documentation', 'Help Center', 'Partners', 'Community', 'Webinars'].map((item) => (
+                            {['Documentation', 'Help Center', 'Community', 'Webinars'].map((item) => (
                                 <li key={item}>
                                     <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center group">
                                         <span className="w-2 h-2 bg-purple-500 rounded-full mr-3 group-hover:scale-125 transition-transform duration-300"></span>
@@ -82,6 +83,12 @@ const Footer = () => {
                                     </a>
                                 </li>
                             ))}
+                            <li>
+                                <button onClick={() => navi('/admin/registeration')} href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center group">
+                                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-3 group-hover:scale-125 transition-transform duration-300"></span>
+                                    GEMID
+                                </button>
+                            </li>
                         </ul>
                     </div>
 

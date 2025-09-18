@@ -30,7 +30,7 @@ const HeroSection = () => {
                             <div className="absolute -inset-8 bg-blue-600 rounded-2xl rotate-3 opacity-20"></div>
                             <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
                                 <img
-                                    src="/api/placeholder/500/400"
+                                    src="https://images.pexels.com/photos/33378862/pexels-photo-33378862.jpeg"
                                     alt="Gemna Dashboard Preview"
                                     className="rounded-xl shadow-2xl"
                                 />
