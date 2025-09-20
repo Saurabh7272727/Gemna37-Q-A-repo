@@ -2,29 +2,42 @@ import React from 'react';
 
 const StudentTable = ({ students }) => {
   return (
-    <div className="mt-6 bg-white shadow-md rounded-lg overflow-x-auto">
-      <table className="min-w-full table-auto">
-        <thead className="bg-gray-100 text-left text-gray-600 uppercase text-sm">
-          <tr>
-            <th className="py-3 px-6">Name</th>
-            <th className="py-3 px-6">Email</th>
-            <th className="py-3 px-6">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, idx) => (
-            <tr key={idx} className="border-b text-black hover:bg-gray-50">
-              <td className="py-3 px-6">{student.name}</td>
-              <td className="py-3 px-6">{student.email}</td>
-              <td className="py-3 px-6">
-                <span className={`px-3 py-1 text-sm rounded-full font-medium ${student.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                  {student.status}
-                </span>
-              </td>
+    <div className='w-full md:h-[600px] h-auto bg-red-600 md:overflow-y-scroll'>
+      <div className="overflow-x-auto ">
+        <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-lg overflow-hidden">
+          <thead className="bg-gray-100 text-left text-gray-600 text-sm uppercase">
+            <tr>
+              <th className="p-4">Image</th>
+              <th className="p-4">Title</th>
+              <th className="p-4">Category</th>
+              <th className="p-4">Description</th>
+              <th className="p-4">status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {students?.map((product) => (
+              <tr
+                key={product.id}
+                className="border-t border-gray-200 hover:bg-gray-50 transition"
+              >
+                <td className="p-4">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-16 h-16 object-contain"
+                  />
+                </td>
+                <td className="p-4 font-medium text-gray-900">{product.title}</td>
+                <td className="p-4 text-gray-700">{product.category}</td>
+                <td className="p-4 text-gray-600 max-w-xs truncate">{product.description}</td>
+                <td className="p-4 text-indigo-600 font-semibold">{product.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+
     </div>
   );
 };

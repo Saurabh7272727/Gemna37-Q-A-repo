@@ -1,44 +1,47 @@
 import React, { useEffect, useState } from 'react'
-import { reducer, initialState } from './store/store.js';
 import { service } from './store/service.js';
-import { useReducer } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useSearchParams } from 'react-router-dom';
 import Dashboard from './AdminDashBoard.jsx';
 import { IoHome } from "react-icons/io5";
 import { PiStudentFill } from "react-icons/pi";
+import { useContext } from 'react';
+import { StoreAdminContext } from './store/store.jsx';
+import AddStudentDashBoard from './AddStudentDashBoard.jsx'
 const Admin = () => {
-
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { dispatch, state } = useContext(StoreAdminContext);
     const [student_com, setStudent_Com] = useState(false);
-    const [queryState, setQueryState] = useSearchParams();
+    const [queryTab, setQueryTab] = useSearchParams();
 
+    useEffect(() => window.scrollTo({ top: 0, behavior: "smooth" }), [])
     useEffect(() => {
+        setQueryTab();
+        console.log("admin are mounnt", state?.loading);
         const responseAsync = async () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
             const result = await service.requestToStudentForm();
             dispatch({ type: "LOAD", payload: result });
         }
-        responseAsync();
+        if (state?.studentList?.length <= 0)
+            responseAsync();
         return () => {
-            dispatch({ type: "UNMOUNT" });
+            // dispatch({ type: "UNMOUNT" });
+            setStudent_Com(null);
+            console.log("admin are unmount", state?.loading);
         }
     }, [])
 
-
-    console.log(state);
     const QueryRouterChange = () => {
-        setQueryState({ page: "student_gem" });
+        setQueryTab({ page: "application/form" })
         setStudent_Com(true);
     }
     const RemoveQueryRouterChange = () => {
-        setQueryState({});
+        setQueryTab();
         setStudent_Com(false);
     }
     return (
         <>
             {
-                state?.loading && <div className='w-screen h-screen flex justify-center items-center bg-gray-900'>
+                (state?.loading == true || state.loading == undefined) && <div className='w-screen h-screen flex justify-center items-center bg-gray-900'>
                     <CircularProgress />
                 </div>
             }
@@ -66,6 +69,9 @@ const Admin = () => {
                     <div className='md:w-[68%] md:h-[90%] w-[100%] h-full'>
                         {
                             !student_com && <Dashboard />
+                        }
+                        {
+                            student_com && <AddStudentDashBoard />
                         }
                     </div>
                 </div>
