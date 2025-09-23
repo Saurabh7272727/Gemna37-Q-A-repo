@@ -7,25 +7,35 @@ import { IoHome } from "react-icons/io5";
 import { PiStudentFill } from "react-icons/pi";
 import { useContext } from 'react';
 import { StoreAdminContext } from './store/store.jsx';
-import AddStudentDashBoard from './AddStudentDashBoard.jsx'
+import AddStudentDashBoard from './AddStudentDashBoard.jsx';
+import { useNavigate } from 'react-router-dom';
 const Admin = () => {
     const { dispatch, state } = useContext(StoreAdminContext);
     const [student_com, setStudent_Com] = useState(false);
-    const [queryTab, setQueryTab] = useSearchParams();
 
+    const [queryTab, setQueryTab] = useSearchParams();
+    const navi = useNavigate();
     useEffect(() => window.scrollTo({ top: 0, behavior: "smooth" }), [])
     useEffect(() => {
         setQueryTab();
         console.log("admin are mounnt", state?.loading);
         const responseAsync = async () => {
             const result = await service.requestToStudentForm();
-            dispatch({ type: "LOAD", payload: result });
+            if (!(result?.success)) {
+                navi('/error_page');
+                return;
+            }
+
+            if (Array.isArray(result?.data)) {
+                dispatch({ type: "LOAD", payload: result?.data });
+                return;
+            }
+            navi('/error_page');
+            return;
         }
         if (state?.studentList?.length <= 0)
             responseAsync();
         return () => {
-            // dispatch({ type: "UNMOUNT" });
-            setStudent_Com(null);
             console.log("admin are unmount", state?.loading);
         }
     }, [])

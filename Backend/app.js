@@ -3,8 +3,11 @@ import studentUploadRouter from './Route/student.upload.image.js';
 import cors from 'cors';
 import initialresponseonhomeroute from './ResponseStructure/initialResponse.js';
 import morgan from 'morgan';
+import connectDataBaseURL from './service/db.js';
 const app = express();
 
+
+connectDataBaseURL();
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
@@ -22,6 +25,6 @@ app.get('/', (req, res) => {
 })
 
 
-app.use('/student', studentUploadRouter)
+app.use('/student', studentUploadRouter);
 
 export default app;

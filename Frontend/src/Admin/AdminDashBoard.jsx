@@ -6,20 +6,9 @@ import { useContext } from 'react';
 const Dashboard = () => {
     const { dispatch, state } = useContext(StoreAdminContext);
     const { studentList } = state;
-
-    // transform the data
-    const MappedData = studentList?.map((item, index) => {
-        if (index % 2 == 0) {
-            return { ...item, status: "Active" };
-        } else {
-            return { ...item, status: "Inactive" }
-        }
-    });
-    console.log(MappedData);
-    const total = MappedData?.length;
-    const active = MappedData?.filter(s => s.status === 'Active').length;
-    const inactive = MappedData?.filter(s => s.status === 'Inactive').length;
-
+    const total = studentList?.length;
+    const active = studentList?.filter(s => s.status?.label === 'Active').length;
+    const inactive = studentList?.filter(s => s.status?.label === 'Inactive').length;
     return (
         <>
             <div className="h-auto w-full bg-gray-900 md:p-8 p-8">
@@ -30,7 +19,9 @@ const Dashboard = () => {
                     <StatsCard title="Deactivated Accounts" count={inactive} type="inactive" />
                 </div>
             </div>
-            <StudentTable students={MappedData} />
+            {
+                total ? <StudentTable students={studentList} /> : <p className='text-white font-semibold md:pl-7'>*No any student are added</p>
+            }
         </>
     );
 };

@@ -12,11 +12,18 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.11.0",
+    "bullmq": "^5.58.7",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "morgan": "^1.10.1"
+    "express-validator": "^7.2.1",
+    "ioredis": "^5.7.0",
+    "mailgen": "^2.0.30",
+    "mongoose": "^8.18.1",
+    "morgan": "^1.10.1",
+    "nodemailer": "^7.0.6",
+    "pdfkit": "^0.17.2"
   }
 }

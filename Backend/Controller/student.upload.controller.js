@@ -3,7 +3,9 @@ import cloudinaryUplaod from '../components/cloudinary.js';
 import fs from 'fs/promises';
 import { stdentResponseSheet } from '../ResponseStructure/studentResponseSheet.js';
 import { ValidDateOCRData } from '../components/ValidDateOCRData.js';
-
+import emailSender from '../service/Email/email.genration.js';
+import generateSecureOTP from '../components/uniqueNumberGen.js';
+import StudentModel from '../model/student.form.schema.js';
 const studentUplaodController = async (req, res) => {
     const { time, image, image_format, image_size } = req.body;
 
@@ -108,4 +110,47 @@ const gemidUploadedImageProcess = async (req, res) => {
 
 }
 
-export { studentUplaodController, gemidUploadedImageProcess };
+
+
+const registerationGEMID = async (req, res) => {
+    const { email, branch, collegeID, course,
+        fatherName, firstName, lastName, motherName, rollNumber, status, year
+    } = req.body;
+
+    const abortController = new AbortController();
+    req.on('close', () => {
+        console.log('Client disconnected');
+        abortController.abort(); // Cancel async operation
+    });
+    if (abortController.signal.aborted) {
+        return res.end();
+    }
+
+    const person = await emailSender(email, "We are supporting your goal and provide a enivorment to work with real world problem", generateSecureOTP(), { ...req.body });
+    if (person) {
+        const submitLastModel = new StudentModel({ ...person, Indb: true });
+        await submitLastModel.save();
+        res.status(201).json({
+            message: "email are send by service", success: true,
+            status: "ACCEPTED", studentData: { ...person, Indb: true }
+        });
+        return;
+    } else {
+        res.status(404).json({ message: "something was wrong", success: false, status: "VALIDATION_ERROR" });
+    }
+
+
+}
+
+const getAllGemIdLog = async (req, res) => {
+    try {
+        const result = await StudentModel.find();
+        res.status(200).json({ message: "All student list", success: true, data: result });
+        return;
+    } catch (error) {
+        res.status(200).json({ message: error.message, success: false });
+    }
+
+}
+
+export { studentUplaodController, gemidUploadedImageProcess, registerationGEMID, getAllGemIdLog };

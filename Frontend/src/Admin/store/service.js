@@ -13,8 +13,8 @@ class Service {
     async requestToStudentForm() {
         try {
             const start = Date.now();
-            const response = await fetch(`https://fakestoreapi.com/products`, {
-                method: "GET",
+            const response = await fetch(`${BACKEND_URL}/student/get/all/gemidlog`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -22,36 +22,31 @@ class Service {
             const end = Date.now();
             console.log(end - start, "ms")
             const result = await response.json();
-            await new Promise(resolve => setTimeout(resolve, 3000));//forcefully pause the response 3sec
+            await new Promise(resolve => setTimeout(resolve, 2000));//forcefully pause the response 3sec
             return result;
         } catch (error) {
             console.log("Error service page requestToStudentForm", error);
-            return message;
+            return error.message;
         }
     }
 
-    // async sendFormToServer(objData) {
-    //     try {
-    //         const response = await fetch(`${BACKEND_URL}`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify(objData)
-    //         });
+    async sendFormToServer(formData) {
+        try {
+            const res = await fetch(`${BACKEND_URL}/student/singup_with_gemna`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
 
-    //         const result = await response.json();
-    //         const { message, success, data } = result;
-    //         this.studentList = data;
-    //         if (success) {
-    //             initialState.studentList = [...initialState.studentList, data];
-    //         }
-    //         return success;
-    //     } catch (error) {
-    //         console.log("Error service page sendFormToServer", error.message);
-    //         return success
-    //     }
-    // }
+            const result = await res.json();
+            return result;
+        } catch (error) {
+            console.log("Error service page sendFormToServer", error.message);
+            return { success: false, message: "somrthing was wrong external-react" };
+        }
+    }
 }
 
 
