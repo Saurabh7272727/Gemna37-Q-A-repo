@@ -53,7 +53,7 @@ const ConnectGemnaPage = () => {
                             <h1 className='font-semibold tracking-wide'>Teacher</h1>
                             <p className='text-[11px] text-wrap'>
                                 Empower Your Teaching Experience
-                                <span className='text-red-900 block'>Join educators transforming classroom management with Gemna</span>
+                                <span className='text-red-900 block'>Join educators transforming classroom management with Gemna & Team</span>
                             </p>
                         </div>
                     </div>
