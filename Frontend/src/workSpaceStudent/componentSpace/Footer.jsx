@@ -30,7 +30,7 @@ const Footer = () => {
                     </button>
                     <button className='flex justify-center items-center space-x-1'>
                         <Stack direction="row" spacing={2}>
-                            <Avatar alt="Cindy Baker" src="../../../public/ff.png" />
+                            <Avatar alt="Cindy Baker" src="https://th.bing.com/th/id/OIP.GzUh30A6bPhNeveyXenw9gHaEK?w=277&h=180&c=7&r=0&o=7&pid=1.7&rm=3" />
                         </Stack>
                     </button>
                 </nav>

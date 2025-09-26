@@ -6,7 +6,7 @@ const Home = () => {
         userLogo: "https://i.pravatar.cc/100?img=3",
         email: "john.doe@example.com",
         postText: "Just finished building a cool React component 🚀🔥",
-        image: "../../../public/square-g.svg",
+        image: "https://th.bing.com/th/id/OIP.9m0eRmX9Yq0SQw_edDOJFwHaFM?w=268&h=188&c=7&r=0&o=7&pid=1.7&rm=3",
     };
 
     return (
