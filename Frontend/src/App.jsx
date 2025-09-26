@@ -15,8 +15,12 @@ const Product = lazy(() => import('./Components/Product/Product.jsx'));
 const Error404Page = lazy(() => import('./Components/ErrorPages/Error404.jsx'))
 const Admin = lazy(() => import('./Admin/Admin.jsx'));
 
+import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
+import { Header as StudentHeader } from './workSpaceStudent/componentSpace/Header.jsx';
+import { Footer as StudentFooter } from './workSpaceStudent/componentSpace/Footer.jsx';
 // Routes handler : saurabh sharma
 const App = () => {
+  const [test, setTest] = useState({ role: "student" });
   const loaderchecker = localStorage.getItem("firstTime");
 
   if (!loaderchecker) {
@@ -32,32 +36,45 @@ const App = () => {
   }, [])
 
   return (
-    <HashRouter>
-      <Header />
-      <Routes>
-        <Route path='/' element={<GemnaLogoDisplay />} />
-        <Route path='/landing' element={<Landing />} />
-        <Route path='/Features' element={
-          <Suspense fallback={<LazyLaodingDemo />}>
-            <Feature />
-          </Suspense>
-        } />
-        <Route path='/Product' element={
-          <Suspense fallback={<LazyLaodingDemo />}>
-            <Product />
-          </Suspense>
-        } />
-        {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
+    <>
+      {
+        test.role === 'student' ?
+          <HashRouter>
+            <StudentHeader />
+            <Routes>
+              <Route path='/' element={<WorkSpace />} />
+            </Routes>
+            <StudentFooter />
+          </HashRouter>
+          : <HashRouter>
+            <Header />
+            <Routes>
+              <Route path='/' element={<GemnaLogoDisplay />} />
+              <Route path='/landing' element={<Landing />} />
+              <Route path='/Features' element={
+                <Suspense fallback={<LazyLaodingDemo />}>
+                  <Feature />
+                </Suspense>
+              } />
+              <Route path='/Product' element={
+                <Suspense fallback={<LazyLaodingDemo />}>
+                  <Product />
+                </Suspense>
+              } />
+              {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
 
-        <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
-        {/* <Route path='/test' element={<Test />} /> */}
-        <Route path='/validation' element={<GemIDValidation />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/admin/registeration' element={<Admin />} />
-        <Route path='/error_page' element={<Error404Page />} />
-      </Routes>
-      <Footer />
-    </HashRouter>
+              <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
+              {/* <Route path='/test' element={<Test />} /> */}
+              <Route path='/validation' element={<GemIDValidation />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/admin/registeration' element={<Admin />} />
+              <Route path='/error_page' element={<Error404Page />} />
+            </Routes>
+            <Footer />
+          </HashRouter>
+      }
+    </>
+
   )
 }
 
