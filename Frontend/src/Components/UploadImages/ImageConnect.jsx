@@ -97,11 +97,11 @@ const ImageConnect = () => {
                     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                         <h3 className="text-xl font-semibold mb-4 flex items-center">
                             <FaIdCard className="mr-2 text-blue-600" />
-                            Verify with Student ID
+                            Verify with Student GEMID
                         </h3>
 
                         <p className="text-gray-600 mb-4">
-                            Upload a clear photo of your student ID card to automatically fill your information.
+                            Upload a clear photo of your student GEMID-PNG card to automatically fill your information.
                         </p>
                         {
                             preview && <img className='md:w-[40%] md:h-[10%] w-[100%] h-[30%] object-contain overflow-hidden' src={preview.result} alt='uploaded image' />
