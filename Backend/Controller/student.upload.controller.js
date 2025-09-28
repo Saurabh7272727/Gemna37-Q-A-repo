@@ -4,8 +4,12 @@ import fs from 'fs/promises';
 import { stdentResponseSheet } from '../ResponseStructure/studentResponseSheet.js';
 import { ValidDateOCRData } from '../components/ValidDateOCRData.js';
 import emailSender from '../service/Email/email.genration.js';
+import emailSenderOfOTP from '../service/Email/email.student.verify.js';
 import generateSecureOTP from '../components/uniqueNumberGen.js';
 import StudentModel from '../model/student.form.schema.js';
+import StudentOtpLog from '../model/otp.student.schema.js';
+import StudentModelMain from '../model/Students.js';
+
 const studentUplaodController = async (req, res) => {
     const { time, image, image_format, image_size } = req.body;
 
@@ -68,7 +72,7 @@ const gemidUploadedImageProcess = async (req, res) => {
             );
             res.status(404).end();
         }
-    }, 13000);
+    }, 26000);
 
 
     try {
@@ -79,10 +83,10 @@ const gemidUploadedImageProcess = async (req, res) => {
 
         const result = await response.json();
         const { ParsedResults } = result;
-
         const textData = ParsedResults[0]?.TextOverlay?.Lines; // array form
 
-        const checkingExistance = ValidDateOCRData(textData);
+        const checkingExistance = await ValidDateOCRData(textData);
+
 
         if (checkingExistance?.success) {
             clearTimeout(ID);
@@ -153,4 +157,106 @@ const getAllGemIdLog = async (req, res) => {
 
 }
 
-export { studentUplaodController, gemidUploadedImageProcess, registerationGEMID, getAllGemIdLog };
+
+const verifyEmailAddress = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const findEmailInOtpSchema = await StudentOtpLog.findOne({ email: email });
+        if (findEmailInOtpSchema) {
+            res.cookie("id", findEmailInOtpSchema._id);
+            res.status(202).json({ message: "Already otp are send on email", success: true, token: { id: findEmailInOtpSchema._id, email } });
+            return;
+        }
+    } catch (error) {
+        res.status(404).json({ message: "something was wrong in catch", success: false });
+        return;
+    }
+
+    try {
+        const OTP = generateSecureOTP();
+        const returnData = await emailSenderOfOTP(email, "Gemna.ai email verification OTP", OTP);
+        if (returnData === false) {
+            res.status(501).json({ message: "email service are not work", success: false });
+            return;
+        }
+        const saveDataBase = new StudentOtpLog({ OTP, email });
+        const data_id = await saveDataBase.save();
+        res.cookie("id", data_id);
+        res.status(202).json({ message: "send otp on email", success: true, token: { id: data_id._id, email } });
+        return;
+    } catch (error) {
+        res.status(501).json({ message: "something was wrong in second catch", success: false });
+        return;
+    }
+
+
+
+
+
+}
+
+const OtpVerificationHandler = async (req, res) => {
+    try {
+        const { password, re_password, OTP, captchaCode, email, id } = req.body;
+        if (!password || !OTP || !email || !id) {
+            res.status(404).json({ message: "invalid request", success: false });
+            return;
+        }
+        if (OTP.length !== 6) {
+            res.status(404).json({ message: "invalid request", success: false });
+            return;
+        }
+
+        const checkOTP = await StudentOtpLog.findOne({ OTP: OTP, _id: id });
+        if (!checkOTP) {
+            res.status(404).json({ message: "Otp are not match", success: false });
+            return;
+        }
+
+        const findStudent = await StudentModel.findOne({ email: email });
+        if (!findStudent) {
+            res.status(404).json({ message: "invalid user request", success: false });
+            return;
+        }
+
+        const exportData = {
+            ref_id: findStudent._id,
+            email: email,
+            password: password
+        }
+
+        findStudent.status.label = "Active";
+        findStudent.status.value = "active";
+        await findStudent.save();
+        const StudentData = new StudentModelMain(exportData);
+        const token_student = await StudentData.save();
+
+        res.status(202).json({
+            message: "successfully sign-up", success: true, token: {
+                id: token_student._id,
+                email: email,
+                password: token_student.password,
+                name: `${findStudent.firstName} ${findStudent.lastName}`,
+                imageURL: findStudent?.imageURL
+            }
+        })
+    } catch (error) {
+        console.log(error.message.slice(0, 6));
+        if (error.message.slice(0, 6) === 'E11000') {
+            res.status(404).json({ message: "your registeration are already complete, login by email & password", success: false });
+            return;
+        }
+        res.status(404).json({ message: "Something was wrong internally", success: false });
+        return;
+    }
+}
+
+
+export {
+    studentUplaodController,
+    gemidUploadedImageProcess,
+    registerationGEMID,
+    getAllGemIdLog,
+    verifyEmailAddress,
+    OtpVerificationHandler
+};

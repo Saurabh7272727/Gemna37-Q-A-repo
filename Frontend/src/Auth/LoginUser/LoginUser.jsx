@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaUserAlt, FaLock, FaGoogle, FaFacebookF } from 'react-icons/fa';
 
 const LoginUser = () => {
+
+
+
     return (
         <div className="min-h-screen group flex items-center justify-center bg-gray-900 relative overflow-hidden">
 
@@ -40,7 +43,7 @@ const LoginUser = () => {
                 </form>
 
                 <p className="text-center text-white text-sm mt-6">
-                    Don’t have an account? <span className="underline cursor-pointer hover:text-indigo-200">Sign up</span>
+                    <span className='text-blue-500 underline underline-offset-2 cursor-pointer'>forget password?</span> on gemna.ai auth service
                 </p>
             </div>
         </div>

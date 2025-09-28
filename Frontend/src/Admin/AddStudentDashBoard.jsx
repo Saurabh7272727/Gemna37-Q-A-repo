@@ -9,16 +9,16 @@ import { useNavigate } from 'react-router-dom';
 import Message from '../MessageGemnaCenter/toast.js';
 import { ToastContainer } from 'react-toastify';
 const branches = [
-    { value: "cse", label: "Computer Science" },
-    { value: "it", label: "Information Technology" },
-    { value: "ece", label: "Electronics" },
-    { value: "me", label: "Mechanical" },
+    { value: "01200", label: "Computer Science" },
+    { value: "01300", label: "Information Technology" },
+    { value: "01400", label: "Electronics" },
+    { value: "080200", label: "Mechanical" },
 ];
 
 const courses = [
-    { value: "btech", label: "B.Tech" },
-    { value: "mtech", label: "M.Tech" },
-    { value: "phd", label: "Ph.D." },
+    { value: "3710", label: "B.Tech" },
+    { value: "3712", label: "M.Tech" },
+    { value: "37145", label: "Ph.D." },
 ];
 
 const years = [

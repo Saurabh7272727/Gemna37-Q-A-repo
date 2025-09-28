@@ -13,20 +13,28 @@ const Footer = () => {
         '>
                 <nav className='md:w-[50%] w-[98%] h-[80%] bg-black text-white rounded-lg px-2 flex justify-around items-center'>
                     <button className='flex justify-around items-center space-x-1'>
-                        <abbr title="Home" className='flex justify-around items-center space-x-1'>
+                        <abbr title="Home" className='flex justify-around items-center space-x-1 no-underline border-0'>
                             <TbHomeBolt className='text-2xl' />
                             <p className='hidden md:inline-flex'>Home</p>
                         </abbr>
                     </button>
                     <button className='flex justify-center items-center space-x-1'>
-                        <abbr title='Chat with friends' className='flex justify-around items-center space-x-1'>
+                        <abbr title='Chat with friends' className='flex justify-around items-center space-x-1 no-underline border-0'>
                             <PiChatTeardropDotsFill className='text-2xl' />
                             <p className='hidden md:inline-flex'>G-Chat</p>
                         </abbr>
                     </button>
-                    <button className='flex justify-center items-center space-x-1'><SiSmartthings className='text-2xl' /><p className=' md:inline-flex hidden'>G-Mart</p></button>
-                    <button className='flex justify-center items-center space-x-1'><BiSolidMessageSquareAdd className='text-2xl' /><p className='hidden md:inline-flex'>Post</p>
-
+                    <button className='flex justify-center items-center space-x-1'>
+                        <abbr title='Gemna tool collection' className='flex justify-around items-center space-x-1 no-underline border-0'>
+                            <SiSmartthings className='text-2xl' />
+                            <p className='hidden md:inline-flex'>G-Mart</p>
+                        </abbr>
+                    </button>
+                    <button className='flex justify-center items-center space-x-1'>
+                        <abbr title='share your idea' className='flex justify-around items-center space-x-1 no-underline border-0'>
+                            <BiSolidMessageSquareAdd className='text-2xl' />
+                            <p className='hidden md:inline-flex'>Post</p>
+                        </abbr>
                     </button>
                     <button className='flex justify-center items-center space-x-1'>
                         <Stack direction="row" spacing={2}>
