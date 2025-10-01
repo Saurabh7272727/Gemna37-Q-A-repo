@@ -54,7 +54,7 @@ const Header = () => {
                         </button>
                     ))}
                 </div>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end" >
                     <Link to="/login" className="text-sm/6 font-semibold text-white">
                         Log in <span aria-hidden="true">&rarr;</span>
                     </Link>
@@ -93,7 +93,7 @@ const Header = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="py-6">
+                            <div className="py-6" onClick={() => setMobileMenuOpen(false)}>
                                 <Link
                                     to="/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"

@@ -9,7 +9,11 @@ import generateSecureOTP from '../components/uniqueNumberGen.js';
 import StudentModel from '../model/student.form.schema.js';
 import StudentOtpLog from '../model/otp.student.schema.js';
 import StudentModelMain from '../model/Students.js';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
+
+dotenv.config();
 const studentUplaodController = async (req, res) => {
     const { time, image, image_format, image_size } = req.body;
 
@@ -235,7 +239,7 @@ const OtpVerificationHandler = async (req, res) => {
             message: "successfully sign-up", success: true, token: {
                 id: token_student._id,
                 email: email,
-                password: token_student.password,
+                password: password,
                 name: `${findStudent.firstName} ${findStudent.lastName}`,
                 imageURL: findStudent?.imageURL
             }
@@ -252,11 +256,71 @@ const OtpVerificationHandler = async (req, res) => {
 }
 
 
+const LoginHandler = async (req, res) => {
+    try {
+        const { email, id, name, password } = req.body;
+
+        if (email && password && name && id) {
+            const findUserInStudentMain = await StudentModelMain.findOne({ email: email, _id: id }).populate("ref_id");
+
+            if (!findUserInStudentMain) {
+                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
+            }
+
+            const checkPassword = await findUserInStudentMain.comparePassword(password);
+
+            if (!checkPassword) {
+                return res.status(404).json({ message: "check your email or password are wrong", success: false })
+            }
+
+            const jwt_token = jwt.sign({ id: findUserInStudentMain._id }, process.env.JWT_SECURE, { expiresIn: "2h" });
+
+            if (!jwt_token) {
+                throw new Error("jsonwebtoken are not response");
+            }
+
+            return res.status(202).json({
+                message: "successfully login", success: true, jwt_token: jwt_token
+            });
+
+        } else if (email && password) {
+            const findUserInStudentMain = await StudentModelMain.findOne({ email: email }).populate("ref_id");
+            if (!findUserInStudentMain) {
+                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
+            }
+
+            const checkPassword = await findUserInStudentMain.comparePassword(password);
+            console.log(checkPassword);
+            if (!checkPassword) {
+                return res.status(404).json({ message: "check your email or password are wrong", success: false })
+            }
+
+            const jwt_token = jwt.sign({ id: findUserInStudentMain._id }, process.env.JWT_SECURE, { expiresIn: "2h" });
+            if (!jwt_token) {
+                throw new Error("jsonwebtoken are not response");
+            }
+
+            return res.status(202).json({
+                message: "successfully login", success: true, jwt_token: jwt_token, token: {
+                    email, id: findUserInStudentMain._id, name: `${findUserInStudentMain.ref_id.firstName} ${findUserInStudentMain.ref_id.lastName}`,
+                    password: password
+                }
+            });
+
+        }
+
+        return res.status(403).json({ message: "Server are not responed", success: false });
+    } catch (error) {
+        return res.status(404).json({ message: `Internal server error : ${error.message}`, success: false })
+    }
+}
+
 export {
     studentUplaodController,
     gemidUploadedImageProcess,
     registerationGEMID,
     getAllGemIdLog,
     verifyEmailAddress,
-    OtpVerificationHandler
+    OtpVerificationHandler,
+    LoginHandler
 };

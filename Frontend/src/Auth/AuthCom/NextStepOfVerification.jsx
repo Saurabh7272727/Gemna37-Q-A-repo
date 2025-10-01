@@ -40,13 +40,16 @@ const StudentDetailsDisplay = ({ responseData }) => {
             });
             const result = await response.json();
             const { message, success, token } = result;
-            setLoading(false);
+
             const messageToast = new Message(result);
             messageToast.setMessage();
             if (success) {
                 const tokenEN = encryptData(token);
                 localStorage.setItem("token", tokenEN);
-                setOtpShowCard(true);
+                setTimeout(() => {
+                    setLoading(true);
+                    setOtpShowCard(true);
+                }, 3000);
             }
 
         } catch (error) {

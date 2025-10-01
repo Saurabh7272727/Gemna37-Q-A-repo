@@ -17,7 +17,7 @@ const OtpCard = () => {
     });
     const [captchaCode, setCaptchaCode] = useState("");
     const [error, setError] = useState({});
-
+    const [wait, setWait] = useState(false);
     function generateCaptcha() {
         return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
@@ -57,18 +57,22 @@ const OtpCard = () => {
     }
 
     const submitHandler = async () => {
+        setWait(true);
         if (inputPassword.password !== inputPassword.re_password) {
+            setWait(false);
             alert("please enter same password both field");
             return;
         }
         if (inputPassword.password.length >= 8 && inputPassword.re_password.length >= 8) {
             if (captchaCode !== captcha) {
                 alert("your captcha are invalid");
+                setWait(false);
                 return;
             } else {
                 const OTP = otp.join("");
                 if (OTP.length !== 6) {
                     alert("OTP are invalid length");
+                    setWait(false);
                     return;
                 } else {
                     const data = decryptData(localStorage.getItem("token"));
@@ -79,7 +83,6 @@ const OtpCard = () => {
                         captchaCode: captcha,
                         ...data
                     }
-                    console.log(requestObj);
                     const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/otp/verification`, {
                         method: "POST",
                         headers: {
@@ -94,6 +97,7 @@ const OtpCard = () => {
                         const messageToast = new Message(result);
                         messageToast.setMessage();
                         setError({ error: message });
+                        setWait(false);
                     } else {
                         localStorage.clear();
                         localStorage.setItem("token_finder", encryptData(token));
@@ -103,6 +107,7 @@ const OtpCard = () => {
             }
         } else {
             alert("password has at least 8 characters");
+            setWait(false);
         }
     }
 
@@ -111,7 +116,6 @@ const OtpCard = () => {
         const AsyncOperationSend = async () => {
             await new Promise(res => setTimeout(() => {
                 setLoading(true);
-
                 res('hello');
             }, 3000));
         }
@@ -204,12 +208,17 @@ const OtpCard = () => {
                                     />
                                 </div>
                             </div>
+                            {
+                                wait ? <button
+                                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:scale-[1.02] transform transition"
+                                >processing...</button> :
+                                    <button
+                                        onClick={submitHandler}
+                                        className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:scale-[1.02] transform transition">
+                                        Verify & Continue
+                                    </button>
+                            }
 
-                            <button
-                                onClick={submitHandler}
-                                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:scale-[1.02] transform transition">
-                                Verify & Continue
-                            </button>
                         </div>
                     </div>
                 </div> : <CircularProgress />

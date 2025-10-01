@@ -5,7 +5,9 @@ import Stack from '@mui/material/Stack';
 import { PiChatTeardropDotsFill } from "react-icons/pi";
 import { SiSmartthings } from "react-icons/si";
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
+import { useNavigate } from 'react-router-dom';
 const Footer = () => {
+    const navi = useNavigate();
     return (
         <>
             <div className='w-screen h-[60px] bg-gray-900 fixed bottom-0 flex md:justify-around justify-center
@@ -13,7 +15,7 @@ const Footer = () => {
         '>
                 <nav className='md:w-[50%] w-[98%] h-[80%] bg-black text-white rounded-lg px-2 flex justify-around items-center'>
                     <button className='flex justify-around items-center space-x-1'>
-                        <abbr title="Home" className='flex justify-around items-center space-x-1 no-underline border-0'>
+                        <abbr onClick={() => navi('/student')} title="Home" className='flex justify-around items-center space-x-1 no-underline border-0'>
                             <TbHomeBolt className='text-2xl' />
                             <p className='hidden md:inline-flex'>Home</p>
                         </abbr>
@@ -27,7 +29,7 @@ const Footer = () => {
                     <button className='flex justify-center items-center space-x-1'>
                         <abbr title='Gemna tool collection' className='flex justify-around items-center space-x-1 no-underline border-0'>
                             <SiSmartthings className='text-2xl' />
-                            <p className='hidden md:inline-flex'>G-Mart</p>
+                            <p className='hidden md:inline-flex'>G-Tools</p>
                         </abbr>
                     </button>
                     <button className='flex justify-center items-center space-x-1'>

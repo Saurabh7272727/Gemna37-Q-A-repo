@@ -18,9 +18,12 @@ const Admin = lazy(() => import('./Admin/Admin.jsx'));
 import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
 import { Header as StudentHeader } from './workSpaceStudent/componentSpace/Header.jsx';
 import { Footer as StudentFooter } from './workSpaceStudent/componentSpace/Footer.jsx';
+import { decryptData } from './Auth/Encryption/jsondataEncryption.js';
+
+
 // Routes handler : saurabh sharma
 const App = () => {
-  const [test, setTest] = useState({ role: "student" });
+  const [test, setTest] = useState({ role: "local" });
   const loaderchecker = localStorage.getItem("firstTime");
 
   if (!loaderchecker) {
@@ -28,6 +31,12 @@ const App = () => {
   }
 
   useEffect(() => {
+    const jwtToken = localStorage.getItem("jwt_token");
+    if (jwtToken) {
+      const jwt_token = decryptData(jwtToken);
+      setTest({ role: jwt_token.role });
+      console.log(jwt_token.role);
+    }
     localStorage.removeItem("message_local");
     return () => {
       console.log("unmount");
@@ -37,42 +46,37 @@ const App = () => {
 
   return (
     <>
-      {
-        test.role === 'students' ?
-          <HashRouter>
-            <StudentHeader />
-            <Routes>
-              <Route path='/' element={<WorkSpace />} />
-            </Routes>
-            <StudentFooter />
-          </HashRouter>
-          : <HashRouter>
-            <Header />
-            <Routes>
-              <Route path='/' element={<GemnaLogoDisplay />} />
-              <Route path='/landing' element={<Landing />} />
-              <Route path='/Features' element={
-                <Suspense fallback={<LazyLaodingDemo />}>
-                  <Feature />
-                </Suspense>
-              } />
-              <Route path='/Product' element={
-                <Suspense fallback={<LazyLaodingDemo />}>
-                  <Product />
-                </Suspense>
-              } />
-              {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
+      <HashRouter>
+        {
+          test.role == 'student' ? <StudentHeader /> : <Header />
+        }
+        <Routes>
+          <Route path='/' element={<GemnaLogoDisplay />} />
+          <Route path='/landing' element={<Landing />} />
+          <Route path='/Features' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <Feature />
+            </Suspense>
+          } />
+          <Route path='/Product' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <Product />
+            </Suspense>
+          } />
+          {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
 
-              <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
-              {/* <Route path='/test' element={<Test />} /> */}
-              <Route path='/validation' element={<GemIDValidation />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/admin/registeration' element={<Admin />} />
-              <Route path='/error_page' element={<Error404Page />} />
-            </Routes>
-            <Footer />
-          </HashRouter>
-      }
+          <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
+          {/* <Route path='/test' element={<Test />} /> */}
+          <Route path='/validation' element={<GemIDValidation />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/admin/registeration' element={<Admin />} />
+          <Route path='/error_page' element={<Error404Page />} />
+          <Route path='/student' element={<WorkSpace />} />
+        </Routes>
+        {
+          test.role == 'student' ? <StudentFooter /> : <Footer />
+        }
+      </HashRouter>
     </>
 
   )

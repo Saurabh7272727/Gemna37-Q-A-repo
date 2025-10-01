@@ -4,11 +4,12 @@ import cors from 'cors';
 import initialresponseonhomeroute from './ResponseStructure/initialResponse.js';
 import morgan from 'morgan';
 import connectDataBaseURL from './service/db.js';
+import cookieParser from 'cookie-parser';
 const app = express();
 
 
 connectDataBaseURL();
-
+app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
     origin: "*",

@@ -5,7 +5,7 @@ const StudentSchema = new Schema(
     {
         ref_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Students",
+            ref: "GEMIDLOG",
             required: true,
         },
         email: {
