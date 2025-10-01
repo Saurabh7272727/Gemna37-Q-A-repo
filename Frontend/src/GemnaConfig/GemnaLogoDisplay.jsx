@@ -39,8 +39,8 @@ const GemnaLogoDisplay = () => {
                 <br />
                 <PulseLoadingSpinner /><br />
                 <h2 className="text-black font-medium flex justify-center items-center shadow-xl shadow-blue-300/40 gap-2 mx-auto">
-                    Geman AI Manager <AiFillFire className="text-red-500" />
-                    <p>v-37.0.01</p>
+                    Geman.ai feels to connect<AiFillFire className="text-red-500" />
+                    <p>v-0.0.01</p>
                 </h2>
             </div>
         </>
