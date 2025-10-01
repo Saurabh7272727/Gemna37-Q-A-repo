@@ -124,7 +124,7 @@ const OtpCard = () => {
     return (
         <>
             {
-                loading ? <div className='mt-2 text-white'>
+                loading ? <div className='md:mt-2 mt-6 text-white'>
                     <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
                         <div className="w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl p-8">
                             <h1 className="text-4xl font-bold text-white text-center mb-2 text-wrap">

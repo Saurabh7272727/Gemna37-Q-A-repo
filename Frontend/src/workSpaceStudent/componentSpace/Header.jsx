@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AiOutlineBars } from "react-icons/ai";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { ImCross } from "react-icons/im";
 
