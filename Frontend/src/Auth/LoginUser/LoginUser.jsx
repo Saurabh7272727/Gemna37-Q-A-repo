@@ -116,6 +116,7 @@ const LoginUser = () => {
                                         value={inputHandler.email}
                                         onChange={(e) => ChangeHandler(e)}
                                         type="text"
+                                        required
                                         placeholder="write your email"
                                         className="pl-10 pr-4 py-2 w-full rounded-md bg-white/50 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     />
@@ -128,6 +129,7 @@ const LoginUser = () => {
                                         value={inputHandler.password}
                                         onChange={(e) => ChangeHandler(e)}
                                         type="password"
+                                        required
                                         placeholder="write your password"
                                         className="pl-10 pr-4 py-2 w-full rounded-md bg-white/50 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     />
