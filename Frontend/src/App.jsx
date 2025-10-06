@@ -19,7 +19,7 @@ import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
 import { Header as StudentHeader } from './workSpaceStudent/componentSpace/Header.jsx';
 import { Footer as StudentFooter } from './workSpaceStudent/componentSpace/Footer.jsx';
 import { decryptData } from './Auth/Encryption/jsondataEncryption.js';
-
+const StudentProfilePage = lazy(() => import('./workSpaceStudent/pages/StudentProfilePage.jsx'));
 
 // Routes handler : saurabh sharma
 const App = () => {
@@ -72,6 +72,12 @@ const App = () => {
           <Route path='/admin/registeration' element={<Admin />} />
           <Route path='/error_page' element={<Error404Page />} />
           <Route path='/student' element={<WorkSpace />} />
+          <Route path='/profile/*' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <StudentProfilePage />
+            </Suspense>
+          } />
+          <Route path='*' element={<div>Gemna.ai does not support your unauth router call</div>} />
         </Routes>
         {
           test.role == 'student' ? <StudentFooter /> : <Footer />

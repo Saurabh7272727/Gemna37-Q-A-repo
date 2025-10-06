@@ -10,7 +10,7 @@ const Home = () => {
     };
 
     return (
-        <div className="w-full h-auto bg-gray-900 flex items-center flex-col justify-center p-4 pb-[110px]">
+        <div className="w-full h-auto bg-gray-900 flex items-center overflow-hidden flex-col justify-center p-4 pb-[110px]">
             <PostCard post={samplePost} />
             <PostCard post={samplePost} />
             <PostCard post={samplePost} />
