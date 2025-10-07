@@ -27,7 +27,7 @@ const StudentProfilePage = () => {
                 <div className='w-full md:h-[380px] h-[100%] flex md:justify-center justify-start items-center md:flex-row flex-col md:gap-x-2'>
                     <div className='md:w-[49%] md:h-full h-[30%] w-[99%] bg-pink-400/5 
                      rounded-md flex justify-center items-center gap-x-5 md:gap-x-8'>
-                        <div className='md:w-[16%] md:h-[40%] w-[30%] h-[50%] object-cover overflow-hidden rounded-full ring-1 ring-gray-700'>
+                        <div className='md:w-[16%] md:h-[40%] w-[27%] h-[50%] object-cover overflow-hidden rounded-full ring-1 ring-gray-700'>
                             <img src="https://www.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=216&h=211&c=8&rs=1&qlt=90&o=6&cb=12&pid=3.1&rm=2" alt="img" className='w-full h-full aspect-auto' />
                         </div>
                         <div className='md:w-[40%] w-[60%] h-[40%]
