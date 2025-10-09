@@ -12,9 +12,12 @@ const WorkSpace = () => {
             navi('/error_page');
         } else {
             const jwt_token = decryptData(jwtToken);
+
             if (!(jwt_token.role === 'student')) {
                 navi('/error_page');
             }
+
+
         }
     }, [])
     return (

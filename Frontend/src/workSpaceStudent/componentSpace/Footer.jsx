@@ -6,9 +6,13 @@ import { PiChatTeardropDotsFill } from "react-icons/pi";
 import { SiSmartthings } from "react-icons/si";
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RxAvatar } from "react-icons/rx";
+
 const Footer = () => {
     const navi = useNavigate();
     const token = localStorage.getItem("jwt_token");
+    const demoprofile = useSelector(state => state.userinfoSlice.user)
     return (
         <>
             <div className='w-screen h-[60px] bg-gray-900 fixed bottom-0 flex md:justify-around justify-center
@@ -39,9 +43,17 @@ const Footer = () => {
                             <p className='hidden md:inline-flex'>Post</p>
                         </abbr>
                     </button>
-                    <button className='flex justify-center items-center space-x-1' onClick={() => navi(`/profile/${token}`)}>
+                    <button title='profile verification' className='flex justify-center items-center space-x-1' onClick={() => navi(`/profile/${token}`)}>
                         <Stack direction="row" spacing={2}>
-                            <Avatar alt="Cindy Baker" src="https://th.bing.com/th/id/OIP.GzUh30A6bPhNeveyXenw9gHaEK?w=277&h=180&c=7&r=0&o=7&pid=1.7&rm=3" />
+                            <h1>{demoprofile?.email ? <Avatar
+                                sx={{
+                                    backgroundColor: "black",
+                                    fontWeight: 500,
+                                    fontSize: 24,
+                                }}
+                            >
+                                {demoprofile?.ref_id?.firstName?.charAt(0)?.toUpperCase()}
+                            </Avatar> : <RxAvatar className='text-3xl' />}</h1>
                         </Stack>
                     </button>
                 </nav>

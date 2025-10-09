@@ -48,7 +48,7 @@ const LoginUser = () => {
                 const toast = new Message(result);
                 toast.setMessage();
                 setTimeout(() => {
-                    navi('/student')
+                    navi('/')
                 }, 3000);
             } else {
                 localStorage.clear();
@@ -59,15 +59,14 @@ const LoginUser = () => {
         } else {
             e.preventDefault();
             const result = await LoginCommunication(inputHandler);
-            console.log(result);
-            const { message, success, jwt_token, token } = result;
+            const { message, success, jwt_token } = result;
             if (success) {
-                localStorage.setItem("token_finder", encryptData(token));
+                // localStorage.setItem("token_finder", encryptData(token));
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
                 toast.setMessage();
                 setTimeout(() => {
-                    navi('/student')
+                    navi('/')
                 }, 3000);
             } else {
                 localStorage.clear();
@@ -85,8 +84,8 @@ const LoginUser = () => {
                 ><div className='md:w-[30%] w-[90%] md:h-[10%] px-2 space-x-3 bg-gray-700/20 py-4 text-white flex justify-around items-center rounded-lg'>
                         <div className='md:w-[100px] md:h-[100px] w-[60px] h-[60px] bg-gray-700 rounded-[100%] flex justify-center items-center text-[40px] font-semibold'>{user.name.charAt(0).toUpperCase()}</div>
                         <div>
-                            <h1 className='md:text-xl text-[13px] font-semibold'>Name - {user.name}</h1>
-                            <p className='font-semibold text-[15px] text-gray-500'>Email - {user.email}</p>
+                            <h1 className='md:text-xl text-[11px] font-semibold'>Name - {user.name}</h1>
+                            <p className='font-semibold text-[12px] text-gray-500'>Email - {user.email}</p>
                             <button
                                 onClick={CLickHandler}
                                 className='px-8 rounded-sm py-1 bg-gradient-to-r from-blue-500 to-purple-600 mt-4 flex justify-center items-center'>Continue</button>

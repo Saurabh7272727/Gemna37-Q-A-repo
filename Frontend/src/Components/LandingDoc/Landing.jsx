@@ -6,6 +6,7 @@ const ShowFeatureInLanding = lazy(() => import('./ShowFeatureInLanding.jsx'));
 const ChatDemoLanding = lazy(() => import('./ChatDemoLanding.jsx'));
 
 const Landing = () => {
+
     const dataSet = [
         {
             pictureSource: "https://dam-cdn.atl.orangelogic.com/AssetLink/737g80fw6ml20lr326ccpphj50d7xex2.webp",
@@ -29,7 +30,6 @@ const Landing = () => {
         }
     ]
     useEffect(() => {
-
         document.title = 'gemna.landing.ai'
     }, [])
     return (

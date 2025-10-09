@@ -66,7 +66,6 @@ const Header = () => {
                                 setMobileMenuOpen(false);
                                 localStorage.clear();
                                 window.location.reload();
-
                             }}>
                                 <button
                                     className="-mx-3 block rounded-lg px-6 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5 bg-red-500"

@@ -273,7 +273,7 @@ const LoginHandler = async (req, res) => {
                 return res.status(404).json({ message: "check your email or password are wrong", success: false })
             }
 
-            const jwt_token = jwt.sign({ id: findUserInStudentMain._id }, process.env.JWT_SECURE, { expiresIn: "2h" });
+            const jwt_token = jwt.sign({ id: findUserInStudentMain._id, password: password }, process.env.JWT_SECURE, { expiresIn: "4h" });
 
             if (!jwt_token) {
                 throw new Error("jsonwebtoken are not response");
@@ -295,16 +295,13 @@ const LoginHandler = async (req, res) => {
                 return res.status(404).json({ message: "check your email or password are wrong", success: false })
             }
 
-            const jwt_token = jwt.sign({ id: findUserInStudentMain._id }, process.env.JWT_SECURE, { expiresIn: "2h" });
+            const jwt_token = jwt.sign({ id: findUserInStudentMain._id, password: password }, process.env.JWT_SECURE, { expiresIn: "2h" });
             if (!jwt_token) {
                 throw new Error("jsonwebtoken are not response");
             }
 
             return res.status(202).json({
-                message: "successfully login", success: true, jwt_token: jwt_token, token: {
-                    email, id: findUserInStudentMain._id, name: `${findUserInStudentMain.ref_id.firstName} ${findUserInStudentMain.ref_id.lastName}`,
-                    password: password
-                }
+                message: "successfully login", success: true, jwt_token: jwt_token
             });
 
         }
