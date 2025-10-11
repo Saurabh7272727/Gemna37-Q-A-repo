@@ -6,8 +6,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Message from '../../MessageGemnaCenter/toast.js';
-
+import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
+import { useDispatch } from 'react-redux';
 const LoginUser = () => {
+    const dispatch = useDispatch();
+
     const navi = useNavigate();
     const [user, setUser] = useState({});
     const [loginFormHandelr, setLoginFormHandler] = useState(false);
@@ -47,13 +50,19 @@ const LoginUser = () => {
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
                 toast.setMessage();
-                setTimeout(() => {
-                    navi('/')
-                }, 3000);
+                dispatch(accessController(true));
+                await new Promise((rej, res) => setTimeout(() => {
+                    navi('/');
+                    res();
+                }, 3000))
+                // setTimeout(() => {
+
+                // }, 3000);
             } else {
                 localStorage.clear();
                 setError({ message });
                 setLoading(false);
+                dispatch(accessController(false));
             }
 
         } else {
@@ -65,13 +74,19 @@ const LoginUser = () => {
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
                 toast.setMessage();
-                setTimeout(() => {
-                    navi('/')
-                }, 3000);
+                dispatch(accessController(true));
+                await new Promise((rej, res) => setTimeout(() => {
+                    navi('/');
+                    res();
+                }, 3000))
+                // setTimeout(() => {
+                //     navi('/')
+                // }, 3000);
             } else {
                 localStorage.clear();
                 setError({ message });
                 setLoading(false);
+                dispatch(accessController(false));
             }
 
         }
