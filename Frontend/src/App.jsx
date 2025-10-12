@@ -25,11 +25,12 @@ const StudentProfilePage = lazy(() => import('./workSpaceStudent/pages/StudentPr
 
 
 // redux Authslice reducers
+import { accessController } from './ReduxStore/Slices/AuthSlice.js';
 
-
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const App = () => {
+  const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
   const loaderchecker = localStorage.getItem("firstTime");
 
@@ -41,6 +42,7 @@ const App = () => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (jwtToken) {
       const jwt_token = decryptData(jwtToken);
+      dispatch(accessController(true));
     }
     localStorage.removeItem("message_local");
     return () => {
