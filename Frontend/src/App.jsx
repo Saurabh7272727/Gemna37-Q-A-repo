@@ -18,7 +18,7 @@ const Admin = lazy(() => import('./Admin/Admin.jsx'));
 import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
 import { decryptData } from './Auth/Encryption/jsondataEncryption.js';
 const StudentProfilePage = lazy(() => import('./workSpaceStudent/pages/StudentProfilePage.jsx'));
-
+import GTools from './workSpaceStudent/pages/G_ToolsPage.jsx';
 
 
 // Routes handler : saurabh sharma
@@ -77,6 +77,7 @@ const App = () => {
           <Route path='/admin/registeration' element={<Admin />} />
           <Route path='/error_page' element={<Error404Page />} />
           <Route path='/student' element={<WorkSpace />} />
+          <Route path='/gtools/page' element={<GTools />} />
           <Route path='/profile/*' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <StudentProfilePage />
