@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react'
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Components/LandingDoc/Landing';
 import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
 import Footer from './Components/Footer.jsx';
@@ -19,15 +19,18 @@ import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
 import { decryptData } from './Auth/Encryption/jsondataEncryption.js';
 const StudentProfilePage = lazy(() => import('./workSpaceStudent/pages/StudentProfilePage.jsx'));
 
-// redux config;
 
-import { Provider } from 'react-redux';
-import store from './ReduxStore/store.js';
 
 // Routes handler : saurabh sharma
-const App = () => {
 
-  const [test, setTest] = useState({ role: "local" });
+
+// redux Authslice reducers
+
+
+import { useSelector } from 'react-redux';
+
+const App = () => {
+  const login = useSelector(state => state.accessSlice.login);
   const loaderchecker = localStorage.getItem("firstTime");
 
   if (!loaderchecker) {
@@ -38,7 +41,6 @@ const App = () => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (jwtToken) {
       const jwt_token = decryptData(jwtToken);
-      setTest({ role: jwt_token.role });
     }
     localStorage.removeItem("message_local");
     return () => {
@@ -49,41 +51,39 @@ const App = () => {
 
   return (
     <>
-      <Provider store={store}>
-        <HashRouter>
-          <Header renderPart={test.role === 'student' ? true : false} />
-          <Routes>
-            <Route path='/' element={<GemnaLogoDisplay />} />
-            <Route path='/landing' element={<Landing />} />
-            <Route path='/Features' element={
-              <Suspense fallback={<LazyLaodingDemo />}>
-                <Feature />
-              </Suspense>
-            } />
-            <Route path='/Product' element={
-              <Suspense fallback={<LazyLaodingDemo />}>
-                <Product />
-              </Suspense>
-            } />
-            {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
+      <HashRouter>
+        <Header renderPart={login} />
+        <Routes>
+          <Route path='/' element={<GemnaLogoDisplay />} />
+          <Route path='/landing' element={<Landing />} />
+          <Route path='/Features' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <Feature />
+            </Suspense>
+          } />
+          <Route path='/Product' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <Product />
+            </Suspense>
+          } />
+          {/* <Route path='*' element={<LazyLaodingDemo />} /> */}
 
-            <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
-            {/* <Route path='/test' element={<Test />} /> */}
-            <Route path='/validation' element={<GemIDValidation />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/admin/registeration' element={<Admin />} />
-            <Route path='/error_page' element={<Error404Page />} />
-            <Route path='/student' element={<WorkSpace />} />
-            <Route path='/profile/*' element={
-              <Suspense fallback={<LazyLaodingDemo />}>
-                <StudentProfilePage />
-              </Suspense>
-            } />
-            <Route path='*' element={<div>Gemna.ai does not support your unauth router call</div>} />
-          </Routes>
-          <Footer renderPart={test.role === 'student' ? true : false} />
-        </HashRouter>
-      </Provider>
+          <Route path='/connectGemnaPage' element={<ConnectGemnaPage />} />
+          {/* <Route path='/test' element={<Test />} /> */}
+          <Route path='/validation' element={<GemIDValidation />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/admin/registeration' element={<Admin />} />
+          <Route path='/error_page' element={<Error404Page />} />
+          <Route path='/student' element={<WorkSpace />} />
+          <Route path='/profile/*' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <StudentProfilePage />
+            </Suspense>
+          } />
+          <Route path='*' element={<div>Gemna.ai does not support your unauth router call</div>} />
+        </Routes>
+        <Footer renderPart={login} />
+      </HashRouter>
     </>
 
   )
