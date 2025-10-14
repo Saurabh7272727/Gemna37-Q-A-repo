@@ -4,7 +4,6 @@ import { SiChatwoot } from "react-icons/si";
 import { useSelector } from 'react-redux';
 const GTools = () => {
     const student = useSelector(state => state?.userinfoSlice?.user?.ref_id?.firstName);
-    console.log(student)
     const tools = [
         {
             name: 'Attendance bit',
@@ -39,29 +38,29 @@ const GTools = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br mt-[70px] from-blue-50 to-indigo-100 p-6">
-            <div className="max-w-md mx-auto">
+        <div className="w-screen md:h-screen h-auto mb-12 md:mb-0 bg-gray-900 mt-[60px] p-6">
+            <div className="max-w-md mx-auto  bg-gray-900">
 
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Gemna.ai G-Tools</h1>
-                    <p className="text-gray-600 text-sm mb-4">
+                    <h1 className="text-3xl font-bold text-white mb-2">G-Tools Collection</h1>
+                    <p className="text-white text-sm mb-4">
                         Your Unified Campus Assistant
                     </p>
-                    <p className="text-gray-500 text-xs">
+                    <p className="text-gray-200 text-xs">
                         Smart utilities that power every moment of your college journey
                     </p>
                 </div>
 
 
-                <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <div className=" rounded-2xl shadow-lg p-6 mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                                 <FaUser className="text-blue-600" />
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Hi,</p>
-                                <h2 className="text-lg font-semibold text-gray-800">{student ? student : "please check first profile to fetch"}</h2>
+                            <div className='flex justify-center items-center gap-3'>
+                                <p className="text-sm text-white">Hi,</p>
+                                <h2 className="text-lg font-semibold text-gray-200 font-sans">{student ? student : "please check first profile to fetch"}</h2>
                             </div>
                         </div>
                     </div>

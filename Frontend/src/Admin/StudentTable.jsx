@@ -1,7 +1,6 @@
 import React from 'react';
 
 const StudentTable = ({ students }) => {
-  students.reverse();
   return (
     <div className='w-full md:h-[600px] h-auto bg-gray-900 md:overflow-y-scroll'>
       <div className="overflow-x-auto ">
@@ -17,7 +16,7 @@ const StudentTable = ({ students }) => {
             </tr>
           </thead>
           <tbody>
-            {students?.map((product) => (
+            {students?.reverse()?.map((product) => (
               <tr
                 key={Math.random()}
                 className="border-t border-gray-200 hover:bg-gray-50 transition"

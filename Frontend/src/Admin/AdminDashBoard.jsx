@@ -6,6 +6,7 @@ import { useContext } from 'react';
 const Dashboard = () => {
     const { dispatch, state } = useContext(StoreAdminContext);
     const { studentList } = state;
+    // studentList.reverse();
     const total = studentList?.length;
     const active = studentList?.filter(s => s.status?.label === 'Active').length;
     const inactive = studentList?.filter(s => s.status?.label === 'Inactive').length;

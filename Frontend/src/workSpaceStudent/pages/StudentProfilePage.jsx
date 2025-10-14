@@ -52,7 +52,6 @@ const StudentProfilePage = () => {
                         dispatch(loadUserInformation(data.data));
                         return;
                     } catch (error) {
-                        console.log("Error ", error);
                         navi("/error_page");
                     }
                 }

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useEffect } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Components/LandingDoc/Landing';
 import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
@@ -42,7 +42,15 @@ const App = () => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (jwtToken) {
       const jwt_token = decryptData(jwtToken);
-      dispatch(accessController(true));
+
+      const { role } = jwt_token;
+      if (role === 'student' && jwt_token.jwt_token) {
+        dispatch(accessController(true));
+      }
+
+      if (role !== 'student') {
+        dispatch(accessController(false));
+      }
     }
     localStorage.removeItem("message_local");
     return () => {
