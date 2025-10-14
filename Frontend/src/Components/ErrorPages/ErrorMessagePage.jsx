@@ -30,12 +30,13 @@ const MessageAlert = ({ type = "info", message = "Something happened!", onClose 
     };
 
     return (
-        <div className={`flex items-center gap-3 p-4 mt-5 mx-1 border rounded-xl shadow-sm ${getStyles()} max-w-md mx-auto`}>
+        <div className={`flex transform translate-y-[20px] mb-10 items-center gap-3 p-4 md:mt-10 mt-[100px] mx-1 border rounded-xl shadow-sm ${getStyles()} max-w-md mx-auto`}>
             {getIcon()}
             <p className="flex-1 font-medium">{message}</p>
             {
                 onClose && <div className={`${getStyles()}`}>Warning</div>
             }
+
         </div>
     );
 };
