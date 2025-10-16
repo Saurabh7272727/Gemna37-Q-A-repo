@@ -29,6 +29,11 @@ import { accessController } from './ReduxStore/Slices/AuthSlice.js';
 
 import { useSelector, useDispatch } from 'react-redux';
 
+
+// g-tool import
+import WorkSpaceContainerSize from './workSpaceStudent/componentSpace/WorkSpaceContainerSize.jsx';
+const G_chatApp = lazy(() => import('./workSpaceStudent/pages/G_collection/G_chatApp.jsx'))
+
 const App = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
@@ -89,6 +94,13 @@ const App = () => {
           <Route path='/profile/*' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <StudentProfilePage />
+            </Suspense>
+          } />
+          <Route path='/app/chat' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <WorkSpaceContainerSize>
+                <G_chatApp renderPart={login} />
+              </WorkSpaceContainerSize>
             </Suspense>
           } />
           <Route path='*' element={<div>Gemna.ai does not support your unauth router call</div>} />

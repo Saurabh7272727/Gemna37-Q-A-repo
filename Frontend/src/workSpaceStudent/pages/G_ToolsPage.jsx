@@ -3,39 +3,42 @@ import { FaUser, FaCalendarCheck, FaRocketchat, FaVideo, FaBook, FaTrello } from
 import { SiChatwoot } from "react-icons/si";
 import { useSelector } from 'react-redux';
 import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
+import { useNavigate } from 'react-router-dom';
 const GTools = () => {
+    const navi = useNavigate();
     const student = useSelector(state => state?.userinfoSlice?.user?.ref_id?.firstName);
     const loginUserVar = useSelector(state => state?.accessSlice?.login);
     const tools = [
         {
             name: 'Attendance bit',
             icon: <FaCalendarCheck className="text-2xl" />,
-            color: 'bg-blue-500'
+            color: 'bg-blue-400'
         },
         {
             name: 'G-Post',
             icon: <FaRocketchat className="text-2xl" />,
-            color: 'bg-green-500'
+            color: 'bg-green-400'
         },
         {
             name: 'G-Live',
             icon: <FaVideo className="text-2xl" />,
-            color: 'bg-purple-500'
+            color: 'bg-purple-400'
         },
         {
             name: 'G-Study',
             icon: <FaBook className="text-2xl" />,
-            color: 'bg-yellow-500'
+            color: 'bg-yellow-400'
         },
         {
             name: 'G-Chat',
             icon: <SiChatwoot className="text-2xl" />,
-            color: 'bg-purple-500'
+            color: 'bg-purple-400',
+            redirect: "/app/chat"
         },
         {
             name: 'G-Jira',
             icon: <FaTrello className="text-2xl" />,
-            color: 'bg-red-500'
+            color: 'bg-red-400'
         }
     ];
 
@@ -82,12 +85,17 @@ const GTools = () => {
                             {tools.map((tool, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center space-y-3 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                                    onClick={() => {
+                                        if (tool.redirect) {
+                                            navi("/app/chat");
+                                        }
+                                    }}
+                                    className={`${tool.color} transform hover:scale-90  rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center space-y-3 hover:shadow-xl transition-shadow duration-300 cursor-pointer`}
                                 >
                                     <div className={`${tool.color} w-12 h-12 rounded-xl flex items-center justify-center text-white`}>
                                         {tool.icon}
                                     </div>
-                                    <span className="text-sm font-medium text-gray-700 text-center">
+                                    <span className="text-sm font-medium text-white text-center">
                                         {tool.name}
                                     </span>
                                 </div>
