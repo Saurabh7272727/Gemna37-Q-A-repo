@@ -11,7 +11,7 @@ import StudentOtpLog from '../model/otp.student.schema.js';
 import StudentModelMain from '../model/Students.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-
+import { v2 as cloudinary } from 'cloudinary';
 
 dotenv.config();
 const studentUplaodController = async (req, res) => {
@@ -34,11 +34,11 @@ const studentUplaodController = async (req, res) => {
     }
 
     const cloud = await cloudinaryUplaod(result.upload_path);
-    const { message, status, success, cloudinary_url } = cloud;
+    const { message, status, success, cloudinary_url, public_id } = cloud;
 
     try {
         if (success) {
-            return res.status(result.status).json({ url, ...result, cloudinary_url });
+            return res.status(result.status).json({ url, ...result, cloudinary_url, public_id });
         } else {
             fs.unlink(result.upload_path);
             const response = stdentResponseSheet.studentResponse(
@@ -46,9 +46,11 @@ const studentUplaodController = async (req, res) => {
                 "Error: upload again",
                 422, null, false, '/gemna.error'
             )
+            await cloudinary.uploader.destroy(public_id);
             return res.status(response.status).json(response);
         }
     } catch (error) {
+        await cloudinary.uploader.destroy(public_id);
         return res.status(response.status).json(response);
     } finally {
         fs.unlink(result.upload_path);
@@ -61,20 +63,23 @@ const gemidUploadedImageProcess = async (req, res) => {
     const abort = new AbortController();
 
     if (!req?.body.success) {
+        await cloudinary.uploader.destroy(req?.body.public_id);
         return res.status(204).json(stdentResponseSheet.studentResponse(
             // message, status, status_message, success, redirect_path
             "Provide a image", 204, null, false, '/geman.error'
         ))
     }
 
-    const ID = setTimeout(() => {
+    const ID = setTimeout(async () => {
         if (!res.headersSent) {
             console.log("abort the mission due to timeout");
             abort.abort();
             const result = stdentResponseSheet.studentResponse(
+                // message, status, status_message, success, redirect_path
                 "GEMID are not found (setTimeout)", 404, null, false, '/gemna.error'
             );
-            res.status(404).end();
+            await cloudinary.uploader.destroy(req?.body.public_id);
+            return res.status(404).json(result);
         }
     }, 26000);
 
@@ -100,6 +105,7 @@ const gemidUploadedImageProcess = async (req, res) => {
             )
             return res.status(checkingExistance.status).json({ ...checkingExistance, ...result })
         } else {
+            await cloudinary.uploader.destroy(req?.body.public_id);
             const result = stdentResponseSheet.studentResponse(
                 // message, status, status_message, success, redirect_path
                 "GEMID are not found (not found)", 404, null, false, '/gemna.error'
@@ -109,6 +115,9 @@ const gemidUploadedImageProcess = async (req, res) => {
 
 
     } catch (error) {
+
+        const d = await cloudinary.uploader.destroy(req?.body.public_id);
+        console.log(d, req?.body.cloudinary_url);
         console.log(error)
         return res.status(505).json(stdentResponseSheet.studentResponse(
             // message, status, status_message, success, redirect_path

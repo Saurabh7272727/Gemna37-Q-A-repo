@@ -20,8 +20,8 @@ const cloudinaryUplaod = async (image_path) => {
 
     try {
         const result = await cloudinary.uploader.upload(`${image_path}`, options);
-        const { url } = result;
-        return { message: "upload", status: 202, success: true, cloudinary_url: url };
+        const { url, public_id } = result;
+        return { message: "upload", status: 202, success: true, cloudinary_url: url, public_id };
     } catch (error) {
         return { message: "something was wrong", status: 505, success: false };
     }
