@@ -173,6 +173,10 @@ const getAllGemIdLog = async (req, res) => {
 
 const verifyEmailAddress = async (req, res) => {
     const { email } = req.body;
+    if (!email.endsWith("@gmail.com")) {
+        res.status(501).json({ message: "email are wrong format, check again", success: false });
+        return;
+    }
     try {
         const findEmailInOtpSchema = await StudentOtpLog.findOne({ email: email });
         if (findEmailInOtpSchema) {
@@ -256,7 +260,7 @@ const OtpVerificationHandler = async (req, res) => {
     } catch (error) {
         console.log(error.message.slice(0, 6));
         if (error.message.slice(0, 6) === 'E11000') {
-            res.status(404).json({ message: "your registeration are already complete, login by email & password", success: false });
+            res.status(404).json({ message: "Your account is already set up! Please sign in using your email and password.", success: false });
             return;
         }
         res.status(404).json({ message: "Something was wrong internally", success: false });
