@@ -215,6 +215,9 @@ const verifyEmailAddress = async (req, res) => {
 const OtpVerificationHandler = async (req, res) => {
     try {
         const { password, re_password, OTP, captchaCode, email, id } = req.body;
+        // password and re_password compare in fortend, and extra validation like - captchaCode;
+
+
         if (!password || !OTP || !email || !id) {
             res.status(404).json({ message: "invalid request", success: false });
             return;
