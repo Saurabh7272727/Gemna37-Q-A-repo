@@ -12,7 +12,7 @@ connectDataBaseURL();
 app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://gemna37-q-a-repo.vercel.app/"],
     methods: ["POST", "GET"],
     credentials: true
 }));
