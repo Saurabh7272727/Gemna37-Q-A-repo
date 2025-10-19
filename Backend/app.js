@@ -12,7 +12,7 @@ connectDataBaseURL();
 app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
-    origin: "*",
+    origin: ["http://localhost:5173"],
     methods: ["POST", "GET"],
     credentials: true
 }));

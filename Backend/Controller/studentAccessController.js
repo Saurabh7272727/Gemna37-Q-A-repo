@@ -1,5 +1,8 @@
 import generateSecureOTP from '../components/uniqueNumberGen.js';
-
+import fs from 'fs/promises';
+import StudentModel from '../model/student.form.schema.js';
+import cloudinaryUplaod from '../components/cloudinary.js';
+import { v2 as cloudinary } from 'cloudinary';
 const UserProfileDetails = async (req, res) => {
     try {
         const jwt_token = req.headers.authorization.split(" ")[1];
@@ -13,4 +16,69 @@ const UserProfileDetails = async (req, res) => {
     }
 }
 
-export { UserProfileDetails };
+const UplaodImageHandler = async (req, res) => {
+    let destroyID = "";
+    let preimage = null;
+    try {
+        const findStudentByID = await StudentModel.findOne({ _id: req?.userDetails?.ref_id?._id });
+
+        if (!findStudentByID) {
+            res.status(401).json({ message: `UnAuthorized access`, success: false });
+            return;
+        }
+
+        if (findStudentByID?.imageURL) {
+            preimage = findStudentByID.imageURL.split("/").at(-1).slice(0, -4);
+        }
+
+        if (req?.file?.path) {
+            const response = await cloudinaryUplaod(req?.file?.path);
+            // { message: "upload", status: 202, success: true, cloudinary_url: url, public_id } = response(success);
+            const { success, cloudinary_url, public_id } = response;
+            if (!success) {
+                throw new Error("Cloudinary are not worked");
+            }
+
+
+            try {
+                destroyID = public_id;
+                findStudentByID.imageURL = cloudinary_url;
+                await findStudentByID.save();
+
+                if (findStudentByID.imageURL) {
+                    req.imageURL = findStudentByID.imageURL;
+                } else {
+                    throw new Error("Image are not saved!");
+                }
+            } catch (error) {
+                await cloudinary.uploader.destroy(public_id);
+                if (error.message)
+                    throw new Error("Image are not saved!");
+            }
+
+        } else {
+            res.status(401).json({ message: `UnAuthorized access`, success: false });
+            console.log(req.file);
+            return;
+        }
+        res.status(201).json({ message: `Successfully uploaded profile image`, success: true, imageURL: req.imageURL });
+    } catch (error) {
+        await fs.unlink(req?.file?.path, (err) => {
+            res.send(err);
+        });
+        await cloudinary.uploader.destroy(destroyID);
+        res.status(501).json({ message: `Internal server error ${error.message}`, success: false });
+        return;
+    } finally {
+        if (req?.file?.path)
+            await fs.unlink(req.file.path, (err) => {
+                console.log(err);
+            });
+
+        if (preimage) {
+            await cloudinary.uploader.destroy(preimage);
+        }
+    }
+}
+
+export { UserProfileDetails, UplaodImageHandler };

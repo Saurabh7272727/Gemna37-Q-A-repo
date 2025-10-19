@@ -68,7 +68,11 @@ const model = new Schema(new mongoose.Schema({
     Indb: {
         type: Boolean,
         required: true
+    },
+    imageURL: {
+        type: String,
     }
+
 }, { timestamps: true }));
 
 const StudentModel = mongoose.model("GEMIDLOG", model);

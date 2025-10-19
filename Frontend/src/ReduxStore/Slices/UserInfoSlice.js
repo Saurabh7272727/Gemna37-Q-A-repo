@@ -19,9 +19,12 @@ const userinfoSlice = createSlice({
                     { label: 'Solutions Submitted', value: 0 },
                 ], ...action.payload
             }
+        },
+        UpdateUserInfo: (state, action) => {
+            state.user.ref_id.imageURL = action.payload;
         }
     }
 })
 
-export const { loadUserInformation } = userinfoSlice.actions;
+export const { loadUserInformation, UpdateUserInfo } = userinfoSlice.actions;
 export default userinfoSlice.reducer;

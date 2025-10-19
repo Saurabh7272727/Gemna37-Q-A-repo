@@ -11,8 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import ApiEndPoints from "../../ReduxStore/apiEndPoints/apiEndPoints.js"
 import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
 import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
-import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js'
-
+import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
+import { ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie';
 const StudentProfilePage = () => {
     const navi = useNavigate();
     const dispatch = useDispatch();
@@ -69,6 +70,11 @@ const StudentProfilePage = () => {
                 })
             }
         }
+
+        return () => {
+            Cookies.remove("ErrorMessage");
+            Cookies.remove("GASID");
+        }
     }, [])
 
 
@@ -81,8 +87,11 @@ const StudentProfilePage = () => {
                         <div className="">
                             {
                                 loading ? <div>loading...</div> :
-                                    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6 text-white">
+                                    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6 text-white relative">
                                         <ProfileHeader user={demoProfile} />
+                                        {
+                                            Cookies.get("ErrorMessage") && <EditEmailMessage message={`${Cookies.get("ErrorMessage")}`} />
+                                        }
                                         <EditEmailMessage message='Only email can be edited.' />
                                         <PersonalInfoCard info={demoProfile} />
                                         <OverviewStats stats={demoProfile?.stats} />
@@ -93,6 +102,7 @@ const StudentProfilePage = () => {
                 }
 
             </WorkSpaceContainerSize>
+            <ToastContainer />
         </>
     )
 }
