@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import {
     studentUplaodController, gemidUploadedImageProcess, registerationGEMID,
     getAllGemIdLog, verifyEmailAddress, OtpVerificationHandler, LoginHandler
@@ -6,7 +6,7 @@ import {
 import { verifyStudentFormSubmit } from '../middleware/student.upload.middleware.js';
 import { UserProfileDetails, UplaodImageHandler } from '../Controller/studentAccessController.js';
 import { UserAccessMiddleware, UserUploadSomethingLikeImage } from '../middleware/studentAccessMiddleware.js';
-import { upload } from '../utils/multer.js';
+import multer from '../utils/multer.js';
 
 const router = new Router();
 
@@ -18,7 +18,9 @@ router.post('/email/verification', verifyEmailAddress);
 router.post('/otp/verification', OtpVerificationHandler);
 router.post('/login', LoginHandler)
 router.get("/account/access", UserAccessMiddleware, UserProfileDetails);
-router.post('/upload/profile/image', upload.single("image"), UserUploadSomethingLikeImage, UserAccessMiddleware,
+router.post('/upload/profile/image', multer, UserUploadSomethingLikeImage, UserAccessMiddleware,
     UplaodImageHandler
 )
+
+
 export default router;

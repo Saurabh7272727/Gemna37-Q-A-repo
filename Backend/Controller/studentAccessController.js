@@ -31,10 +31,9 @@ const UplaodImageHandler = async (req, res) => {
             preimage = findStudentByID.imageURL.split("/").at(-1).slice(0, -4);
         }
 
-        if (req?.file?.path) {
-            const response = await cloudinaryUplaod(req?.file?.path);
-            // { message: "upload", status: 202, success: true, cloudinary_url: url, public_id } = response(success);
-            const { success, cloudinary_url, public_id } = response;
+        if (req?.cloud.success) {
+            // using middleware to stored file in cloudinary;
+            const { success, cloudinary_url, public_id } = req.cloud;
             if (!success) {
                 throw new Error("Cloudinary are not worked");
             }
@@ -58,23 +57,14 @@ const UplaodImageHandler = async (req, res) => {
 
         } else {
             res.status(401).json({ message: `UnAuthorized access`, success: false });
-            console.log(req.file);
             return;
         }
         res.status(201).json({ message: `Successfully uploaded profile image`, success: true, imageURL: req.imageURL });
     } catch (error) {
-        await fs.unlink(req?.file?.path, (err) => {
-            res.send(err);
-        });
         await cloudinary.uploader.destroy(destroyID);
         res.status(501).json({ message: `Internal server error ${error.message}`, success: false });
         return;
     } finally {
-        if (req?.file?.path)
-            await fs.unlink(req.file.path, (err) => {
-                console.log(err);
-            });
-
         if (preimage) {
             await cloudinary.uploader.destroy(preimage);
         }

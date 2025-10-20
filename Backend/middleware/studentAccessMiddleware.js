@@ -52,64 +52,49 @@ const UserAccessMiddleware = async (req, res, next) => {
 const UserUploadSomethingLikeImage = async (req, res, next) => {
 
     try {
-        let token = req?.cookies?.GASID;
+        let token = await req?.cookies?.GASID;
+
         if (token) {
             token = decryptData(token);
             if (['student', 'teacher'].includes(token?.role)) {
-
                 req.GASID = token.jwt_token;
             } else {
-                await fs.unlink(req.file.path, (err) => {
-                    console.log("middleware error 62:", err);
-                })
                 throw new Error("token are not valid");
             }
         } else {
-            await fs.unlink(req.file.path, (err) => {
-                console.log("middleware error 68:", err);
-            })
             throw new Error("token are not valid");
         }
     } catch (error) {
-        res.status(501).json({ message: `User Error 401 mohan -  ${error.message}`, success: false });
+        res.status(501).json({ message: `something was wrong with you, please reload the page - ${error.message}`, success: false });
         return;
     }
 
 
     try {
-        const { name, size, type } = req.body;
-        if (!name || !type) {
-            await fs.unlink(req.file.path, (err) => {
-                console.log("middleware error 85:", err);
-            })
+        const { time, image, image_format, image_size } = req.body;
+        if (!time || !image_format) {
             res.status(501).json({ message: `Provide full information about payload`, success: false })
             return;
         }
 
 
         // only accept under 8Mb size of image size
-        if ((size / 1024 / 1024).toFixed(2) > 9) {
-            await fs.unlink(req.file.path, (err) => {
-                console.log("middleware error 95:", err);
-            })
+        if ((image_size / 1024 / 1024).toFixed(2) > 9) {
             res.status(400).json({ message: `payload data size is too long`, success: false })
             return;
         }
 
-        const typeArray = ['image/jpeg', 'image/png'];
-        if (!typeArray.includes(type)) {
+        const typeArray = ['jpeg', 'png'];
+        if (!typeArray.includes(image_format)) {
             res.status(400).json({ message: `image are required only in jpeg & png formate`, success: false })
             return;
         }
 
-        if (typeArray.includes(type) && name && size) {
+        if (typeArray.includes(image_format) && image && image_size) {
             next();
         }
 
     } catch (error) {
-        await fs.unlink(req.file.path, (err) => {
-            console.log("middleware error 113:", err);
-        })
         res.status(501).json({ message: `Internal server error ${error.message}`, success: false });
         return;
     }

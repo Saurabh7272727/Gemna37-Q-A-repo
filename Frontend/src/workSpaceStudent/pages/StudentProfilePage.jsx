@@ -13,6 +13,7 @@ import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
 import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { ToastContainer } from 'react-toastify';
+
 import Cookies from 'js-cookie';
 const StudentProfilePage = () => {
     const navi = useNavigate();
@@ -91,6 +92,9 @@ const StudentProfilePage = () => {
                                         <ProfileHeader user={demoProfile} />
                                         {
                                             Cookies.get("ErrorMessage") && <EditEmailMessage message={`${Cookies.get("ErrorMessage")}`} />
+                                        }
+                                        {
+                                            Cookies.get("ErrorMessage") && <EditEmailMessage message={`Logout the session and again login secure`} />
                                         }
                                         <EditEmailMessage message='Only email can be edited.' />
                                         <PersonalInfoCard info={demoProfile} />

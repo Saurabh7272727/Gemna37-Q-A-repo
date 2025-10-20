@@ -3,7 +3,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { ImCross } from "react-icons/im";
-
+import Cookies from 'js-cookie';
 const Header = () => {
     const locationData = useLocation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -65,6 +65,8 @@ const Header = () => {
                             <div className="py-6" onClick={() => {
                                 setMobileMenuOpen(false);
                                 localStorage.clear();
+                                Cookies.remove("GASID");
+                                Cookies.remove("ErrorMessage");
                                 window.location.reload();
                             }}>
                                 <button

@@ -70,16 +70,19 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('image', selectedImage);
-        formData.append('name', selectedImage.name);
-        formData.append('size', selectedImage.size);
-        formData.append('type', selectedImage.type);
 
-
+        const payload = {
+            time: selectedImage.lastModified,
+            image: previewUrl,
+            image_format: selectedImage.type.split("/")[1],
+            image_size: selectedImage.size
+        }
         const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
             method: "POST",
-            body: formData,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
             credentials: 'include'
         });
 
@@ -96,11 +99,12 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             return;
         }
 
-        dropDownBtn(false);
+
         Cookies.remove("GASID");
         Cookies.remove("ErrorMessage");
 
         if (imageURL) {
+            dropDownBtn(false);
             dispatch(UpdateUserInfo(imageURL));
             setLoading(false);
         }
