@@ -63,6 +63,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
 
 
     const handleSubmit = async (e) => {
+        console.log(Cookies.get("GASID"));
         e.preventDefault();
         setLoading(true);
         if (!selectedImage) {
@@ -81,9 +82,9 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `bearer ${Cookies.get("GASID")}`
             },
             body: JSON.stringify(payload),
-            credentials: 'include'
         });
 
         const result = await response.json();
