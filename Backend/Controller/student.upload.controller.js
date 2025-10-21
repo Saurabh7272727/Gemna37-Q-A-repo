@@ -273,9 +273,8 @@ const OtpVerificationHandler = async (req, res) => {
 
 
 const LoginHandler = async (req, res) => {
+    const { email, id, name, password } = req.body;
     try {
-        const { email, id, name, password } = req.body;
-
         if (email && password && name && id) {
             const findUserInStudentMain = await StudentModelMain.findOne({ email: email, _id: id }).populate("ref_id");
 
@@ -300,7 +299,9 @@ const LoginHandler = async (req, res) => {
             });
 
         } else if (email && password) {
-            const findUserInStudentMain = await StudentModelMain.findOne({ email: email }).populate("ref_id");
+            const findUserInStudentMain = await StudentModelMain.findOne({ email: email }, {
+                maxTimeMS: 30000, // 30 seconds timeout // Specific fields agar chahiye
+            }).populate("ref_id");
             if (!findUserInStudentMain) {
                 return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
             }
