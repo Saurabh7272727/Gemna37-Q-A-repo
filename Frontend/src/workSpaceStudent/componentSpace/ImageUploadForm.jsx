@@ -80,43 +80,55 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
 
         }
         console.log(selectedImage.size / 1024 / 1024);
-        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `bearer ${Cookies.get("GASID")}`
-            },
-            body: JSON.stringify(payload),
-        });
+        try {
+            const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${Cookies.get("GASID")}`
+                },
+                body: JSON.stringify(payload),
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        const { success, message, imageURL } = result;
+            const { success, message, imageURL } = result;
 
-        if (!success) {
-            // dropDownBtn(false);
-            setLoading(false);
-            // Cookies.remove("GASID");
-            Cookies.set("ErrorMessage", message);
-            const messageW = new Message(result);
-            messageW.setMessage();
-            return;
+            if (!success) {
+                // dropDownBtn(false);
+                setLoading(false);
+                // Cookies.remove("GASID");
+                Cookies.set("ErrorMessage", message);
+                const messageW = new Message(result);
+                messageW.setMessage();
+                return;
+            }
+
+
+            Cookies.remove("GASID");
+            Cookies.remove("ErrorMessage");
+
+            if (imageURL) {
+                dropDownBtn(false);
+                dispatch(UpdateUserInfo(imageURL));
+                setLoading(false);
+            }
+            setSelectedImage(null);
+            setPreviewUrl('');
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        } catch (error) {
+            if (error) {
+                setLoading(false);
+                // Cookies.remove("GASID");
+                Cookies.set("ErrorMessage", "Please provide under 3.8MB size of image");
+                const messageW = new Message({ message: "image size are too long", success: false });
+                messageW.setMessage();
+                return;
+            }
         }
 
-
-        Cookies.remove("GASID");
-        Cookies.remove("ErrorMessage");
-
-        if (imageURL) {
-            dropDownBtn(false);
-            dispatch(UpdateUserInfo(imageURL));
-            setLoading(false);
-        }
-        setSelectedImage(null);
-        setPreviewUrl('');
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
     };
 
     return (
