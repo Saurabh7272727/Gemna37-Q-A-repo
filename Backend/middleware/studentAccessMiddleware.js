@@ -133,6 +133,7 @@ const UserUploadSomethingLikeImage = async (req, res, next) => {
 
     try {
         const { time, image, image_format, image_size } = req.body;
+        console.log("DDDDDDDDDDDDD", image_size);
         if (!time || !image_format) {
             res.status(501).json({
                 message: `Provide full information about payload`,
@@ -141,7 +142,7 @@ const UserUploadSomethingLikeImage = async (req, res, next) => {
             return;
         }
 
-        // only accept under 8Mb size of image size
+        // only accept under 4Mb size of image size
         if ((image_size / 1024 / 1024).toFixed(2) >= 4.01) {
             res.status(400).json({
                 message: `Payload data size is too long`,
