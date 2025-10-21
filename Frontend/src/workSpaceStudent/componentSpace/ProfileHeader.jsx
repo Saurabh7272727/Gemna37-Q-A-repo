@@ -10,7 +10,7 @@ export default function ProfileHeader({ user }) {
 
     const dispatch = useDispatch();
     const [upload, setUplaod] = useState(false);
-
+    const [preview, setPreview] = useState(false);
     const ImageURLUploadHandler = () => {
         if (upload) {
             Cookies.remove("GASID");
@@ -46,8 +46,18 @@ export default function ProfileHeader({ user }) {
         }
     }, [])
 
+
+    const preViewHandler = () => {
+        setPreview(!preview);
+    }
+
     return (
         <>
+            {
+                preview && <div onClick={() => setPreview(!preview)} className='w-full h-full flex justify-center pt-[90px] md:pt-0 md:items-start bg-gray-900/70 absolute left-0 z-30'>
+                    <img onClick={preViewHandler} className='md:h-[40%] h-[25%]  object-center content-start ring-3 ring-blue-600 md:w-[40%] w-[80%] md:rounded-full rounded-md md:object-cover object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' />
+                </div>
+            }
             <div className="bg-black ring-[0.5px] ring-gray-400 rounded-2xl overflow-hidden shadow p-4 relative">
                 <div className="h-36 bg-gray-900 ring-[0.5px] ring-gray-400 
             rounded-xl flex justify-center items-center
@@ -57,7 +67,7 @@ export default function ProfileHeader({ user }) {
                 </div>
                 <div className="absolute top-16 left-6">
                     <div title={`${user?.ref_id?.firstName} ${user?.ref_id?.lastName}`} className="h-20 w-20 rounded-full ring-[0.5px] ring-gray-400 bg-gray-800 flex items-center justify-center text-2xl font-bold border-4 border-[#0d0d0d]">
-                        {user?.ref_id?.imageURL ? <img className='h-20 w-20 rounded-full object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' /> : user?.ref_id?.firstName?.charAt(0).toUpperCase()}
+                        {user?.ref_id?.imageURL ? <img onClick={preViewHandler} className='h-20 w-20 rounded-full object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' /> : user?.ref_id?.firstName?.charAt(0).toUpperCase()}
                     </div>
                 </div>
                 <div className="mt-12 pl-19" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>
