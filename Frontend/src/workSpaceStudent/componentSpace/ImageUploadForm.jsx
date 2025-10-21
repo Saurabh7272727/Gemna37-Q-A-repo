@@ -77,7 +77,9 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             image: previewUrl,
             image_format: selectedImage.type.split("/")[1],
             image_size: selectedImage.size
+
         }
+        console.log(selectedImage.size / 1024 / 1024);
         const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
             method: "POST",
             headers: {
@@ -94,7 +96,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
         if (!success) {
             // dropDownBtn(false);
             setLoading(false);
-            Cookies.remove("GASID");
+            // Cookies.remove("GASID");
             Cookies.set("ErrorMessage", message);
             const messageW = new Message(result);
             messageW.setMessage();
@@ -229,7 +231,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
                         Supported formats: JPEG, PNG
                     </p>
                     <p className="text-sm text-gray-600">
-                        Maximum file size: 10MB
+                        Maximum file size: 3.8MB
                     </p>
                 </div>
             </div>
