@@ -7,7 +7,7 @@ import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { useDispatch } from 'react-redux';
 import ImageUploadForm from './ImageUploadForm.jsx'
 export default function ProfileHeader({ user }) {
-    //   const result = await takeImageShower(image.target.files[0], setPreview);
+
     const dispatch = useDispatch();
     const [upload, setUplaod] = useState(false);
 

@@ -79,7 +79,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             image_size: selectedImage.size
 
         }
-        console.log(selectedImage.size / 1024 / 1024);
+
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
                 method: "POST",
@@ -95,9 +95,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             const { success, message, imageURL } = result;
 
             if (!success) {
-                // dropDownBtn(false);
                 setLoading(false);
-                // Cookies.remove("GASID");
                 Cookies.set("ErrorMessage", message);
                 const messageW = new Message(result);
                 messageW.setMessage();
@@ -118,10 +116,10 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
+
         } catch (error) {
             if (error) {
                 setLoading(false);
-                // Cookies.remove("GASID");
                 Cookies.set("ErrorMessage", "Please provide under 3.8MB size of image");
                 const messageW = new Message({ message: "image size are too long", success: false });
                 messageW.setMessage();
@@ -194,7 +192,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
                                                 {isDragging ? 'Drop image here' : 'Choose an image or drag & drop'}
                                             </p>
                                             <p className="text-sm text-gray-500">
-                                                PNG, JPG, GIF up to 10MB
+                                                PNG, JPG, up to 3.8MB
                                             </p>
                                         </div>
                                         <button
