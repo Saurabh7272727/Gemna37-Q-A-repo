@@ -53,57 +53,156 @@ const UserAccessMiddleware = async (req, res, next) => {
 
 
 
-const UserUploadSomethingLikeImage = async (req, res, next) => {
+// const UserUploadSomethingLikeImage = async (req, res, next) => {
 
+//     try {
+//         let token = await req?.headers?.cookie?.GASID;
+//         console.log("Token most appy", token);
+//         if (token) {
+//             console.log(token);
+//             token = decryptData(token);
+//             if (['student', 'teacher'].includes(token?.role)) {
+//                 req.GASID = token.jwt_token;
+//             } else {
+//                 throw new Error("token are not valid");
+//             }
+//         } else {
+//             throw new Error("token are not valid");
+//         }
+//     } catch (error) {
+//         res.status(501).json({ message: `something was wrong with you, please reload the page - ${error.message}`, success: false });
+//         return;
+//     }
+
+
+//     try {
+//         const { time, image, image_format, image_size } = req.body;
+//         if (!time || !image_format) {
+//             res.status(501).json({ message: `Provide full information about payload`, success: false })
+//             return;
+//         }
+
+
+//         // only accept under 8Mb size of image size
+//         if ((image_size / 1024 / 1024).toFixed(2) > 9) {
+//             res.status(400).json({ message: `payload data size is too long`, success: false })
+//             return;
+//         }
+
+//         const typeArray = ['jpeg', 'png'];
+//         if (!typeArray.includes(image_format)) {
+//             res.status(400).json({ message: `image are required only in jpeg & png formate`, success: false })
+//             return;
+//         }
+
+//         if (typeArray.includes(image_format) && image && image_size) {
+//             next();
+//         }
+
+//     } catch (error) {
+//         res.status(501).json({ message: `Internal server error ${error.message}`, success: false });
+//         return;
+//     }
+// }
+
+const UserUploadSomethingLikeImage = async (req, res, next) => {
     try {
-        let token = await req?.headers?.cookie?.GASID;
-        console.log("Token most appy", token);
+        // ✅ Vercel-compatible cookie access method
+        let token = null;
+
+        // Method 1: Check req.headers.cookie directly
+        if (req.headers.cookie) {
+            const cookies = req.headers.cookie.split(';').reduce((acc, cookie) => {
+                const [name, value] = cookie.trim().split('=');
+                acc[name] = decodeURIComponent(value);
+                return acc;
+            }, {});
+
+            token = cookies.GASID;
+            console.log("Token from cookies object:", token);
+        }
+
+        // // Method 2: Check req.headers directly
+        // if (!token && req.headers['cookie']) {
+        //     const cookieHeader = req.headers['cookie'];
+        //     const cookieMatch = cookieHeader.match(/GASID=([^;]+)/);
+        //     if (cookieMatch) {
+        //         token = cookieMatch[1];
+        //         console.log("Token from header match:", token);
+        //     }
+        // }
+
+        // console.log("Final token found:", token);
+
+        if (!token) {
+            throw new Error("Token not found in cookies");
+        }
+
         if (token) {
             console.log(token);
             token = decryptData(token);
             if (['student', 'teacher'].includes(token?.role)) {
                 req.GASID = token.jwt_token;
             } else {
-                throw new Error("token are not valid");
+                throw new Error("Token role not valid");
             }
         } else {
-            throw new Error("token are not valid");
+            throw new Error("Token are not valid");
         }
     } catch (error) {
-        res.status(501).json({ message: `something was wrong with you, please reload the page - ${error.message}`, success: false });
+        res.status(501).json({
+            message: `Something was wrong with you, please reload the page - ${error.message}`,
+            success: false
+        });
         return;
     }
-
 
     try {
         const { time, image, image_format, image_size } = req.body;
         if (!time || !image_format) {
-            res.status(501).json({ message: `Provide full information about payload`, success: false })
+            res.status(501).json({
+                message: `Provide full information about payload`,
+                success: false
+            });
             return;
         }
 
-
         // only accept under 8Mb size of image size
         if ((image_size / 1024 / 1024).toFixed(2) > 9) {
-            res.status(400).json({ message: `payload data size is too long`, success: false })
+            res.status(400).json({
+                message: `Payload data size is too long`,
+                success: false
+            });
             return;
         }
 
         const typeArray = ['jpeg', 'png'];
         if (!typeArray.includes(image_format)) {
-            res.status(400).json({ message: `image are required only in jpeg & png formate`, success: false })
+            res.status(400).json({
+                message: `Image are required only in jpeg & png format`,
+                success: false
+            });
             return;
         }
 
         if (typeArray.includes(image_format) && image && image_size) {
             next();
+        } else {
+            res.status(400).json({
+                message: `Image data is required`,
+                success: false
+            });
+            return;
         }
 
     } catch (error) {
-        res.status(501).json({ message: `Internal server error ${error.message}`, success: false });
+        res.status(501).json({
+            message: `Internal server error ${error.message}`,
+            success: false
+        });
         return;
     }
-}
+};
 
 
 export { UserAccessMiddleware, UserUploadSomethingLikeImage };
