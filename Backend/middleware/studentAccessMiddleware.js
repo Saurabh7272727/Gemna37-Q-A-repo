@@ -107,39 +107,13 @@ const UserAccessMiddleware = async (req, res, next) => {
 
 const UserUploadSomethingLikeImage = async (req, res, next) => {
     try {
-        // ✅ Vercel-compatible cookie access method
         let token = null;
-
-        // Method 1: Check req.headers.cookie directly
-        if (req.headers.cookie) {
-            const cookies = req.headers.cookie.split(';').reduce((acc, cookie) => {
-                const [name, value] = cookie.trim().split('=');
-                acc[name] = decodeURIComponent(value);
-                return acc;
-            }, {});
-
-            token = cookies.GASID;
-            console.log("Token from cookies object:", token);
-        }
-
-        // // Method 2: Check req.headers directly
-        // if (!token && req.headers['cookie']) {
-        //     const cookieHeader = req.headers['cookie'];
-        //     const cookieMatch = cookieHeader.match(/GASID=([^;]+)/);
-        //     if (cookieMatch) {
-        //         token = cookieMatch[1];
-        //         console.log("Token from header match:", token);
-        //     }
-        // }
-
-        // console.log("Final token found:", token);
-
+        token = req.headers.authorization.trim().split(" ")[1];
         if (!token) {
             throw new Error("Token not found in cookies");
         }
 
         if (token) {
-            console.log(token);
             token = decryptData(token);
             if (['student', 'teacher'].includes(token?.role)) {
                 req.GASID = token.jwt_token;
