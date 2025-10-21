@@ -18,7 +18,7 @@ router.post('/email/verification', verifyEmailAddress);
 router.post('/otp/verification', OtpVerificationHandler);
 router.post('/login', LoginHandler)
 router.get("/account/access", UserAccessMiddleware, UserProfileDetails);
-router.post('/upload/profile/image', multer, UserUploadSomethingLikeImage, UserAccessMiddleware,
+router.post('/upload/profile/image', UserUploadSomethingLikeImage, multer, UserAccessMiddleware,
     UplaodImageHandler
 )
 
