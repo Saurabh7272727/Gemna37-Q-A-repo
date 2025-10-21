@@ -87,6 +87,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
         });
 
         const result = await response.json();
+
         const { success, message, imageURL } = result;
 
         if (!success) {

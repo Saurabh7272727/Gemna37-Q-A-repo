@@ -38,12 +38,15 @@ const UserAccessMiddleware = async (req, res, next) => {
         }
     } catch (error) {
         try {
-            await fs.unlink(req.file.path, (err) => {
-                res.send(err);
-            })
+            if (req?.file?.path)
+                await fs.unlink(req?.file?.path, (err) => {
+                    res.send(err);
+                });
         } catch (error) {
+            console.log("45", error)
             return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
         }
+        console.log("48", error)
         return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
     }
 }
@@ -54,8 +57,9 @@ const UserUploadSomethingLikeImage = async (req, res, next) => {
 
     try {
         let token = await req?.cookies?.GASID;
-
+        console.log(token);
         if (token) {
+            console.log(token);
             token = decryptData(token);
             if (['student', 'teacher'].includes(token?.role)) {
                 req.GASID = token.jwt_token;

@@ -7,6 +7,15 @@ import { stdentResponseSheet } from '../ResponseStructure/studentResponseSheet.j
 const multer = async (req, res, next) => {
     const { time, image, image_format, image_size } = req.body;
 
+    if (!time || !image || !image_format || !image_size) {
+        const response = stdentResponseSheet.studentResponse(
+            //message, status, status_message, success, redirect_path
+            "Error: upload again",
+            422, null, false, '/gemna.error'
+        )
+        return res.status(422).json({ ...response });
+    }
+
     const { url } = req;
     const abortController = new AbortController();
 

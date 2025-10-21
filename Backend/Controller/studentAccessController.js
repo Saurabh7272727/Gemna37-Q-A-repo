@@ -12,6 +12,7 @@ const UserProfileDetails = async (req, res) => {
         req.userDetails.password = generateSecureOTP();
         return res.status(200).json({ message: "successfully verify", success: true, data: req.userDetails });
     } catch (error) {
+        console.log(error);
         return res.status(422).json({ message: error, success: false });
     }
 }
