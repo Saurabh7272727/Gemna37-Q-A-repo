@@ -6,7 +6,8 @@ import fs from 'fs/promises';
 const UserAccessMiddleware = async (req, res, next) => {
     try {
         const jwt_token = req.GASID || req.headers.authorization.trim().split(" ")[1];
-        // console.log(jwt_token, req.headers.authorization)
+        // console.log(jwt_token, req.headers.authorization);
+
         if (!jwt_token) {
             return res.status(422).json({ message: "unauthorized access jwt_token", success: false });
         }
