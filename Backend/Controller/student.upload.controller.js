@@ -299,12 +299,13 @@ const LoginHandler = async (req, res) => {
             });
 
         } else if (email && password) {
-            const findUserInStudentMain = await StudentModelMain.findOne({ email: email }, {
-                maxTimeMS: 30000, // 30 seconds timeout // Specific fields agar chahiye
-            }).populate("ref_id");
+            let findUserInStudentMain = await StudentModelMain.findOne({ email: email });
+
             if (!findUserInStudentMain) {
                 return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
             }
+
+            findUserInStudentMain = await StudentModelMain.findOne({ email: email }).populate("ref_id");
 
             const checkPassword = await findUserInStudentMain.comparePassword(password);
             console.log(checkPassword);
