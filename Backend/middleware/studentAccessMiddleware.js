@@ -56,8 +56,8 @@ const UserAccessMiddleware = async (req, res, next) => {
 const UserUploadSomethingLikeImage = async (req, res, next) => {
 
     try {
-        let token = await req?.cookies?.GASID;
-        console.log(token);
+        let token = await req?.headers?.cookie?.GASID;
+        console.log("Token most appy", token);
         if (token) {
             console.log(token);
             token = decryptData(token);
