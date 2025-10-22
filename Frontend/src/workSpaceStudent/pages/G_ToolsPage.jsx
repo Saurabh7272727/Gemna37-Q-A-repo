@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUser, FaCalendarCheck, FaRocketchat, FaVideo, FaBook, FaTrello } from 'react-icons/fa';
 import { SiChatwoot } from "react-icons/si";
-import { useSelector } from 'react-redux';
-import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import ApiEndPoints from "../../ReduxStore/apiEndPoints/apiEndPoints.js"
+import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
+import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
+import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
+import { ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie';
+
 const GTools = () => {
     const navi = useNavigate();
     const student = useSelector(state => state?.userinfoSlice?.user?.ref_id?.firstName);
@@ -41,13 +48,84 @@ const GTools = () => {
             color: 'bg-red-400'
         }
     ];
+    const dispatch = useDispatch();
+    const data = useParams();
+    const [errorFind, setErrorFind] = useState({
+        findError: false,
+        message: " ",
+        type: " "
+    })
+    const [loading, setLoading] = useState(false);
+    const jwt_token = localStorage.getItem("jwt_token");
+    if (jwt_token) {
+        var token = decryptData(jwt_token);
+    }
 
+    const demoProfile = useSelector(state => state.userinfoSlice.user)
+
+    useEffect(() => {
+        if (!jwt_token) {
+            navi("/error_page");
+        } else {
+            if (jwt_token === data['*']) {
+                const fetchData = async () => {
+                    try {
+                        const api = new ApiEndPoints();
+                        const data = await api.fetchUserProfile('student/account/access', token.jwt_token);
+                        const { message, success } = data;
+                        if (!success) {
+                            setErrorFind({
+                                findError: true,
+                                message,
+                                type: "error"
+                            });
+                            return;
+                        }
+                        dispatch(loadUserInformation(data.data));
+                        return;
+                    } catch (error) {
+                        navi("/error_page");
+                    }
+                }
+
+                setLoading(true);
+                if (!demoProfile.email) {
+                    fetchData();
+                }
+                setLoading(false);
+            } else {
+                setErrorFind({
+                    findError: true,
+                    message: "Url log are change , please re-login again",
+                    type: "warning"
+                })
+            }
+        }
+
+        return () => {
+            Cookies.remove("ErrorMessage");
+            Cookies.remove("GASID");
+        }
+    }, [])
+
+    if (!loading) {
+        <div>Loading....</div>
+    }
+
+    if (!loginUserVar) {
+        return (
+            <MessageAlert type={"error"} message={"Your trying to reach unauthenticated path ,that are resistricted"} onClose={true} />
+        )
+    }
 
 
     return (
         <>
             {
-                loginUserVar ? <div className="w-screen md:h-screen h-auto mb-12 md:mb-0 bg-gray-900 mt-[60px] p-6">
+                errorFind.findError && <MessageAlert type={errorFind.type} message={errorFind.message} onClose={true} />
+            }
+            {
+                !errorFind.findError ? <div className="w-screen md:h-screen h-auto mb-12 md:mb-0 bg-gray-900 mt-[60px] p-6">
                     <div className="max-w-md mx-auto  bg-gray-900">
 
                         <div className="text-center mb-8">
@@ -64,11 +142,11 @@ const GTools = () => {
                         <div className=" rounded-2xl shadow-lg p-6 mb-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <FaUser className="text-blue-600" />
+                                    <div className="w-10 h-10 overflow-hidden bg-blue-100 rounded-full flex items-center justify-center">
+                                        <img src='../../../insurance_2545838.png' className='w-full h-full object-cover bg-center' alt='verify' />
                                     </div>
                                     <div className='flex justify-center items-center gap-3'>
-                                        <p className="text-sm text-white">Hi,</p>
+                                        <p className="text-lg font-semibold text-gray-500 font-sans">Welcome back ,</p>
                                         <h2 className="text-lg font-semibold text-gray-200 font-sans">{student ? student : "please check first profile to fetch"}</h2>
                                     </div>
                                 </div>
@@ -104,7 +182,7 @@ const GTools = () => {
                     </div>
                 </div> : <MessageAlert type={"warning"} message="service unavailable for logout user" onClose={true} />
             }
-
+            <ToastContainer />
         </>
 
     );
