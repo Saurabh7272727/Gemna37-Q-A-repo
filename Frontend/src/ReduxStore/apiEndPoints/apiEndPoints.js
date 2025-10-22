@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 class ApiEndPoints {
     constructor(message, success, data = "Not found") {
         this.message = message;
@@ -35,6 +37,20 @@ class ApiEndPoints {
             console.error("Error fetching user profile:", error);
             return new ApiEndPoints("Error fetching user profile", false, error.message);
         }
+    }
+
+    async UploadProfileImage(endPoint, payload) {
+        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}${endPoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `bearer ${Cookies.get("GASID")}`
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = response.json();
+        return result;
     }
 }
 

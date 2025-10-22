@@ -4,15 +4,17 @@ import Cookies from 'js-cookie';
 import { UpdateUserInfo } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { useDispatch } from 'react-redux';
 import Message from '../../MessageGemnaCenter/toast.js';
-
+import ApiEndPoints from '../../ReduxStore/apiEndPoints/apiEndPoints.js';
 
 const ImageUploadForm = ({ dropDownBtn, setError }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const api = new ApiEndPoints();
     const [selectedImage, setSelectedImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
+
     // handlers to handler operation upload images to change student profile image;
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith('image/jpeg') || file.type.startsWith('image/png')) {
@@ -81,17 +83,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
         }
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/upload/profile/image`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `bearer ${Cookies.get("GASID")}`
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const result = await response.json();
-
+            const result = await api.UploadProfileImage("/student/upload/profile/image", payload);
             const { success, message, imageURL } = result;
 
             if (!success) {
@@ -119,6 +111,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
 
         } catch (error) {
             if (error) {
+                console.log(error);
                 setLoading(false);
                 Cookies.set("ErrorMessage", "Please provide under 3.8MB size of image");
                 const messageW = new Message({ message: "image size are too long", success: false });

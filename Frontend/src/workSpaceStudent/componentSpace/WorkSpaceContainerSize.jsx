@@ -5,7 +5,7 @@ const WorkSpaceContainerSize = ({ children, css }) => {
         <>
             <div
 
-                className={`w-screen h-screen overflow-y-auto scrollbar-none pt-[71px] pb-[71px] ${css} scroll-smooth`}>
+                className={`w-screen bg-gray-900 h-screen overflow-y-auto scrollbar-none pt-[60px] pb-[60px] ${css} scroll-smooth`}>
                 {children}
             </div>
         </>

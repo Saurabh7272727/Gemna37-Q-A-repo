@@ -31,7 +31,7 @@ const Footer = () => {
                             <p className='hidden md:inline-flex'>G-Chat</p>
                         </abbr>
                     </button>
-                    <button onClick={() => navi('/gtools/page')} className='flex justify-center items-center space-x-1'>
+                    <button onClick={() => navi(`/gtools/page/${token}`)} className='flex justify-center items-center space-x-1'>
                         <abbr title='Gemna tool collection' className='flex justify-around items-center space-x-1 no-underline border-0'>
                             <SiSmartthings className='text-2xl' />
                             <p className='hidden md:inline-flex'>G-Tools</p>

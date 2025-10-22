@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Components/LandingDoc/Landing';
 import GemnaLogoDisplay from './GemnaConfig/GemnaLogoDisplay.jsx';
@@ -26,13 +26,16 @@ import GTools from './workSpaceStudent/pages/G_ToolsPage.jsx';
 
 // redux Authslice reducers
 import { accessController } from './ReduxStore/Slices/AuthSlice.js';
-
+import { loadUserInformation } from './ReduxStore/Slices/UserInfoSlice.js'
 import { useSelector, useDispatch } from 'react-redux';
 
 
 // g-tool import
 import WorkSpaceContainerSize from './workSpaceStudent/componentSpace/WorkSpaceContainerSize.jsx';
-const G_chatApp = lazy(() => import('./workSpaceStudent/pages/G_collection/G_chatApp.jsx'))
+const G_chatApp = lazy(() => import('./workSpaceStudent/pages/G_collection/G_chatApp.jsx'));
+
+// Fetch current student data;
+import ApiEndPoints from './ReduxStore/apiEndPoints/apiEndPoints.js';
 
 
 const mohan = 'saurabh'
@@ -45,6 +48,7 @@ const App = () => {
     localStorage.setItem("firstTime", true);
   }
 
+
   useEffect(() => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (jwtToken) {
@@ -52,19 +56,43 @@ const App = () => {
 
       const { role } = jwt_token;
       if (role === 'student' && jwt_token.jwt_token) {
-        dispatch(accessController(true));
-      }
+        const api = new ApiEndPoints();
+        try {
+          const fetchdata = async () => {
+            dispatch(accessController(true));
+            console.log("Gemna.ai fetch your local information")
+            const result = await api.fetchUserProfile('student/account/access', jwt_token.jwt_token);
+            dispatch(loadUserInformation(result.data));
+            dispatch(accessController(true));
+            if (role !== 'student') {
+              dispatch(accessController(false));
+            }
+          }
+          fetchdata();
+        } catch (error) {
+          if (role !== 'student') {
+            dispatch(accessController(false));
+          }
+          console.error("Error - 37 Something was wrong on App.jsx com");
+        }
 
-      if (role !== 'student') {
-        dispatch(accessController(false));
       }
     }
+
+
     localStorage.removeItem("message_local");
     return () => {
       console.log("unmount");
       localStorage.removeItem("firstTime");
     }
-  }, [])
+  }, []);
+  const users = [
+    { id: 1, name: "Aarav Mehta", status: "online" },
+    { id: 2, name: "Priya Sharma", status: "offline" },
+    { id: 3, name: "Rahul Verma", status: "online" },
+    { id: 4, name: "Isha Patel", status: "offline" },
+    { id: 5, name: "Vikram Singh", status: "online" },
+  ];
 
   return (
     <>
@@ -92,7 +120,7 @@ const App = () => {
           <Route path='/admin/registeration' element={<Admin />} />
           <Route path='/error_page' element={<Error404Page />} />
           <Route path='/student' element={<WorkSpace />} />
-          <Route path='/gtools/page' element={<GTools />} />
+          <Route path='/gtools/page/*' element={<GTools />} />
           <Route path='/profile/*' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <StudentProfilePage />
@@ -101,7 +129,7 @@ const App = () => {
           <Route path='/app/chat' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <WorkSpaceContainerSize>
-                <G_chatApp renderPart={login} />
+                <G_chatApp renderPart={login} users={users} />
               </WorkSpaceContainerSize>
             </Suspense>
           } />
