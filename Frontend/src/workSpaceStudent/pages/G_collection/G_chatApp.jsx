@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import Error404 from '../../../Components/ErrorPages/Error404.jsx';
 import {
-    FaSearch, FaUserCircle, FaPaperPlane
+    FaSearch, FaPaperPlane
 } from 'react-icons/fa';
 import { GoVerified } from "react-icons/go";
 import { useSelector } from 'react-redux';
-import { FiUserPlus } from "react-icons/fi";
 import { SiGooglegemini } from "react-icons/si";
-const G_chatApp = ({ renderPart, users }) => {
+import MobileActionList from './component_apps/GChatTools.jsx';
+import ShowConnectedFri from './component_apps/ShowConnectedFri.jsx';
 
+const G_chatApp = ({ renderPart, users }) => {
+    const [mobileListShow, setMobileListShow] = useState(false);
 
     if (!renderPart) {
         localStorage.clear();
@@ -26,11 +28,6 @@ const G_chatApp = ({ renderPart, users }) => {
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
 
-    // Simulate loading skeleton
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 1500);
-        return () => clearTimeout(timer);
-    }, []);
 
     const handleUserClick = (user) => {
         const alreadyOpen = activeChats.find((u) => u.id === user.id);
@@ -53,9 +50,8 @@ const G_chatApp = ({ renderPart, users }) => {
     return (
         <>
 
-            <div className='w-full h-full  bg-gray-900'>
+            <div className='w-full h-full  bg-gray-900 relative'>
                 <div className="w-full h-full bg-gray-900 text-white flex flex-row">
-                    {/* Sidebar */}
                     <aside className="lg:w-1/4 w-full border-r border-white/20 p-4">
                         <h1 className="md:text-2xl text-[13px] font-bold mb-4 flex items-center h-[20px] gap-2 ">
                             <GoVerified className="text-green-400 text-2xl" />
@@ -70,56 +66,33 @@ const G_chatApp = ({ renderPart, users }) => {
                                 className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
                             />
                         </div>
-
-                        {/* User List */}
-                        <div className="space-y-2 overflow-y-auto h-[65vh] pr-1 scrollbar-thin scrollbar-thumb-white/20">
-                            {loading
-                                ? Array(5)
-                                    .fill(0)
-                                    .map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className="animate-pulse flex items-center space-x-3 bg-white/5 rounded-xl p-3"
-                                        >
-                                            <div className="w-10 h-10 bg-gray-500/30 rounded-full" />
-                                            <div className="flex-1">
-                                                <div className="h-3 bg-gray-500/30 rounded w-2/3 mb-1" />
-                                                <div className="h-2 bg-gray-500/30 rounded w-1/3" />
-                                            </div>
-                                        </div>
-                                    ))
-                                : users.map((user) => (
-                                    <div
-                                        key={user.id}
-                                        onClick={() => handleUserClick(user)}
-                                        className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition"
-                                    >
-                                        <FaUserCircle className="text-3xl text-gray-300" />
-                                        <div>
-                                            <p className="font-semibold">{user.name}</p>
-                                            <p className="text-sm text-gray-400">
-                                                {user.status || "offline"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                        </div>
+                        <ShowConnectedFri
+                            users={users}
+                            handleUserClick={handleUserClick}
+                            setLoading={setLoading}
+                            loading={loading}
+                        />
                     </aside>
+                    {
+                        mobileListShow && <div className={`md:hidden flex w-full h-[90%] bg-gray-900/90 absolute bottom-1 right-0 transition duration-700`}>
+                            <MobileActionList />
+                        </div>
+                    }
 
                     <div
-
-                        className='md:hidden flex justify-center items-center text-3xl border border-4 border-blue-500  w-[56px] h-[56px] rounded-full fixed top-[79%] right-[7%]'>
+                        onClick={() => setMobileListShow(!mobileListShow)}
+                        className={`md:hidden flex justify-center items-center text-3xl  border-4  ${mobileListShow ? "border-red-500" : "border-blue-500"}  w-[56px] h-[56px] rounded-full fixed top-[79%] right-[7%]`}>
                         <SiGooglegemini />
                     </div>
 
-                    <div className='md:w-[60px] w-[30px] text-white hidden md:flex justify-center pt-[100px] bg-gray-800 h-full ring-2/0.5 ring-gray-200'>
-                        <FiUserPlus />
+                    <div className='md:w-[200px] w-[30px] text-white hidden md:flex justify-center pt-[100px] bg-gray-800 h-full'>
+                        <MobileActionList />
                     </div>
 
                     {/* Chat Area */}
-                    <main className="flex-1  flex-col hidden md:inline-block">
+                    <main className="flex-1 md:flex flex-col hidden">
                         {/* Tabs */}
-                        <div className="flex border-b border-white/20 p-2 overflow-x-auto scrollbar-none">
+                        <div className="flex border-b border-white/20 p-2 gap-x-4 overflow-x-auto scrollbar-none">
                             {activeChats.map((chat) => (
                                 <div
                                     key={chat.id}
