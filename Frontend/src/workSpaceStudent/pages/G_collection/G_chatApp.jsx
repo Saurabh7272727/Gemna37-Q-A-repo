@@ -11,23 +11,31 @@ import ShowConnectedFri from './component_apps/ShowConnectedFri.jsx';
 import ApiEndPoints from '../../../ReduxStore/apiEndPoints/apiEndPoints.js';
 import { addActiveUserList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import ChatArea from './component_apps/ChatArea.jsx'
+
 const G_chatApp = ({ renderPart }) => {
     const dispatch = useDispatch();
     const navi = useNavigate();
+    const isMobile = useMediaQuery({ maxWidth: 768 });
     const ActiveUserList = useSelector(state => state?.ListSliceOdfStudent?.ActiveUserList);
     const OnlineUserList = useSelector(state => state?.ListSliceOdfStudent?.OnlineUserList);
     const ConnectedUserList = useSelector(state => state?.ListSliceOdfStudent?.ConnectedUserList);
     const studentProfile = useSelector((state) => state?.userinfoSlice?.user)
-    const [activeChats, setActiveChats] = useState([]);
+
     const [loading, setLoading] = useState(true);
-    const [selectedChat, setSelectedChat] = useState(null);
-    const [message, setMessage] = useState("");
     const [test, setTest] = useState(false);
     const [mobileListShow, setMobileListShow] = useState(false);
     const [users, setUsers] = useState([]);
 
+    const [emit, setEmit] = useState({
+        id: " ",
+        mode: false
+    })
+
     // if any error;
     if (!renderPart) {
+        console.log("expire token")
         localStorage.clear();
         return (
             <>
@@ -37,23 +45,6 @@ const G_chatApp = ({ renderPart }) => {
     }
 
 
-    const handleUserClick = (user) => {
-        const alreadyOpen = activeChats.find((u) => u._id === user._id);
-        if (alreadyOpen) return setSelectedChat(user);
-        if (activeChats.length >= 3) {
-            const updated = [...activeChats.slice(1), user];
-            setActiveChats(updated);
-        } else {
-            setActiveChats((prev) => [...prev, user]);
-        }
-        setSelectedChat(user);
-    };
-
-    const handleSend = () => {
-        if (!message.trim()) return;
-        console.log("Sent:", message);
-        setMessage("");
-    };
 
 
     useEffect(() => {
@@ -71,7 +62,8 @@ const G_chatApp = ({ renderPart }) => {
                     setUsers(ConnectedUserList);
                     setTest(false);
                 } else {
-                    throw new Error("Something was wrong")
+                    localStorage.clear();
+                    navi('/error_page');
                 }
             });
         } catch (error) {
@@ -102,10 +94,14 @@ const G_chatApp = ({ renderPart }) => {
         }
     };
 
+    const emitTheChatArea = (id, mode) => {
+        setEmit({ id, mode })
+    }
+
     return (
         <>
             {
-                test ? <div>Loading...</div> :
+                test ? <div className='w-full h-full flex justify-center items-center text-white'>Loading...</div> :
                     <div className='w-full h-full  bg-gray-900 relative'>
                         <div className="w-full h-full bg-gray-900 text-white flex flex-row">
                             <aside className="lg:w-1/4 w-full border-r border-white/20 p-4">
@@ -135,7 +131,7 @@ const G_chatApp = ({ renderPart }) => {
 
                                 <ShowConnectedFri
                                     users={users}
-                                    handleUserClick={handleUserClick}
+                                    emitTheChatArea={emitTheChatArea}
                                     setLoading={setLoading}
                                     loading={loading}
                                 />
@@ -159,70 +155,14 @@ const G_chatApp = ({ renderPart }) => {
                             </div>
 
                             <main className="flex-1 md:flex flex-col hidden">
+                                {
+                                    emit?.mode && <ChatArea renderPart={true} idByProps={emit?.id} />
+                                }
 
-                                <div className="flex border-b border-white/20 p-2 gap-x-4 overflow-x-auto scrollbar-none">
-                                    {activeChats.map((chat) => (
-                                        <div
-                                            key={chat._id}
-                                            onClick={() => setSelectedChat(chat)}
-                                            className={`px-4 py-2 rounded-t-xl cursor-pointer transition font-medium ${selectedChat?.id === chat.id
-                                                ? "bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg text-white"
-                                                : "bg-white/10 text-gray-300 hover:bg-white/20"
-                                                }`}
-                                        >
-                                            {chat.firstName}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-white/5">
-                                    {selectedChat ? (
-                                        <>
-                                            <div className="text-center text-gray-400 text-sm">
-                                                Chatting with<span className="p-2 rounded-lg font-semibold">{selectedChat.firstName} {selectedChat.lastName}</span>
-                                            </div>
-                                            <div className="flex justify-start">
-                                                <div className="bg-white/10 p-3 rounded-xl text-sm">
-                                                    Hey! How’s your day?
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-end">
-                                                <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg text-sm">
-                                                    Pretty good! Just working on Gemna.AI 🚀
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className="h-full flex items-center justify-center text-gray-400">
-                                            Select a friend to start chatting 💬
-                                        </div>
-                                    )}
-                                </div>
-
-
-                                {selectedChat && (
-                                    <div className="p-3 flex items-center bg-white/10 backdrop-blur-md">
-                                        <input
-                                            value={message}
-                                            onChange={(e) => setMessage(e.target.value)}
-                                            placeholder="Type your message..."
-                                            className="flex-1 px-4 py-2 rounded-full bg-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
-                                        />
-                                        <button
-                                            onClick={handleSend}
-                                            className="ml-3 bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg transition"
-                                        >
-                                            <FaPaperPlane />
-                                        </button>
-                                    </div>
-                                )}
                             </main>
                         </div>
                     </div>
-
             }
-
-
         </>
 
     )

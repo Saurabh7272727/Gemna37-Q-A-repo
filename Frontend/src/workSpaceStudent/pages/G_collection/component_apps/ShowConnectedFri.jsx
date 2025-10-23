@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react'
 import { FaRegUserCircle } from "react-icons/fa";
 import { LuUserX } from "react-icons/lu";
+import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom';
 
-const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
+const ShowConnectedFri = ({ users, setLoading, loading, emitTheChatArea }) => {
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+    const navi = useNavigate();
     // Simulate loading skeleton
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 1500);
@@ -41,7 +45,14 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
                     : users?.map((user) => (
                         <div
                             key={user?._id}
-                            onClick={() => handleUserClick(user)}
+                            onClick={() => {
+                                if (isMobile) {
+                                    navi(`/chat/app/${user?._id}`)
+                                } else {
+                                    emitTheChatArea(user?._id, true);
+                                }
+
+                            }}
                             className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition"
                         >
                             {

@@ -4,14 +4,16 @@ import './index.css'
 import App from './App.jsx'
 import { StoreAdminContextCom } from './Admin/store/store.jsx';
 import { Provider } from 'react-redux';
-
+import { PersistGate } from 'redux-persist/integration/react';
 // redux config;
-import store from './ReduxStore/store.js';
+import store, { persistor } from './ReduxStore/store.js';
 
 createRoot(document.getElementById('root')).render(
   <StoreAdminContextCom>
     <Provider store={store}>
-      <App />
-    </Provider >
+      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
   </StoreAdminContextCom>
 )

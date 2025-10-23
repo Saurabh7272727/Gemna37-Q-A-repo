@@ -33,7 +33,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // g-tool import
 import WorkSpaceContainerSize from './workSpaceStudent/componentSpace/WorkSpaceContainerSize.jsx';
 const G_chatApp = lazy(() => import('./workSpaceStudent/pages/G_collection/G_chatApp.jsx'));
-
+const ChatArea = lazy(() => import('./workSpaceStudent/pages/G_collection/component_apps/ChatArea.jsx'))
 // Fetch current student data;
 import ApiEndPoints from './ReduxStore/apiEndPoints/apiEndPoints.js';
 
@@ -126,7 +126,15 @@ const App = () => {
               </WorkSpaceContainerSize>
             </Suspense>
           } />
-          <Route path='*' element={<div>Gemna.ai does not support your unauth router call</div>} />
+
+          <Route path='/chat/app/:id' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <WorkSpaceContainerSize>
+                <ChatArea renderPart={login} idByProps={" "} />
+              </WorkSpaceContainerSize>
+            </Suspense>
+          } />
+          <Route path='*' element={<div className='pt-[100px]'>Gemna.ai does not support your unauth router call</div>} />
         </Routes>
         <Footer renderPart={login} />
       </HashRouter>
