@@ -84,13 +84,6 @@ const App = () => {
       localStorage.removeItem("firstTime");
     }
   }, []);
-  const users = [
-    { id: 1, name: "Aarav Mehta", status: "online" },
-    { id: 2, name: "Priya Sharma", status: "offline" },
-    { id: 3, name: "Rahul Verma", status: "online" },
-    { id: 4, name: "Isha Patel", status: "offline" },
-    { id: 5, name: "Vikram Singh", status: "online" },
-  ];
 
   return (
     <>
@@ -127,7 +120,7 @@ const App = () => {
           <Route path='/app/chat' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <WorkSpaceContainerSize>
-                <G_chatApp renderPart={login} users={users} />
+                <G_chatApp renderPart={login} />
               </WorkSpaceContainerSize>
             </Suspense>
           } />
