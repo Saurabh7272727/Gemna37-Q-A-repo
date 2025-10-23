@@ -1,14 +1,25 @@
 import React, { useEffect } from 'react'
 import { FaRegUserCircle } from "react-icons/fa";
-
+import { LuUserX } from "react-icons/lu";
 
 const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
-
     // Simulate loading skeleton
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 1500);
         return () => clearTimeout(timer);
     }, []);
+
+
+    if (users.length === 0) {
+        return (
+            <>
+                <div className='w-full h-[60] flex justify-center items-start pt-[30%]'>
+                    <h1 className='text-[120px] text-white'><LuUserX /></h1>
+                </div>
+            </>
+        )
+    }
+
     return (
         <>
             <div className="space-y-2 overflow-y-auto h-[65vh] pr-1 scrollbar-thin scrollbar-thumb-white/20">

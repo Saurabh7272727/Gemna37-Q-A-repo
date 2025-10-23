@@ -52,6 +52,9 @@ class ApiEndPoints {
         const result = response.json();
         return result;
     }
+
+
+
 }
 
 export default ApiEndPoints;
