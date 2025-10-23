@@ -1,5 +1,7 @@
 import express from 'express';
 import studentUploadRouter from './Route/student.upload.image.js';
+import VerifyedStudentFetchRouter from './Route/student.fetchdata.router.js';
+
 import cors from 'cors';
 import initialresponseonhomeroute from './ResponseStructure/initialResponse.js';
 import morgan from 'morgan';
@@ -28,5 +30,5 @@ app.get('/', (req, res) => {
 
 
 app.use('/student', studentUploadRouter);
-
+app.use('/api/v1/students', VerifyedStudentFetchRouter);
 export default app;

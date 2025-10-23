@@ -21,7 +21,7 @@ const StudentSchema = new Schema(
             minlength: 6,
         },
     },
-    { timestamps: true }
+    { timestamps: true, strictPopulate: false }
 );
 
 // Hash password before save
