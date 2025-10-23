@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
 
 class ApiEndPoints {
     constructor(message, success, data = "Not found") {
@@ -53,6 +54,25 @@ class ApiEndPoints {
         return result;
     }
 
+    async fetchAllActiveUser(endPoint) {
+        try {
+            let token = localStorage.getItem("jwt_token");
+            token = decryptData(token);
+
+            const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}${endPoint}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${token?.jwt_token}`
+                },
+            });
+
+            const result = response.json();
+            return result;
+        } catch (error) {
+            return { message: "External forntend Error - api - 70", success: false };
+        }
+    }
 
 
 }

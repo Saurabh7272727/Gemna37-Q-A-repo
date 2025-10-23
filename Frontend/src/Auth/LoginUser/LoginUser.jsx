@@ -70,6 +70,7 @@ const LoginUser = () => {
             const result = await LoginCommunication(inputHandler);
             const { message, success, jwt_token } = result;
             if (success) {
+                console.log(jwt_token);
                 // localStorage.setItem("token_finder", encryptData(token));
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);

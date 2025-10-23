@@ -10,7 +10,7 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
     }, []);
 
 
-    if (users.length === 0) {
+    if (users?.length === 0) {
         return (
             <>
                 <div className='w-full h-[60] flex justify-center items-start pt-[30%]'>
@@ -25,8 +25,8 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
             <div className="space-y-2 overflow-y-auto h-[65vh] pr-1 scrollbar-thin scrollbar-thumb-white/20">
                 {loading
                     ? Array(5)
-                        .fill(0)
-                        .map((_, i) => (
+                        ?.fill(0)
+                        ?.map((_, i) => (
                             <div
                                 key={i}
                                 className="animate-pulse flex items-center space-x-3 bg-white/5 rounded-xl p-3"
@@ -38,17 +38,17 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
                                 </div>
                             </div>
                         ))
-                    : users.map((user) => (
+                    : users?.map((user) => (
                         <div
-                            key={user.id}
+                            key={user?._id}
                             onClick={() => handleUserClick(user)}
                             className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition"
                         >
                             <FaRegUserCircle className="text-3xl text-gray-300" />
                             <div>
-                                <p className="font-semibold">{user.name}</p>
+                                <p className="font-semibold">{user.firstName} {user?.lastName}</p>
                                 <p className="text-sm text-gray-400">
-                                    {user.status || "offline"}
+                                    {user?.status?.label}
                                 </p>
                             </div>
                         </div>
