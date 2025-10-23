@@ -5,6 +5,11 @@ import fs from 'fs/promises';
 
 const UserAccessMiddleware = async (req, res, next) => {
     try {
+        const firstCheckingLog = req.GASID || req.headers.authorization;
+        if (!firstCheckingLog) {
+            throw new Error("Authorization token are missing....");
+        }
+
         const jwt_token = req.GASID || req.headers.authorization.trim().split(" ")[1];
         // console.log(jwt_token, req.headers.authorization);
 
@@ -46,7 +51,6 @@ const UserAccessMiddleware = async (req, res, next) => {
             console.log("45", error)
             return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
         }
-        console.log("48", error)
         return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
     }
 }
