@@ -44,11 +44,14 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
                             onClick={() => handleUserClick(user)}
                             className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition"
                         >
-                            <FaRegUserCircle className="text-3xl text-gray-300" />
+                            {
+                                user?.imageURL ? <img className='h-14 w-14 border-2 border-blue-500 rounded-full object-cover bg-center' src={`${user?.imageURL}`} alt='profile image loading..' /> : <FaRegUserCircle className="text-3xl text-gray-300" />
+                            }
+
                             <div>
-                                <p className="font-semibold">{user.firstName} {user?.lastName}</p>
-                                <p className="text-sm text-gray-400">
-                                    {user?.status?.label}
+                                <p className="font-semibold pl-1">{user.firstName} {user?.lastName}</p>
+                                <p className="text-sm text-gray-400 pl-1">
+                                    <span>Roll no {user?.rollNumber}</span> <span className='text-green-700 font-bold text-xs'> - {user?.status?.label} </span>
                                 </p>
                             </div>
                         </div>

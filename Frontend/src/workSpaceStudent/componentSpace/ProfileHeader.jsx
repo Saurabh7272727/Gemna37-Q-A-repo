@@ -67,7 +67,7 @@ export default function ProfileHeader({ user }) {
                 </div>
                 <div className="absolute top-16 left-6">
                     <div title={`${user?.ref_id?.firstName} ${user?.ref_id?.lastName}`} className="h-20 w-20 rounded-full ring-[0.5px] ring-gray-400 bg-gray-800 flex items-center justify-center text-2xl font-bold border-4 border-[#0d0d0d]">
-                        {user?.ref_id?.imageURL ? <img onClick={preViewHandler} className='h-20 w-20 rounded-full object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' /> : user?.ref_id?.firstName?.charAt(0).toUpperCase()}
+                        {user?.ref_id?.imageURL ? <img onClick={preViewHandler} className='h-full w-full border-2 border-blue-500 rounded-full object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' /> : user?.ref_id?.firstName?.charAt(0).toUpperCase()}
                     </div>
                 </div>
                 <div className="mt-12 pl-19" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>
