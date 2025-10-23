@@ -38,7 +38,7 @@ const G_chatApp = ({ renderPart }) => {
 
 
     const handleUserClick = (user) => {
-        const alreadyOpen = activeChats.find((u) => u.id === user.id);
+        const alreadyOpen = activeChats.find((u) => u._id === user._id);
         if (alreadyOpen) return setSelectedChat(user);
         if (activeChats.length >= 3) {
             const updated = [...activeChats.slice(1), user];
@@ -158,30 +158,28 @@ const G_chatApp = ({ renderPart }) => {
                                 <MobileActionList setMobileActionList={setMobileActionList} />
                             </div>
 
-                            {/* Chat Area */}
                             <main className="flex-1 md:flex flex-col hidden">
-                                {/* Tabs */}
+
                                 <div className="flex border-b border-white/20 p-2 gap-x-4 overflow-x-auto scrollbar-none">
                                     {activeChats.map((chat) => (
                                         <div
-                                            key={chat.id}
+                                            key={chat._id}
                                             onClick={() => setSelectedChat(chat)}
                                             className={`px-4 py-2 rounded-t-xl cursor-pointer transition font-medium ${selectedChat?.id === chat.id
                                                 ? "bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg text-white"
                                                 : "bg-white/10 text-gray-300 hover:bg-white/20"
                                                 }`}
                                         >
-                                            {chat.name}
+                                            {chat.firstName}
                                         </div>
                                     ))}
                                 </div>
 
-                                {/* Chat Window */}
                                 <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-white/5">
                                     {selectedChat ? (
                                         <>
                                             <div className="text-center text-gray-400 text-sm">
-                                                Chatting with <span className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg font-semibold">{selectedChat.name}</span>
+                                                Chatting with<span className="p-2 rounded-lg font-semibold">{selectedChat.firstName} {selectedChat.lastName}</span>
                                             </div>
                                             <div className="flex justify-start">
                                                 <div className="bg-white/10 p-3 rounded-xl text-sm">
@@ -212,7 +210,7 @@ const G_chatApp = ({ renderPart }) => {
                                         />
                                         <button
                                             onClick={handleSend}
-                                            className="ml-3 bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg transition p-3 rounded-full"
+                                            className="ml-3 bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg transition"
                                         >
                                             <FaPaperPlane />
                                         </button>

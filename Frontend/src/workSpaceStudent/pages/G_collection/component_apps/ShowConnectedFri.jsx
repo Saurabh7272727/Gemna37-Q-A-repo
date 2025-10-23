@@ -45,7 +45,7 @@ const ShowConnectedFri = ({ users, handleUserClick, setLoading, loading }) => {
                             className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition"
                         >
                             {
-                                user?.imageURL ? <img className='h-14 w-14 border-2 border-blue-500 rounded-full object-cover bg-center' src={`${user?.imageURL}`} alt='profile image loading..' /> : <FaRegUserCircle className="text-3xl text-gray-300" />
+                                !user?.imageURL ? <img className='h-14 w-14 border-2 border-blue-500 rounded-full object-cover bg-center' src={`${user?.imageURL}`} alt='profile image loading..' /> : <FaRegUserCircle className="text-3xl text-gray-300 h-14 w-14 border-2 border-blue-500 rounded-full" />
                             }
 
                             <div>
