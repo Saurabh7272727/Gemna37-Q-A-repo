@@ -6,7 +6,8 @@ const socket = io(import.meta.env.VITE_APP_BACKEND_URL, {
     auth: {
         token: localStorage.getItem("jwt_token")
     },
-    autoConnect: false
+    autoConnect: false,
+    transports: ['websocket', 'polling']
 });
 
 
