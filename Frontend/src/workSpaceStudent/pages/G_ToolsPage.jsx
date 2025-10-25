@@ -11,9 +11,11 @@ import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 
+
 const GTools = () => {
     const navi = useNavigate();
     const student = useSelector(state => state?.userinfoSlice?.user?.ref_id?.firstName);
+    const demoProfile = useSelector(state => state?.userinfoSlice?.user);
     const loginUserVar = useSelector(state => state?.accessSlice?.login);
     const tools = [
         {
@@ -61,8 +63,6 @@ const GTools = () => {
         var token = decryptData(jwt_token);
     }
 
-    const demoProfile = useSelector(state => state.userinfoSlice.user)
-
     useEffect(() => {
         if (!jwt_token) {
             navi("/error_page");
@@ -101,12 +101,12 @@ const GTools = () => {
                 })
             }
         }
-
         return () => {
             Cookies.remove("ErrorMessage");
             Cookies.remove("GASID");
         }
-    }, [])
+    }, []);
+
 
     if (!loading) {
         <div>Loading....</div>

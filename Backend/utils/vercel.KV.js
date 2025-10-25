@@ -1,3 +1,8 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis'
 
-export default kv;
+const kv = new Redis({
+    url: process.env.VERCEL_URL_KV,
+    token: process.env.VERCEL_URL_KV_TOKEN,
+})
+
+export default kv

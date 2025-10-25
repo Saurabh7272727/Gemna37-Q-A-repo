@@ -4,8 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { ImCross } from "react-icons/im";
 import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';;
+import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
+
+
 const Header = () => {
     const locationData = useLocation();
+    const dispatch = useDispatch();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navi = useNavigate();
     const { pathname } = locationData;
@@ -67,7 +72,8 @@ const Header = () => {
                                 localStorage.clear();
                                 Cookies.remove("GASID");
                                 Cookies.remove("ErrorMessage");
-                                window.location.reload();
+                                dispatch(accessController(false));
+                                navi('/');
                             }}>
                                 <button
                                     className="-mx-3 block rounded-lg px-6 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5 bg-red-500"

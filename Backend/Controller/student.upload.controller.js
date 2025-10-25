@@ -87,7 +87,10 @@ const gemidUploadedImageProcess = async (req, res) => {
     try {
         const OCR_URL = `https://api.ocr.space/parse/imageurl?apikey=${process.env.OCR_KEY}&url=${req?.body.cloudinary_url}&language=eng&isOverlayRequired=true`;
         const response = await fetch(OCR_URL, {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "apikey": `${process.env.OCR_KEY}`
+            }
         });
 
         const result = await response.json();

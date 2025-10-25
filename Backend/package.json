@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@upstash/redis": "^1.35.6",
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^1.2.0",
     "autocannon": "^8.0.0",
@@ -35,6 +36,7 @@
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
-    "pdfkit": "^0.17.2"
+    "pdfkit": "^0.17.2",
+    "socket.io": "^4.8.1"
   }
 }

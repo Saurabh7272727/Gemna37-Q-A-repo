@@ -55,7 +55,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 })
             }
         }
-    }, [])
+    }, [UserId]);
 
     if (!UserId || !renderPart) {
         return (

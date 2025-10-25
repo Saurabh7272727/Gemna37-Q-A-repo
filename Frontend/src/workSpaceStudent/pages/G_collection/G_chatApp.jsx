@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Error404 from '../../../Components/ErrorPages/Error404.jsx';
 import {
     FaSearch, FaPaperPlane
@@ -11,13 +11,12 @@ import ShowConnectedFri from './component_apps/ShowConnectedFri.jsx';
 import ApiEndPoints from '../../../ReduxStore/apiEndPoints/apiEndPoints.js';
 import { addActiveUserList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
 import ChatArea from './component_apps/ChatArea.jsx'
+
 
 const G_chatApp = ({ renderPart }) => {
     const dispatch = useDispatch();
     const navi = useNavigate();
-    const isMobile = useMediaQuery({ maxWidth: 768 });
     const ActiveUserList = useSelector(state => state?.ListSliceOdfStudent?.ActiveUserList);
     const OnlineUserList = useSelector(state => state?.ListSliceOdfStudent?.OnlineUserList);
     const ConnectedUserList = useSelector(state => state?.ListSliceOdfStudent?.ConnectedUserList);
@@ -67,6 +66,7 @@ const G_chatApp = ({ renderPart }) => {
                 }
             });
         } catch (error) {
+            console.log("72 G_chatApp  ", error)
             localStorage.clear();
             navi('/error_page');
         }
@@ -76,18 +76,32 @@ const G_chatApp = ({ renderPart }) => {
         }
 
     }, [])
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (ref.current === 'Online Student') {
+            setTest(false);
+            setMobileActionList(ref.current);
+        }
+        return () => {
+            setTest(false);
+        }
+    }, [OnlineUserList.length])
 
     const setMobileActionList = (type) => {
         switch (type) {
             case "Add Active Student":
+                ref.current = type
                 setUsers(ActiveUserList);
                 setMobileListShow(false)
                 break;
             case "Online Student":
+                ref.current = "Online Student"
                 setUsers(OnlineUserList);
                 setMobileListShow(false)
                 break;
             default:
+                ref.current = type
                 setUsers(ConnectedUserList);
                 setMobileListShow(false);
                 break;
@@ -95,7 +109,9 @@ const G_chatApp = ({ renderPart }) => {
     };
 
     const emitTheChatArea = (id, mode) => {
-        setEmit({ id, mode })
+        setEmit(() => {
+            return { id: id, mode: mode };
+        })
     }
 
     return (

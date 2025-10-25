@@ -44,7 +44,6 @@ const LoginUser = () => {
         setLoading(true);
         if (loginFormHandelr) {
             const result = await LoginCommunication(user);
-            console.log(result);
             const { message, success, jwt_token } = result;
             if (success) {
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
@@ -55,9 +54,6 @@ const LoginUser = () => {
                     navi('/');
                     res();
                 }, 3000))
-                // setTimeout(() => {
-
-                // }, 3000);
             } else {
                 localStorage.clear();
                 setError({ message });
@@ -70,7 +66,6 @@ const LoginUser = () => {
             const result = await LoginCommunication(inputHandler);
             const { message, success, jwt_token } = result;
             if (success) {
-                console.log(jwt_token);
                 // localStorage.setItem("token_finder", encryptData(token));
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
@@ -80,9 +75,6 @@ const LoginUser = () => {
                     navi('/');
                     res();
                 }, 3000))
-                // setTimeout(() => {
-                //     navi('/')
-                // }, 3000);
             } else {
                 localStorage.clear();
                 setError({ message });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -6,6 +6,10 @@ const recentPages = ['/dashboard', '/settings', '/help']; // Optional dynamic li
 
 export default function Error404() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("Error404 page render");
+    }, [])
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
