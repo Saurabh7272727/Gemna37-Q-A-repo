@@ -4,7 +4,7 @@ import { LuUserX } from "react-icons/lu";
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { HiOutlineStatusOnline } from "react-icons/hi";
-import { SiCoolermaster } from "react-icons/si";
+import { IoLogoIonic } from "react-icons/io5";
 import { useSelector } from 'react-redux';
 
 const ShowConnectedFri = ({ users, setLoading, loading, emitTheChatArea }) => {
@@ -14,7 +14,7 @@ const ShowConnectedFri = ({ users, setLoading, loading, emitTheChatArea }) => {
 
     // Simulate loading skeleton
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 2500);
+        const timer = setTimeout(() => setLoading(false), 900);
         return () => clearTimeout(timer);
     }, []);
 
@@ -71,8 +71,11 @@ const ShowConnectedFri = ({ users, setLoading, loading, emitTheChatArea }) => {
                                 </p>
                             </div>
                             {
-                                (currentUser?._id === user?._id) && <div className='flex items-center justify-center text-4xl p-3 rounded-xl hover:bg-white/10 cursor-pointer transition'>
-                                    <SiCoolermaster />
+                                (currentUser?._id === user?._id) && <div onClick={(e) => {
+                                    e.stopPropagation();
+                                    alert("this service are blocked for all users")
+                                }} className='flex items-center justify-center md:text-4xl lg:text-2xl text-2xl  p-3 rounded-xl hover:bg-white/10 cursor-pointer transition'>
+                                    <IoLogoIonic />
                                 </div>
                             }
                         </div>

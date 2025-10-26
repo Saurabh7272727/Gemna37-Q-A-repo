@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import MessageAlert from '../../../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { useMediaQuery } from 'react-responsive';
@@ -19,20 +19,30 @@ const ChatArea = ({ idByProps, renderPart }) => {
     const UserId = id || idByProps;
     const navi = useNavigate();
     const Data = useSelector((state) => state?.ListSliceOdfStudent?.ActiveUserList);
+    const onlineStudent = useSelector((state) => state?.ListSliceOdfStudent?.OnlineUserList);
+    const currentStudent = useSelector((state) => state?.userinfoSlice?.user);
+
+    const ref = useRef()
 
     const [state, setState] = useState({
         data: "",
         error: "",
         loading: true
-    })
+    });
+
+    const [inputState, setInputState] = useState({
+        message: ""
+    });
 
     useEffect(() => {
         if (!isMobile) {
             navi(`/app/chat`);
         }
-
-
         if (UserId) {
+            if (ref.current) {
+                ref.current.focus();
+            }
+
             if (Data.length > 0) {
                 const findUserById = Data?.find((user) => {
                     if (user?._id === UserId) {
@@ -41,9 +51,22 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 })
 
                 if (findUserById) {
-                    setState((sau) => {
-                        return { ...sau, loading: false, data: findUserById }
-                    })
+                    const findStatus = onlineStudent.find((em) => {
+                        if (em?._id === findUserById?._id) {
+                            return em;
+                        }
+                    });
+
+                    if (findStatus) {
+                        // console.log('online user -----', findStatus);
+                        setState((sau) => {
+                            return { ...sau, loading: false, data: findStatus }
+                        })
+                    } else {
+                        setState((sau) => {
+                            return { ...sau, loading: false, data: findUserById }
+                        })
+                    }
                 } else {
                     setState((sau) => {
                         return { ...sau, error: `User not found by ID -${UserId}`, loading: false }
@@ -55,7 +78,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 })
             }
         }
-    }, [UserId]);
+    }, [UserId, onlineStudent.length]);
 
     if (!UserId || !renderPart) {
         return (
@@ -71,6 +94,33 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 <MessageAlert type={"warning"} message={`User not Found by ID - 58`} onClose={true} />
             </>
         )
+    }
+
+    const inputHandler = (e) => {
+        const { name, value } = e.target;
+        const copy = { ...inputState };
+        copy[name] = value;
+        setInputState(copy);
+    }
+
+    const sendHandler = () => {
+        if (!state?.data?.socketId) {
+            return alert("user are offline , and do not send any message");
+        }
+
+        if (inputState.message && state.data.socketId) {
+            const payload = {
+                senderId: currentStudent?.ref_id?._id,
+                receiverId: state?.data?._id,
+                messaage: inputState.message,
+                timestamp: new Date(),
+                socketId: state.data.socketId
+            }
+
+            console.log("text send---", payload);
+        } else {
+            alert("type your message")
+        }
     }
 
     return (
@@ -107,6 +157,16 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                         </div>
                                     </div>
 
+                                    {
+                                        state?.data.socketId ? <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 shadow-sm">
+                                            <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
+                                            <span className="text-xs font-semibold text-white tracking-wide">ONLINE</span>
+                                        </div> : <div className="inline-flex items-center md:px-3 px-1 py-1 rounded-full bg-gradient-to-r from-red-500 to-red-600 shadow-sm">
+                                            <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
+                                            <span className="text-xs font-semibold text-white tracking-wide">OFFLINE</span>
+                                        </div>
+                                    }
+
                                     {/* Action Buttons */}
                                     <div className="flex items-center space-x-2 sm:space-x-4">
                                         <button className="p-2 hover:bg-gray-800 rounded-full transition-colors">
@@ -125,44 +185,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                             {/* Messages Area - Responsive */}
                             <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-900">
                                 <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
-                                    {/* Received Message */}
-                                    <div className="flex items-start space-x-2 sm:space-x-3">
-                                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span className="text-white text-xs sm:text-sm font-medium">J</span>
-                                        </div>
-                                        <div className="bg-gray-800 rounded-2xl rounded-tl-none px-3 py-2 sm:px-4 sm:py-3 shadow-sm border border-gray-700 max-w-[85%] sm:max-w-xs">
-                                            <p className="text-gray-200 text-sm">Hello! How can I help you today?</p>
-                                            <span className="text-xs text-gray-400 mt-1 block">10:30 AM</span>
-                                        </div>
-                                    </div>
 
-                                    {/* Sent Message */}
-                                    <div className="flex items-start justify-end space-x-2 sm:space-x-3">
-                                        <div className="bg-blue-500 rounded-2xl rounded-tr-none px-3 py-2 sm:px-4 sm:py-3 shadow-sm max-w-[85%] sm:max-w-xs">
-                                            <p className="text-white text-sm">I need help with my project</p>
-                                            <span className="text-xs text-blue-100 mt-1 block">10:31 AM</span>
-                                        </div>
-                                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span className="text-white text-xs sm:text-sm font-medium">Y</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Received Message with File */}
-                                    <div className="flex items-start space-x-2 sm:space-x-3">
-                                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span className="text-white text-xs sm:text-sm font-medium">J</span>
-                                        </div>
-                                        <div className="bg-gray-800 rounded-2xl rounded-tl-none px-3 py-2 sm:px-4 sm:py-3 shadow-sm border border-gray-700 max-w-[85%] sm:max-w-xs">
-                                            <div className="flex items-center space-x-2 bg-gray-700 rounded-lg px-2 py-1 sm:px-3 sm:py-2">
-                                                <FiPaperclip className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-gray-200 truncate">project_guide.pdf</p>
-                                                    <p className="text-xs text-gray-400">2.4 MB</p>
-                                                </div>
-                                            </div>
-                                            <span className="text-xs text-gray-400 mt-1 block">10:32 AM</span>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -182,14 +205,21 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                     {/* Message Input */}
                                     <div className="flex-1 min-w-0">
                                         <input
+                                            onChange={(e) => inputHandler(e)}
+                                            value={inputState?.message}
+                                            name='message'
                                             type="text"
+                                            required
+                                            ref={ref}
                                             placeholder="Type a message..."
                                             className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-700 text-white placeholder-gray-400"
                                         />
                                     </div>
 
                                     {/* Send Button */}
-                                    <button className="p-2 sm:p-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-sm flex-shrink-0">
+                                    <button
+                                        onClick={() => sendHandler()}
+                                        className="p-2 sm:p-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-sm flex-shrink-0">
                                         <FiSend className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                                     </button>
                                 </div>
