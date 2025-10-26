@@ -46,14 +46,17 @@ const App = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
   const loaderchecker = localStorage.getItem("firstTime");
-  const studentProfile = useSelector((state) => state?.userinfoSlice?.user)
+  const [tokenexpire, setTokenexpire] = useState(false)
+
   if (!loaderchecker) {
     localStorage.setItem("firstTime", true);
   }
 
   useEffect(() => {
     socket.on("connect_error", (err) => {
-      console.log(err.message); // prints the message associated with the error
+      console.log("socket message --- ", err.message);
+      setTokenexpire(true);
+      // prints the message associated with the error
     });
 
     const jwtToken = localStorage.getItem("jwt_token");
@@ -93,6 +96,7 @@ const App = () => {
 
   useEffect(() => {
     if (login) {
+      setTokenexpire(false);
       socket.auth.token = localStorage.getItem("jwt_token");
       socket.connect();
 
@@ -119,7 +123,7 @@ const App = () => {
   return (
     <>
       <HashRouter>
-        <Header renderPart={login} />
+        <Header renderPart={login} tokenexpire={tokenexpire} />
         <Routes>
           <Route path='/' element={<GemnaLogoDisplay />} />
           <Route path='/landing' element={<Landing />} />

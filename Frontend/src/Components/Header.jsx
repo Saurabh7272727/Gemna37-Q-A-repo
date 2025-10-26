@@ -10,7 +10,7 @@ const navigation = [
     { name: 'Marketplace', href: '#' },
     { name: 'Company', href: '#' },
 ]
-const Header = ({ renderPart }) => {
+const Header = ({ renderPart, tokenexpire }) => {
     const locationData = useLocation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navi = useNavigate();
@@ -27,7 +27,7 @@ const Header = ({ renderPart }) => {
     return (
         <>
             {
-                renderPart ? <StudentHeader /> :
+                renderPart ? <StudentHeader tokenexpire={tokenexpire} /> :
                     <header className="absolute inset-x-0 top-0 z-50">
                         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
                             <div className="flex lg:flex-1">

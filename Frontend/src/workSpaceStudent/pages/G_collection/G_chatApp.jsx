@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Error404 from '../../../Components/ErrorPages/Error404.jsx';
 import {
-    FaSearch, FaPaperPlane
+    FaSearch
 } from 'react-icons/fa';
+import { PulseLoadingSpinner } from '../../../Components/LodingSpinners/LoadingDemo.jsx'
 import { GoVerified } from "react-icons/go";
 import { useSelector, useDispatch } from 'react-redux';
 import { SiGooglegemini } from "react-icons/si";
@@ -48,23 +49,27 @@ const G_chatApp = ({ renderPart }) => {
 
     useEffect(() => {
         try {
-            setTest(true);
-            setUsers(ConnectedUserList);
-            let result = null
-            const fecthAsync = async () => {
-                const api = new ApiEndPoints();
-                result = await api.fetchAllActiveUser('/api/v1/students');
-            }
-            fecthAsync().then(() => {
-                if (result.success) {
-                    dispatch(addActiveUserList([...result.data]))
-                    setUsers(ConnectedUserList);
-                    setTest(false);
-                } else {
-                    localStorage.clear();
-                    navi('/error_page');
+            if (ActiveUserList.length === 0) {
+                setTest(true);
+                setUsers(ConnectedUserList);
+                let result = null
+                const fecthAsync = async () => {
+                    const api = new ApiEndPoints();
+                    result = await api.fetchAllActiveUser('/api/v1/students');
                 }
-            });
+                fecthAsync().then(() => {
+                    if (result.success) {
+                        dispatch(addActiveUserList([...result.data]))
+                        setUsers(ConnectedUserList);
+                        setTest(false);
+                    } else {
+                        localStorage.clear();
+                        navi('/error_page');
+                    }
+                });
+            }
+
+            setUsers(ConnectedUserList);
         } catch (error) {
             console.log("72 G_chatApp  ", error)
             localStorage.clear();
@@ -74,10 +79,8 @@ const G_chatApp = ({ renderPart }) => {
         return () => {
             setUsers(null);
         }
-
     }, [])
     const ref = useRef(null);
-
     useEffect(() => {
         if (ref.current === 'Online Student') {
             setTest(false);
@@ -117,7 +120,7 @@ const G_chatApp = ({ renderPart }) => {
     return (
         <>
             {
-                test ? <div className='w-full h-full flex justify-center items-center text-white'>Loading...</div> :
+                test ? <div className='w-full h-full flex justify-center items-center text-white'>loading....</div> :
                     <div className='w-full h-full  bg-gray-900 relative'>
                         <div className="w-full h-full bg-gray-900 text-white flex flex-row">
                             <aside className="lg:w-1/4 w-full border-r border-white/20 p-4">

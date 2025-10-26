@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';;
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 
 
-const Header = () => {
+const Header = ({ tokenexpire }) => {
     const locationData = useLocation();
     const dispatch = useDispatch();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,6 +32,10 @@ const Header = () => {
             flex md:justify-around items-center justify-between md:px-0 px-4
             '>
                 <h1 onClick={() => navi('/landing')} className='text-white cursor-pointer font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Gemna.ai</h1>
+                {tokenexpire && <div className="inline-flex items-center md:px-3 px-1 py-1 rounded-full bg-gradient-to-r from-red-500 to-red-600 shadow-sm">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
+                    <span className="text-xs font-semibold text-white tracking-wide">TOKEN EXPIRE - GAS</span>
+                </div>}
                 <button onClick={() => setMobileMenuOpen(true)}><AiOutlineBars className='w-[60px] h-[30px] text-white cursor-pointer' /></button>
             </nav>
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="">

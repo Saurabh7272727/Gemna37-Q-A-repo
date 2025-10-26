@@ -128,9 +128,9 @@ const ChatArea = ({ idByProps, renderPart }) => {
             {
                 state?.loading ? <div>Loading....</div> :
                     <div className='text-white w-full h-full'>
-                        <div className="flex flex-col h-full bg-gray-900">
+                        <div className="flex flex-col h-full bg-gray-900 relative">
                             {/* Header - Responsive */}
-                            <div className="border-b border-gray-700 px-4 py-3 sm:px-6 sm:py-4">
+                            <div className="border-b w-[40%] border-gray-700 px-4 py-3 sm:px-6 sm:py-4 fixed top-[8%]">
                                 <div className="flex items-center justify-between">
                                     {/* User Info */}
                                     <div className="flex items-center space-x-3 sm:space-x-4">
