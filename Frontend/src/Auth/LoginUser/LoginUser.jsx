@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Message from '../../MessageGemnaCenter/toast.js';
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
+import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
+import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js'
 import { useDispatch } from 'react-redux';
 const LoginUser = () => {
     const dispatch = useDispatch();
@@ -59,6 +61,8 @@ const LoginUser = () => {
                 setError({ message });
                 setLoading(false);
                 dispatch(accessController(false));
+                dispatch(clearinfoSlice());
+                dispatch(clearTheList());
             }
 
         } else {
@@ -80,6 +84,8 @@ const LoginUser = () => {
                 setError({ message });
                 setLoading(false);
                 dispatch(accessController(false));
+                dispatch(clearinfoSlice());
+                dispatch(clearTheList());
             }
 
         }

@@ -22,9 +22,12 @@ const userinfoSlice = createSlice({
         },
         UpdateUserInfo: (state, action) => {
             state.user.ref_id.imageURL = action.payload;
+        },
+        clearinfoSlice: (state, action) => {
+            state.user = {}
         }
     }
 })
 
-export const { loadUserInformation, UpdateUserInfo } = userinfoSlice.actions;
+export const { loadUserInformation, UpdateUserInfo, clearinfoSlice } = userinfoSlice.actions;
 export default userinfoSlice.reducer;

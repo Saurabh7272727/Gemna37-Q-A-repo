@@ -6,7 +6,6 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
 
     // Auto scroll to bottom when new messages arrive
     useEffect(() => {
-        console.log(messages, currentUserId)
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [safeMessages]);
 
@@ -44,7 +43,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                     {/* Message time */}
                                     <div className={`text-xs mt-2 ${isCurrentUser ? 'text-blue-100' : 'text-gray-500'
                                         }`}>
-                                        {message.createdAt ?
+                                        {message?.ref_id?.createdAt ?
                                             new Date(message?.ref_id?.createdAt).toLocaleTimeString([], {
                                                 hour: '2-digit',
                                                 minute: '2-digit'

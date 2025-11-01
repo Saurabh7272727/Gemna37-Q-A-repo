@@ -6,8 +6,8 @@ import { ImCross } from "react-icons/im";
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';;
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
-
-
+import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
+import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js'
 const Header = ({ tokenexpire }) => {
     const locationData = useLocation();
     const dispatch = useDispatch();
@@ -77,6 +77,8 @@ const Header = ({ tokenexpire }) => {
                                 Cookies.remove("GASID");
                                 Cookies.remove("ErrorMessage");
                                 dispatch(accessController(false));
+                                dispatch(clearTheList());
+                                dispatch(clearinfoSlice())
                                 navi('/');
                             }}>
                                 <button

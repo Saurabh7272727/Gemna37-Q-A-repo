@@ -81,6 +81,7 @@ const App = () => {
         } catch (error) {
           if (role !== 'student') {
             dispatch(accessController(false));
+            dispatch(clearTheList());
           }
           console.error("Error - 37 Something was wrong on App.jsx com");
         }
@@ -90,8 +91,6 @@ const App = () => {
     localStorage.removeItem("message_local");
     return () => {
       localStorage.removeItem("firstTime");
-      dispatch(clearTheList());
-      console.log("app are unmount");
     }
   }, []);
 

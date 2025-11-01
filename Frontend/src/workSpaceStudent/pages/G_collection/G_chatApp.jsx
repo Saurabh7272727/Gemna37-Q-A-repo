@@ -47,7 +47,7 @@ const G_chatApp = ({ renderPart }) => {
 
     useEffect(() => {
         try {
-            if (ConnectedUserList.length === 0) {
+            if (!ConnectedUserList.length) {
                 console.log("connection")
                 setTest(true);
                 setUsers(ConnectedUserList);
@@ -60,6 +60,7 @@ const G_chatApp = ({ renderPart }) => {
                     if (result.success) {
                         // process write filteration;
                         const { data } = result;
+                        console.log(data)
                         const arrangeData = data.reduce((acum, item) => {
                             if (item.member_one._id == studentProfile.ref_id._id) {
                                 acum?.push({ ...item.member_two, chatID: item.id });
