@@ -242,7 +242,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                             </div>
 
                             {/* Messages Area - Responsive */}
-                            <div className="md:h-[80%] h-[78%] overflow-y-auto p-4 sm:p-6 bg-gray-900 transform translate-y-[15%] mb-[56px] md:mb-[106px]">
+                            <div className="md:h-[80%] h-[78%] overflow-y-auto p-4 sm:p-6 bg-gray-900 transform translate-y-[15%] mb-[110px] md:mb-[106px]">
                                 <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto w-[100%] h-auto">
                                     <VirtualizedChat
                                         currentUserId={currentStudent?.ref_id?._id}
