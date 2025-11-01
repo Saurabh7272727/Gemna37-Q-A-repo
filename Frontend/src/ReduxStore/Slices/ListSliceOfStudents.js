@@ -20,9 +20,14 @@ const ListSliceOdfStudent = createSlice({
         },
         clearTheList: (state, action) => {
             state.ActiveUserList = [];
+            state.OnlineUserList = [];
+            state.ConnectedUserList = [];
+        },
+        addConnectionList: (state, action) => {
+            state.ConnectedUserList = [...action.payload];
         }
     }
 })
 
-export const { addActiveUserList, addOnlineUserList, clearTheList } = ListSliceOdfStudent.actions;
+export const { addActiveUserList, addOnlineUserList, clearTheList, addConnectionList } = ListSliceOdfStudent.actions;
 export default ListSliceOdfStudent.reducer;

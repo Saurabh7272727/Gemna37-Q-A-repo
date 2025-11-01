@@ -10,7 +10,7 @@ import { SiGooglegemini } from "react-icons/si";
 import MobileActionList from './component_apps/GChatTools.jsx';
 import ShowConnectedFri from './component_apps/ShowConnectedFri.jsx';
 import ApiEndPoints from '../../../ReduxStore/apiEndPoints/apiEndPoints.js';
-import { addActiveUserList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
+import { addActiveUserList, addConnectionList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
 import { useNavigate } from 'react-router-dom';
 import ChatArea from './component_apps/ChatArea.jsx'
 
@@ -45,11 +45,54 @@ const G_chatApp = ({ renderPart }) => {
     }
 
 
+    useEffect(() => {
+        try {
+            if (ConnectedUserList.length === 0) {
+                console.log("connection")
+                setTest(true);
+                setUsers(ConnectedUserList);
+                let result = null
+                const fecthAsync = async () => {
+                    const api = new ApiEndPoints();
+                    result = await api.fetchAllConnection('/api/v1/students/connection');
+                }
+                fecthAsync().then(() => {
+                    if (result.success) {
+                        // process write filteration;
+                        const { data } = result;
+                        const arrangeData = data.reduce((acum, item) => {
+                            if (item.member_one._id == studentProfile.ref_id._id) {
+                                acum?.push({ ...item.member_two, chatID: item.id });
+                            } else {
+                                acum?.push({ ...item.member_one, chatID: item.id });
+                            }
+                            return acum;
+                        }, []);
+                        dispatch(addConnectionList([...arrangeData]))
+                        setUsers(ConnectedUserList);
+                        setTest(false);
+                    } else {
+                        localStorage.clear();
+                        navi('/error_page');
+                    }
+                });
+            } else {
+                setUsers(ConnectedUserList);
+            }
+        } catch (error) {
+            console.log("84 G_chatApp  ", error)
+            localStorage.clear();
+            navi('/error_page');
+        }
+    }, [ConnectedUserList.length])
+
+
 
 
     useEffect(() => {
         try {
             if (ActiveUserList.length === 0) {
+                console.log("active")
                 setTest(true);
                 setUsers(ConnectedUserList);
                 let result = null
@@ -79,7 +122,8 @@ const G_chatApp = ({ renderPart }) => {
         return () => {
             setUsers(null);
         }
-    }, [])
+    }, [ActiveUserList.length]);
+
     const ref = useRef(null);
     useEffect(() => {
         if (ref.current === 'Online Student') {

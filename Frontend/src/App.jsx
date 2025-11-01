@@ -26,7 +26,7 @@ const GTools = lazy(() => import('./workSpaceStudent/pages/G_ToolsPage.jsx'))
 import { accessController } from './ReduxStore/Slices/AuthSlice.js';
 import { loadUserInformation } from './ReduxStore/Slices/UserInfoSlice.js'
 import { useSelector, useDispatch } from 'react-redux';
-import { addOnlineUserList } from './ReduxStore/Slices/ListSliceOfStudents.js'
+import { addOnlineUserList, clearTheList } from './ReduxStore/Slices/ListSliceOfStudents.js'
 
 // utils floder
 import convertMapToArray from './ReduxStore/utils/ConvertMapToArray.js';
@@ -90,6 +90,8 @@ const App = () => {
     localStorage.removeItem("message_local");
     return () => {
       localStorage.removeItem("firstTime");
+      dispatch(clearTheList());
+      console.log("app are unmount");
     }
   }, []);
 
@@ -113,6 +115,10 @@ const App = () => {
       socket.on("userAreDisconnect", (data) => {
         const arr = convertMapToArray(data?.onlineUsers);
         dispatch(addOnlineUserList(arr));
+      });
+
+      socket.on("notification_new_message", (data) => {
+        console.log(data);
       })
 
     } else {

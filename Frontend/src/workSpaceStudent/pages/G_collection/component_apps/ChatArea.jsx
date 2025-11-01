@@ -11,7 +11,9 @@ import {
     FiVideo,
     FiMoreVertical
 } from 'react-icons/fi';
-
+import socket from '../../../../socket_client/socket_client.js';
+import ApiEndPoints from '../../../../ReduxStore/apiEndPoints/apiEndPoints.js';
+import VirtualizedChat from './VirtualizedChat.jsx';
 
 const ChatArea = ({ idByProps, renderPart }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -21,6 +23,8 @@ const ChatArea = ({ idByProps, renderPart }) => {
     const Data = useSelector((state) => state?.ListSliceOdfStudent?.ActiveUserList);
     const onlineStudent = useSelector((state) => state?.ListSliceOdfStudent?.OnlineUserList);
     const currentStudent = useSelector((state) => state?.userinfoSlice?.user);
+    const connectedUser = useSelector((state) => state?.ListSliceOdfStudent?.ConnectedUserList);
+
 
     const ref = useRef()
 
@@ -34,7 +38,10 @@ const ChatArea = ({ idByProps, renderPart }) => {
         message: ""
     });
 
+    const [messages, setMessages] = useState([]);
+
     useEffect(() => {
+
         if (!isMobile) {
             navi(`/app/chat`);
         }
@@ -103,6 +110,52 @@ const ChatArea = ({ idByProps, renderPart }) => {
         setInputState(copy);
     }
 
+    useEffect(() => {
+        const findPayload = connectedUser.find((item) => {
+            if (item.email === state.data.email) {
+                return item;
+            }
+        });
+
+        try {
+            if (findPayload) {
+                setState((sau) => {
+                    return {
+                        ...sau,
+                        loading: true
+                    }
+                })
+                let result = null
+                const fecthAsync = async () => {
+                    const api = new ApiEndPoints();
+                    result = await api.fetchAllConnectionMessage(`/api/v1/students/connection/${findPayload.chatID}`);
+                }
+                fecthAsync().then(() => {
+                    if (result.success) {
+                        setMessages(result.data);
+                        setState((sau) => {
+                            return {
+                                ...sau,
+                                loading: false
+                            }
+                        })
+                    } else {
+                        localStorage.clear();
+                        navi(-1);
+                    }
+                });
+            } else {
+                console.log("147 chatArea - waiting....")
+            }
+        } catch (error) {
+            console.log("152 chatArea  ", error)
+            localStorage.clear();
+            navi('/error_page');
+        }
+    }, [state.data.email]);
+
+    // console.log(state.data.email);
+
     const sendHandler = () => {
         if (!state?.data?.socketId) {
             return alert("user are offline , and do not send any message");
@@ -112,11 +165,16 @@ const ChatArea = ({ idByProps, renderPart }) => {
             const payload = {
                 senderId: currentStudent?.ref_id?._id,
                 receiverId: state?.data?._id,
-                messaage: inputState.message,
-                timestamp: new Date(),
-                socketId: state.data.socketId
+                message: inputState.message,
+                socketId: state.data.socketId,
+                index: 1,
+                type: "text",
+                r_email: state?.data?.email.trim()
             }
 
+            socket.emit("socket_send_payload", { ...payload }, (data) => {
+                console.log(data);
+            });
             console.log("text send---", payload);
         } else {
             alert("type your message")
@@ -126,7 +184,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
     return (
         <>
             {
-                state?.loading ? <div>Loading....</div> :
+                state?.loading ? <div className='w-full h-full flex justify-center items-center text-white'>Loading....</div> :
                     <div className='text-white w-full h-full'>
                         <div className="flex flex-col h-full bg-gray-900 relative">
                             {/* Header - Responsive */}
@@ -149,6 +207,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                         <div className="max-w-[140px] sm:max-w-none">
                                             <h2 className="text-base sm:text-lg font-semibold text-white truncate">
                                                 {state?.data?.firstName} {state?.data?.lastName}
+                                                {state?.data?.email}
                                             </h2>
                                             <p className="text-xs sm:text-sm text-gray-300 font-medium flex items-center mt-1">
                                                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
@@ -183,9 +242,12 @@ const ChatArea = ({ idByProps, renderPart }) => {
                             </div>
 
                             {/* Messages Area - Responsive */}
-                            <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-900">
-                                <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
-
+                            <div className="md:h-[80%] h-[78%] overflow-y-auto p-4 sm:p-6 bg-gray-900 transform translate-y-[15%] mb-[56px] md:mb-[106px]">
+                                <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto w-[100%] h-auto">
+                                    <VirtualizedChat
+                                        currentUserId={currentStudent?.ref_id?._id}
+                                        messages={messages}
+                                    />
                                 </div>
                             </div>
 
@@ -201,6 +263,8 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                             <FiImage className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                                         </button>
                                     </div>
+
+
 
                                     {/* Message Input */}
                                     <div className="flex-1 min-w-0">
