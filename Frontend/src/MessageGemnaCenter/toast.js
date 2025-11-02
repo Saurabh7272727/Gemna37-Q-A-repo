@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 
 class Message {
-    constructor(response) { // object of response
+    constructor(response) {
         this.message = response;
     }
 

@@ -191,7 +191,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
     useEffect(() => {
         const handleNewMessage = (data) => {
-            console.log("📩 New message received:", data);
             if (data.notify === "you receive new message") {
                 setMessages((sau) => {
                     return [...sau, { ref_id: { ...data.message } }]
