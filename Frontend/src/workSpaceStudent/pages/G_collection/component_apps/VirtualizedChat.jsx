@@ -10,9 +10,9 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [safeMessages]);
+    }, [safeMessages.length]);
 
-    console.log(messages);
+    // console.log(messages);
 
     const timeGetter = (time) => {
         const timer = new Date(time);

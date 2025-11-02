@@ -167,15 +167,30 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 receiverId: state?.data?._id,
                 message: inputState.message,
                 socketId: state.data.socketId,
-                index: 1,
+                index: messages.length,
                 type: "text",
                 r_email: state?.data?.email.trim()
             }
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
-                console.log(data);
+                if (data.notify === "successfully send your message") {
+                    setMessages((sau) => {
+                        return [...sau, { ref_id: { ...data.message } }]
+                    })
+                } else {
+                    console.log(data.notify);
+                }
             });
-            console.log("text send---", payload);
+
+            socket.on("notification_new_message", (data) => {
+                if (data.notify === "you receive new message") {
+                    setMessages((sau) => {
+                        return [...sau, { ref_id: { ...data.message } }]
+                    })
+                } else {
+                    console.log(data);
+                }
+            })
         } else {
             alert("type your message")
         }

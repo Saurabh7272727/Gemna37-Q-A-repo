@@ -116,10 +116,6 @@ const App = () => {
         dispatch(addOnlineUserList(arr));
       });
 
-      socket.on("notification_new_message", (data) => {
-        console.log(data);
-      })
-
     } else {
       socket.disconnect();
     }
