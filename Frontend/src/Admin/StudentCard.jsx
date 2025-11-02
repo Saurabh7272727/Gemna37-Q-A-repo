@@ -38,7 +38,7 @@ const StudentCard = ({
                     <div className="flex items-center"><FaBook className="mr-2 text-green-600" /> Course: {course.label}</div>
                     <div className="flex items-center"><FaUser className="mr-2 text-purple-600" /> Branch: {branch.label}</div>
                     <div className="flex items-center"><FaCalendarAlt className="mr-2 text-yellow-600" /> Year: {year.label}</div>
-                    <div className="flex items-center"><FaCalendarAlt className="mr-2 text-yellow-600" /> Email: {email.label}</div>
+                    <div className="flex items-center"><FaCalendarAlt className="mr-2 text-yellow-600" /> Email: {email}</div>
                     <div className="flex items-center">
                         <IoMdRadioButtonOn
                             className={`mr-2 ${status.value === 'active' ? 'text-green-600' : 'text-red-500'}`}
