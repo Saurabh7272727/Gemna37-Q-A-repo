@@ -178,7 +178,8 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 if (data.notify === "successfully send your message") {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
-                    })
+                    });
+                    setInputState({ message: " " })
                 } else {
                     console.log(data.notify);
                 }
