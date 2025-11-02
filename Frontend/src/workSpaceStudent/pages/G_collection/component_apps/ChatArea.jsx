@@ -156,7 +156,8 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
     // console.log(state.data.email);
 
-    const sendHandler = () => {
+    const sendHandler = (e) => {
+        e.stopPropagation()
         if (!state?.data?.socketId) {
             return alert("user are offline , and do not send any message");
         }
@@ -182,22 +183,25 @@ const ChatArea = ({ idByProps, renderPart }) => {
                     console.log(data.notify);
                 }
             });
-
-            socket.on("notification_new_message", (data) => {
-                console.log("you have new message");
-                if (data.notify === "you receive new message") {
-
-                    setMessages((sau) => {
-                        return [...sau, { ref_id: { ...data.message } }]
-                    })
-                } else {
-                    console.log(data);
-                }
-            })
         } else {
             alert("type your message")
         }
     }
+
+    useEffect(() => {
+        const handleNewMessage = (data) => {
+            console.log("📩 New message received:", data);
+            if (data.notify === "you receive new message") {
+                setMessages((sau) => {
+                    return [...sau, { ref_id: { ...data.message } }]
+                })
+            }
+        };
+        socket.on("notification_new_message", handleNewMessage);
+        return () => {
+            socket.off("notification_new_message", handleNewMessage);
+        };
+    }, []);
 
     return (
         <>
@@ -299,7 +303,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
                                     {/* Send Button */}
                                     <button
-                                        onClick={() => sendHandler()}
+                                        onClick={(e) => sendHandler(e)}
                                         className="p-2 sm:p-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-sm flex-shrink-0">
                                         <FiSend className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                                     </button>

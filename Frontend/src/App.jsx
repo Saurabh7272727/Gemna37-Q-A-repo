@@ -119,15 +119,19 @@ const App = () => {
         dispatch(addOnlineUserList(arr));
       })
 
-      socket.on("userAreDisconnect", (data) => {
-        const arr = convertMapToArray(data?.onlineUsers);
-        dispatch(addOnlineUserList(arr));
-      });
-
     } else {
       socket.disconnect();
     }
   }, [login]);
+
+  useEffect(() => {
+    if (login) {
+      socket.on("userAreDisconnect", (data) => {
+        const arr = convertMapToArray(data?.onlineUsers);
+        dispatch(addOnlineUserList(arr));
+      });
+    }
+  }, [login])
 
   return (
     <>
