@@ -1,18 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
 const VirtualizedChat = ({ currentUserId, messages = [] }) => {
     const messagesEndRef = useRef();
+    const containerRef = useRef();
     const safeMessages = Array.isArray(messages) ? messages : [];
-    const [detailsCot, setDetailsCot] = useState({
-        id: ""
-    })
+    const [detailsCot, setDetailsCot] = useState({ id: "" });
+    const [visibleCount, setVisibleCount] = useState(10); // ✅ Initially 10 messages
 
+    // ✅ AUTO SCROLL TO BOTTOM when new messages arrive
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [safeMessages.length]);
 
-    // console.log(messages);
+    // ✅ SCROLL HANDLER - Load more messages when scrolling
+    const handleScroll = useCallback((e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+
+        // ✅ Load more when scrolled to top (scrollTop === 0)
+        if (scrollTop === 0 && visibleCount < safeMessages.length) {
+            const newCount = Math.min(safeMessages.length, visibleCount + 10);
+            setVisibleCount(newCount);
+        }
+    }, [visibleCount, safeMessages.length]);
+
+    // ✅ Reset visible count when messages change
+    useEffect(() => {
+        setVisibleCount(10); // Reset to 10 when new messages arrive
+    }, [safeMessages.length]);
+
+    // ✅ Get visible messages (last N messages based on visibleCount)
+    const visibleMessages = safeMessages.slice(-visibleCount);
 
     const timeGetter = (time) => {
         const timer = new Date(time);
@@ -27,8 +45,11 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
 
     return (
         <div
+            ref={containerRef}
+            onScroll={handleScroll}
             onClick={() => setDetailsCot({ id: "" })}
-            className="h-full w-full overflow-y-auto bg-gray-900 rounded-lg border border-gray-900 p-4">
+            className="h-full md:w-[80%] w-full overflow-y-auto scrollbar-none bg-gray-900 rounded-lg border border-gray-900 p-4"
+        >
             {safeMessages.length === 0 ? (
                 <div className="h-full flex items-center justify-center pt-[10%] text-gray-500">
                     <div className="text-center">
@@ -39,7 +60,15 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                 </div>
             ) : (
                 <div className="space-y-3">
-                    {safeMessages.map((message, index) => {
+                    {/* ✅ Show "Load more" indicator if there are more messages */}
+                    {visibleCount < safeMessages.length && (
+                        <div className="text-center py-2 text-gray-400 text-sm">
+                            ↑ Scroll to top to load {safeMessages.length - visibleCount} more messages
+                        </div>
+                    )}
+
+                    {/* ✅ Only render visible messages */}
+                    {visibleMessages.map((message, index) => {
                         const isCurrentUser = message?.ref_id?.senderId === currentUserId;
 
                         return (
