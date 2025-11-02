@@ -173,6 +173,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
             }
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
+                console.log("send messages", data);
                 if (data.notify === "successfully send your message") {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
@@ -183,7 +184,9 @@ const ChatArea = ({ idByProps, renderPart }) => {
             });
 
             socket.on("notification_new_message", (data) => {
+                console.log("you have new message");
                 if (data.notify === "you receive new message") {
+
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
                     })

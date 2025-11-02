@@ -105,6 +105,14 @@ const App = () => {
         console.log(`${socket.id} are connect with server`);
       });
 
+      socket.on('disconnect', (reason) => {
+        console.log('❌ Socket disconnected:', reason);
+      });
+
+      socket.on('connect_error', (error) => {
+        console.log('🔴 Connection error:', error);
+      });
+
 
       socket.on("newUserAreConnect", (data) => {
         const arr = convertMapToArray(data?.onlineUsers);
