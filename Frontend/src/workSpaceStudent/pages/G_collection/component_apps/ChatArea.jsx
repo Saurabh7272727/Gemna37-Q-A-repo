@@ -85,7 +85,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 })
             }
         }
-    }, [UserId, onlineStudent.length]);
+    }, [UserId, onlineStudent.length, idByProps]);
 
     if (!UserId || !renderPart) {
         return (
@@ -174,7 +174,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
             }
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
-                console.log("send messages", data);
                 if (data.notify === "successfully send your message") {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
@@ -191,7 +190,9 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
     useEffect(() => {
         const handleNewMessage = (data) => {
-            if (data.notify === "you receive new message") {
+            if (data.distination === `${currentStudent?.ref_id?._id}/${currentStudent?.ref_id?._id}`) {
+                return;
+            } else if (data.notify === "you receive new message") {
                 setMessages((sau) => {
                     return [...sau, { ref_id: { ...data.message } }]
                 })
@@ -210,7 +211,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                     <div className='text-white w-full h-full'>
                         <div className="flex flex-col h-full bg-gray-900 relative">
                             {/* Header - Responsive */}
-                            <div className="border-b md:w-[59%] w-auto border-gray-700 px-4 py-3 sm:px-6 sm:py-4 fixed top-[8%]">
+                            <div className="border-b z-50 bg-gray-900 md:w-[59%] w-auto border-gray-700 px-4 py-3 sm:px-6 sm:py-4 fixed top-[8%]">
                                 <div className="flex items-center justify-between">
                                     {/* User Info */}
                                     <div className="flex items-center space-x-3 sm:space-x-4">

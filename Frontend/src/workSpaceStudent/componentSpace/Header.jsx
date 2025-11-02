@@ -8,8 +8,7 @@ import { useDispatch } from 'react-redux';;
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
 import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js';
-import { ToastContainer, toast } from 'react-toastify';
-import socket from '../../socket_client/socket_client.js';
+
 
 const Header = ({ tokenexpire }) => {
     const locationData = useLocation();
@@ -27,27 +26,6 @@ const Header = ({ tokenexpire }) => {
     const redirectThePage = ({ name }) => {
         navi(`/${name}`);
     }
-
-    useEffect(() => {
-        const currentPath = locationData.pathname;
-        const isChatPage = currentPath.startsWith('/chat/app/');
-        let handleNewMessage = null;
-        if (!isChatPage) {
-            handleNewMessage = (data) => {
-                if (data.notify === "you receive new message") {
-                    toast.success(`${data.notify}`);
-                }
-            };
-            socket.on("notification_new_message", handleNewMessage);
-        } else {
-            console.log("gemna.ai On chat page, notification listener disabled");
-        }
-        return () => {
-            if (handleNewMessage) {
-                socket.off("notification_new_message", handleNewMessage);
-            }
-        };
-    }, [locationData.pathname]);
 
     return (
         <>
@@ -118,11 +96,6 @@ const Header = ({ tokenexpire }) => {
                     </DialogPanel>
                 </Dialog>
             </div>
-
-
-            <ToastContainer
-                autoClose={6000}
-            />
         </>
 
     )

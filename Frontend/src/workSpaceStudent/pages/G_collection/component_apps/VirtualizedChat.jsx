@@ -56,7 +56,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                         {message?.ref_id?.message}
                                     </div>
                                     {
-                                        detailsCot.id === message._id && <div className={`${isCurrentUser ? "text-gray-500" : "text-gray-400"}`}>
+                                        detailsCot.id === message?.ref_id?._id && <div className={`${isCurrentUser ? "text-gray-500" : "text-gray-400"}`}>
                                             <p className='text-xs pt-2'>type - {message?.ref_id?.type}</p>
                                             <p className='text-xs'>Message Date - {timeGetter(message?.ref_id?.createdAt)}</p>
                                             <p className='text-xs'>Week day - {WeekDay(message?.ref_id?.createdAt)}</p>
@@ -75,8 +75,9 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                         }
                                         <span
                                             onClick={(e) => {
+                                                console.log("message -id ", message._id);
                                                 e.stopPropagation();
-                                                setDetailsCot({ id: message._id });
+                                                setDetailsCot({ id: message?.ref_id?._id });
                                             }}
                                             className='pl-[40%] text-white font-bold cursor-pointer active:text-blue-600'>
                                             <HiOutlineDotsVertical />
