@@ -80,7 +80,6 @@ const AddStudentDashBoard = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         if (validate()) {
             setBtnLoading(true);
             dispatch({ type: "LOAD_FORM_INACTIVE", payload: { ...formData, loading: true } });
@@ -98,7 +97,6 @@ const AddStudentDashBoard = () => {
             setBtnLoading(false);
             return;
         }
-        console.log(result);
         setBtnLoading(false);
     };
     return (

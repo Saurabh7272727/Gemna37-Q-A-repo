@@ -20,6 +20,8 @@ const StudentCard = ({
     email,
     loading
 }) => {
+
+
     return (
         <>
             <div className='md:w-[90%] w-[100%] h-[300px] bg-white rounded-lg flex-none  pt-4 relative'>
