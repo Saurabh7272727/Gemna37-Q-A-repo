@@ -274,7 +274,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                             </div>
 
                             {/* Message Input - Responsive */}
-                            <div className="border-t border-gray-700 px-4 py-3 sm:px-6 sm:py-4 bg-gray-800">
+                            <div className="border-t z-50 border-gray-700 px-4 py-3 sm:px-6 sm:py-4 bg-gray-800">
                                 <div className="flex items-center space-x-3 sm:space-x-4">
                                     {/* Attachment Buttons */}
                                     <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
