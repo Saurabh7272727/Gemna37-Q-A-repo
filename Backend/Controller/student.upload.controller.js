@@ -146,18 +146,23 @@ const registerationGEMID = async (req, res) => {
         return res.end();
     }
 
-    const person = await emailSender(email, "We are supporting your goal and provide a enivorment to work with real world problem", generateSecureOTP(), { ...req.body });
-    if (person) {
-        const submitLastModel = new StudentModel({ ...person, Indb: true });
-        await submitLastModel.save();
-        res.status(201).json({
-            message: "email are send by service", success: true,
-            status: "ACCEPTED", studentData: { ...person, Indb: true }
-        });
-        return;
-    } else {
-        res.status(404).json({ message: "something was wrong", success: false, status: "VALIDATION_ERROR" });
+    try {
+        const person = await emailSender(email, "We are supporting your goal and provide a enivorment to work with real world problem", generateSecureOTP(), { ...req.body });
+        if (person) {
+            const submitLastModel = new StudentModel({ ...person, Indb: true });
+            await submitLastModel.save();
+            res.status(201).json({
+                message: "email are send by service", success: true,
+                status: "ACCEPTED", studentData: { ...person, Indb: true }
+            });
+            return;
+        } else {
+            res.status(404).json({ message: "something was wrong", success: false, status: "VALIDATION_ERROR" });
+        }
+    } catch (error) {
+        res.status(902).json({ message: error.message, success: false, status: "VALIDATION_ERROR" });
     }
+
 
 
 }
