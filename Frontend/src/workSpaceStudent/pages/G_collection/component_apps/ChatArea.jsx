@@ -241,10 +241,10 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                     {
                                         state?.data.socketId ? <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 shadow-sm">
                                             <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
-                                            <span className="text-xs font-semibold text-white tracking-wide">ONLINE</span>
+                                            <span className="text-xs text-[8px] font-semibold text-white tracking-wide">ONLINE</span>
                                         </div> : <div className="inline-flex items-center md:px-3 px-1/2 py-1/2 rounded-full bg-gradient-to-r from-red-500 to-red-600 shadow-sm">
                                             <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
-                                            <span className="text-xs font-semibold text-white tracking-wide">OFFLINE</span>
+                                            <span className="md:text-xs text-[8px] font-semibold text-white tracking-wide">OFFLINE</span>
                                         </div>
                                     }
 
