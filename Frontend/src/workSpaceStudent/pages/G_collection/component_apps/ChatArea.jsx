@@ -178,7 +178,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
                     });
-                    setInputState({ message: " " })
+                    setInputState({ message: "" })
                 } else {
                     console.log(data.notify);
                 }
