@@ -207,7 +207,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                         <div className="max-w-[140px] sm:max-w-none">
                                             <h2 className="text-base sm:text-lg font-semibold text-white truncate">
                                                 {state?.data?.firstName} {state?.data?.lastName}
-                                                {state?.data?.email}
                                             </h2>
                                             <p className="text-xs sm:text-sm text-gray-300 font-medium flex items-center mt-1">
                                                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
