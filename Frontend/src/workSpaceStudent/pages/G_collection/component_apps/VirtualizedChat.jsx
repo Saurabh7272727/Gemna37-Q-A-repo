@@ -27,7 +27,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
 
     return (
         <div
-            onClick={() => setDetailsCot({ id: " " })}
+            onClick={() => setDetailsCot({ id: "" })}
             className="h-full w-full overflow-y-auto bg-gray-900 rounded-lg border border-gray-900 p-4">
             {safeMessages.length === 0 ? (
                 <div className="h-full flex items-center justify-center pt-[10%] text-gray-500">
