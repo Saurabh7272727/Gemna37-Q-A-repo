@@ -3,16 +3,19 @@ import { FaUserAlt, FaLock, FaGoogle, FaFacebookF } from 'react-icons/fa';
 import { decryptData, encryptData } from '../Encryption/jsondataEncryption.js';
 import LoginCommunication from '../../Communication/Login.commuincation.js';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Message from '../../MessageGemnaCenter/toast.js';
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
 import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js'
 import { useDispatch } from 'react-redux';
-const LoginUser = () => {
-    const dispatch = useDispatch();
+import { SiAuth0 } from 'react-icons/si';
+import Cookies from 'js-cookie'
 
+const LoginUser = () => {
+    const [getValueParams, setValueParams] = useSearchParams();
+    const dispatch = useDispatch();
     const navi = useNavigate();
     const [user, setUser] = useState({});
     const [loginFormHandelr, setLoginFormHandler] = useState(false);
@@ -34,6 +37,28 @@ const LoginUser = () => {
         }
     }, []);
 
+
+    useEffect(() => {
+
+        const ttt = async () => {
+            if (getValueParams.get("token") && getValueParams.get("token") === Cookies.get("token")) {
+                // console.log(getValueParams.get("token"), "============", Cookies.get("token"));
+
+                localStorage.removeItem("jwt_token");
+                localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: getValueParams.get("token") }));
+                const toast = new Message({ message: "Login successfully", success: true });
+                toast.setMessage();
+                dispatch(accessController(true));
+                await new Promise((rej, res) => setTimeout(() => {
+                    navi('/');
+                    res();
+                }, 3000))
+            }
+        }
+
+        ttt();
+    }, [])
+
     const ChangeHandler = (e) => {
         const { name, value } = e.target;
         const copyData = { ...inputHandler };
@@ -48,6 +73,7 @@ const LoginUser = () => {
             const result = await LoginCommunication(user);
             const { message, success, jwt_token } = result;
             if (success) {
+
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
                 toast.setMessage();
@@ -70,6 +96,7 @@ const LoginUser = () => {
             const result = await LoginCommunication(inputHandler);
             const { message, success, jwt_token } = result;
             if (success) {
+                console.log("==========", jwt_token);
                 // localStorage.setItem("token_finder", encryptData(token));
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: jwt_token }));
                 const toast = new Message(result);
@@ -90,6 +117,11 @@ const LoginUser = () => {
 
         }
     }
+
+    const handleGoogleLogin = () => {
+        navi('/auth/google/verification')
+    };
+
     return (
         <>
             {
@@ -159,7 +191,14 @@ const LoginUser = () => {
                             </form>
 
                             <p className="text-center text-white text-sm mt-6">
-                                <span className='text-blue-500 underline underline-offset-2 cursor-pointer'>forget password?</span> on gemna.ai auth service
+                                <span className='text-blue-500 underline underline-offset-2 cursor-pointer'>
+                                    <button
+                                        className="btn-google"
+                                        onClick={handleGoogleLogin}
+                                    >
+                                        Continue with Google
+                                    </button>
+                                </span> on gemna.ai auth service
                             </p>
                         </div>
                         {

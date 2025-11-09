@@ -20,7 +20,7 @@
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^1.2.0",
     "autocannon": "^8.0.0",
-    "axios": "^1.11.0",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "bullmq": "^5.58.7",
     "cloudinary": "^2.7.0",

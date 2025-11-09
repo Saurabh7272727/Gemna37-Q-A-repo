@@ -6,30 +6,30 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
     const containerRef = useRef();
     const safeMessages = Array.isArray(messages) ? messages : [];
     const [detailsCot, setDetailsCot] = useState({ id: "" });
-    const [visibleCount, setVisibleCount] = useState(10); // ✅ Initially 10 messages
+    const [visibleCount, setVisibleCount] = useState(10);
 
-    // ✅ AUTO SCROLL TO BOTTOM when new messages arrive
+
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [safeMessages.length]);
 
-    // ✅ SCROLL HANDLER - Load more messages when scrolling
+
     const handleScroll = useCallback((e) => {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
 
-        // ✅ Load more when scrolled to top (scrollTop === 0)
+
         if (scrollTop === 0 && visibleCount < safeMessages.length) {
             const newCount = Math.min(safeMessages.length, visibleCount + 10);
             setVisibleCount(newCount);
         }
     }, [visibleCount, safeMessages.length]);
 
-    // ✅ Reset visible count when messages change
+
     useEffect(() => {
-        setVisibleCount(10); // Reset to 10 when new messages arrive
+        setVisibleCount(10);
     }, [safeMessages.length]);
 
-    // ✅ Get visible messages (last N messages based on visibleCount)
+
     const visibleMessages = safeMessages.slice(-visibleCount);
 
     const timeGetter = (time) => {
@@ -53,21 +53,21 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
             {safeMessages.length === 0 ? (
                 <div className="h-full flex items-center justify-center pt-[10%] text-gray-500">
                     <div className="text-center">
-                        <div className="text-4xl mb-2">💬</div>
+                        <div className="text-4xl mb-2">Gemna.ai G-Chat</div>
                         <p className="text-lg font-medium">No messages yet</p>
                         <p className="text-sm">Start a conversation!</p>
                     </div>
                 </div>
             ) : (
                 <div className="space-y-3">
-                    {/* ✅ Show "Load more" indicator if there are more messages */}
+
                     {visibleCount < safeMessages.length && (
                         <div className="text-center py-2 text-gray-400 text-sm">
-                            ↑ Scroll to top to load {safeMessages.length - visibleCount} more messages
+                            JS-37 Scroll to top to load {safeMessages.length - visibleCount} more messages
                         </div>
                     )}
 
-                    {/* ✅ Only render visible messages */}
+
                     {visibleMessages.map((message, index) => {
                         const isCurrentUser = message?.ref_id?.senderId === currentUserId;
 
@@ -80,7 +80,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                     ? 'bg-gray-800 text-white rounded-br-none'
                                     : 'bg-gray-600 text-white rounded-bl-none border border-gray-900'
                                     }`}>
-                                    {/* Message content */}
+
                                     <div className="text-sm break-words">
                                         {message?.ref_id?.message}
                                     </div>
@@ -92,7 +92,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                         </div>
                                     }
 
-                                    {/* Message time */}
+
                                     <div className={`text-xs mt-2 flex justify-between ${isCurrentUser ? 'text-blue-100' : 'text-gray-400'
                                         }`}>
                                         {message?.ref_id?.createdAt ?

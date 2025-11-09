@@ -1,6 +1,7 @@
 import express from 'express';
 import studentUploadRouter from './Route/student.upload.image.js';
 import VerifyedStudentFetchRouter from './Route/student.fetchdata.router.js';
+import googleVerificationRouter from './Route/student.auth.google.js';
 
 import cors from 'cors';
 import initialresponseonhomeroute from './ResponseStructure/initialResponse.js';
@@ -14,7 +15,7 @@ connectDataBaseURL();
 app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
-    origin: ["http://localhost:5173", "https://gemna37-q-a-repo.vercel.app"],
+    origin: ["http://localhost:5173", "http://localhost:3000", "https://gemna37-q-a-repo.vercel.app"],
     methods: ["POST", "GET"],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
@@ -31,4 +32,5 @@ app.get('/', (req, res) => {
 
 app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
+app.use('/', googleVerificationRouter)
 export default app;

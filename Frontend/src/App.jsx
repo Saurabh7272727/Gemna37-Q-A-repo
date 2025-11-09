@@ -42,6 +42,9 @@ import ApiEndPoints from './ReduxStore/apiEndPoints/apiEndPoints.js';
 import socket from './socket_client/socket_client.js';
 
 
+// google auth com
+import GoogleStyleAuthPage from './Auth/LoginUser/GoogleAuth.jsx';
+
 const App = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
@@ -106,11 +109,11 @@ const App = () => {
       });
 
       socket.on('disconnect', (reason) => {
-        console.log('❌ Socket disconnected:', reason);
+        console.log('Socket disconnected:', reason);
       });
 
       socket.on('connect_error', (error) => {
-        console.log('🔴 Connection error:', error);
+        console.log('Connection error:', error);
       });
 
 
@@ -186,6 +189,10 @@ const App = () => {
               </WorkSpaceContainerSize>
             </Suspense>
           } />
+
+          <Route path='/auth/google/verification' element={<GoogleStyleAuthPage />} />
+          <Route path='/success/google/*' element={<Login />} />
+          <Route path='/error/google/auth' element={<div className='pt-[100px]'>User Not found by Google Auth</div>} />
           <Route path='*' element={<div className='pt-[100px]'>Gemna.ai does not support your unauth router call</div>} />
         </Routes>
         <Footer renderPart={login} />

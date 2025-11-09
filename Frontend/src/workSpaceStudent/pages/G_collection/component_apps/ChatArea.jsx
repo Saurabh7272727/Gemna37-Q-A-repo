@@ -204,12 +204,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
         };
     }, []);
 
-
-    //     <VirtualizedChat
-    //     currentUserId={currentStudent?.ref_id?._id}
-    //     messages={messages}
-    // />
-
     return (
         <>
             {
@@ -269,7 +263,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                 </div>
                             </div>
 
-                            {/* Messages Area - Responsive */}
+
                             <div className="md:h-[80%] flex justify-center items-center overflow-hidden h-[100%] bg-gray-900 transform translate-y-[22%] mb-[110px] md:mb-[120px]">
                                 <VirtualizedChat
                                     currentUserId={currentStudent?.ref_id?._id}
@@ -277,10 +271,9 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                 />
                             </div>
 
-                            {/* Message Input - Responsive */}
                             <div className="border-t z-50 border-gray-700 px-4 py-3 sm:px-6 sm:py-4 bg-gray-800">
                                 <div className="flex items-center space-x-3 sm:space-x-4">
-                                    {/* Attachment Buttons */}
+
                                     <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                                         <button className="p-2 hover:bg-gray-700 rounded-full transition-colors">
                                             <FiPaperclip className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
@@ -291,8 +284,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                     </div>
 
 
-
-                                    {/* Message Input */}
                                     <div className="flex-1 min-w-0">
                                         <input
                                             onChange={(e) => inputHandler(e)}
@@ -305,8 +296,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                             className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-700 text-white placeholder-gray-400"
                                         />
                                     </div>
-
-                                    {/* Send Button */}
                                     <button
                                         onClick={(e) => sendHandler(e)}
                                         className="p-2 sm:p-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-sm flex-shrink-0">
