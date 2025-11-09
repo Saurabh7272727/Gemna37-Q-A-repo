@@ -13,7 +13,7 @@ router.get('/auth/google', (req, res) => {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
 
     const options = {
-        redirect_uri: 'http://localhost:3000/auth/google/callback',
+        redirect_uri: 'https://gemna37-q-a-repo.onrender.com/auth/google/callback',
         client_id: process.env.GOOGLE_CLIENT_ID,
         access_type: 'offline',
         response_type: 'code',
@@ -36,7 +36,7 @@ router.get('/auth/google/callback', async (req, res) => {
             client_id: process.env.GOOGLE_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
             code,
-            redirect_uri: 'http://localhost:3000/auth/google/callback',
+            redirect_uri: 'https://gemna37-q-a-repo.onrender.com/auth/google/callback',
             grant_type: 'authorization_code'
         });
 
