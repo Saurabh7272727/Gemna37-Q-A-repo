@@ -7,7 +7,7 @@ const GoogleStyleAuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
 
     const handleGoogleAuth = async () => {
-        const backendURL = process.env.VITE_APP_BACKEND_URL
+        const backendURL = import.meta.env.VITE_APP_BACKEND_URL
         window.location.href = `${backendURL}/auth/google`;
     };
 
