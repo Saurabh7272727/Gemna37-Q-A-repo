@@ -61,7 +61,6 @@ router.get('/auth/google/callback', async (req, res) => {
             if (!jwt_token) {
                 throw new Error("jsonwebtoken are not response");
             }
-            res.cookie("token", jwt_token);
             res.redirect(`${process.env.FRONTEND_URL}/#/success/google/auth?token=${jwt_token}`);
 
         } catch (error) {

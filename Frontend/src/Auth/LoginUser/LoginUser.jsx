@@ -41,9 +41,8 @@ const LoginUser = () => {
     useEffect(() => {
 
         const ttt = async () => {
-            if (getValueParams.get("token") && getValueParams.get("token") === Cookies.get("token")) {
-                console.log(getValueParams.get("token"), "============", Cookies.get("token"));
-
+            if (getValueParams.get("token")) {
+                console.log(getValueParams.get("token"), "============");
                 localStorage.removeItem("jwt_token");
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: getValueParams.get("token") }));
                 const toast = new Message({ message: "Login successfully", success: true });
