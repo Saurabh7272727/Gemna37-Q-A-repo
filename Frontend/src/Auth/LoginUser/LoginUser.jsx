@@ -42,7 +42,7 @@ const LoginUser = () => {
 
         const ttt = async () => {
             if (getValueParams.get("token") && getValueParams.get("token") === Cookies.get("token")) {
-                // console.log(getValueParams.get("token"), "============", Cookies.get("token"));
+                console.log(getValueParams.get("token"), "============", Cookies.get("token"));
 
                 localStorage.removeItem("jwt_token");
                 localStorage.setItem("jwt_token", encryptData({ role: "student", jwt_token: getValueParams.get("token") }));

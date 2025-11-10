@@ -13,7 +13,7 @@ router.get('/auth/google', (req, res) => {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
 
     const options = {
-        redirect_uri: 'https://gemna37-q-a-repo.onrender.com/auth/google/callback',
+        redirect_uri: `${process.env.BACKEND_URL}/auth/google/callback`,
         client_id: process.env.GOOGLE_CLIENT_ID,
         access_type: 'offline',
         response_type: 'code',
@@ -36,7 +36,7 @@ router.get('/auth/google/callback', async (req, res) => {
             client_id: process.env.GOOGLE_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
             code,
-            redirect_uri: 'https://gemna37-q-a-repo.onrender.com/auth/google/callback',
+            redirect_uri: `${process.env.BACKEND_URL}/auth/google/callback`,
             grant_type: 'authorization_code'
         });
 
@@ -62,7 +62,7 @@ router.get('/auth/google/callback', async (req, res) => {
                 throw new Error("jsonwebtoken are not response");
             }
             res.cookie("token", jwt_token);
-            res.redirect(`${process.env.FRONTEND_URL}/success/google/auth?token=${jwt_token}`);
+            res.redirect(`${process.env.FRONTEND_URL}/#/success/google/auth?token=${jwt_token}`);
 
         } catch (error) {
             throw new Error("User not found");
