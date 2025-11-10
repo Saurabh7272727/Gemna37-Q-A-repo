@@ -52,7 +52,7 @@ router.get('/auth/google/callback', async (req, res) => {
         try {
             let findByEmail = await StudentModelMain.findOne({ email: email }).maxTimeMS(30000);
             if (!findByEmail && !findByEmail.email) {
-                throw new Error("User not found");
+                res.redirect(`${process.env.FRONTEND_URL}/#/error/google/auth`);
             }
             let password = "gemna.ai_fork_()&^^^^";
             findByEmail = await StudentModelMain.findOne({ email: email }).populate("ref_id");
