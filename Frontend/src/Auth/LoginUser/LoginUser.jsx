@@ -10,8 +10,7 @@ import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
 import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js'
 import { useDispatch } from 'react-redux';
-import { SiAuth0 } from 'react-icons/si';
-import Cookies from 'js-cookie'
+
 
 const LoginUser = () => {
     const [getValueParams, setValueParams] = useSearchParams();
@@ -25,6 +24,7 @@ const LoginUser = () => {
     })
     const [error, setError] = useState({});
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const endata = localStorage.getItem("token_finder");
@@ -172,11 +172,17 @@ const LoginUser = () => {
                                         name='password'
                                         value={inputHandler.password}
                                         onChange={(e) => ChangeHandler(e)}
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         required
                                         placeholder="write your password"
                                         className="pl-10 pr-4 py-2 w-full rounded-md bg-white/50 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     />
+
+                                    <div className='my-2 flex gap-x-2'>
+                                        <input type='checkbox' className='py-3' onChange={() => {
+                                            setShowPassword(!showPassword);
+                                        }} /><span className='text-gray-400 md:text-[17px] text-[12px]'>Show password</span>
+                                    </div>
                                 </div>
                                 {
                                     error.message && <div className='text-red-700 text-start font-semibold text-xs md:text-[14px] ring-1 rounded-md bg-gray-900 ring-red-500 px-4 py-1'>{error.message}</div>

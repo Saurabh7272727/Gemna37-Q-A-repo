@@ -2,7 +2,7 @@ import React from "react";
 import { FaUserPlus, FaUsersCog, FaEnvelope, FaCogs } from "react-icons/fa";
 import { FaGitlab } from "react-icons/fa";
 import { HiStatusOnline } from "react-icons/hi";
-const MobileActionList = ({ setMobileActionList }) => {
+const MobileActionList = ({ setMobileActionList, refAcc }) => {
     const verifiedShot = ['Add Active Student', 'Online Student']
     const actions = [
         { name: "Online Student", icon: <HiStatusOnline className="text-green-500" /> },
@@ -18,6 +18,7 @@ const MobileActionList = ({ setMobileActionList }) => {
             <ul className="w-[100%] flex flex-col p-2 space-y-1 text-[18px] md:text-[14px]">
                 {actions.map((item, i) => (
                     <li
+                        ref={(el) => { refAcc.current[i] = el }}
                         onClick={() => {
                             if (verifiedShot.includes(item.name)) {
                                 setMobileActionList(item.name);

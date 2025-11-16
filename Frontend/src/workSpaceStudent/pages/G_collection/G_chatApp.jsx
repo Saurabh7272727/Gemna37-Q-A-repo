@@ -3,7 +3,6 @@ import Error404 from '../../../Components/ErrorPages/Error404.jsx';
 import {
     FaSearch
 } from 'react-icons/fa';
-import { PulseLoadingSpinner } from '../../../Components/LodingSpinners/LoadingDemo.jsx'
 import { GoVerified } from "react-icons/go";
 import { useSelector, useDispatch } from 'react-redux';
 import { SiGooglegemini } from "react-icons/si";
@@ -27,7 +26,7 @@ const G_chatApp = ({ renderPart }) => {
     const [test, setTest] = useState(false);
     const [mobileListShow, setMobileListShow] = useState(false);
     const [users, setUsers] = useState([]);
-
+    const [typeKnower, setTypeKnower] = useState("connected");
     const [emit, setEmit] = useState({
         id: " ",
         mode: false
@@ -137,6 +136,7 @@ const G_chatApp = ({ renderPart }) => {
     }, [OnlineUserList.length])
 
     const setMobileActionList = (type) => {
+        setTypeKnower(type);
         switch (type) {
             case "Add Active Student":
                 ref.current = type
@@ -162,6 +162,43 @@ const G_chatApp = ({ renderPart }) => {
         })
     }
 
+    const debouncingref = useRef();
+    const refAcc = useRef([]);
+
+    const inputChangeHandler = (e) => {
+        const value = e.target.value.toLowerCase();
+        if (value === '') {
+
+            switch (typeKnower) {
+                case "Add Active Student":
+                    refAcc.current[1].click();
+                    break;
+                case "Online Student":
+                    refAcc.current[0].click();
+                    break;
+                default:
+                    refAcc.current[9].click();
+                    break;
+            }
+
+            if (debouncingref.current) {
+                clearTimeout(debouncingref.current);
+            }
+            return;
+        }
+        if (debouncingref.current) {
+            clearTimeout(debouncingref.current);
+        }
+        debouncingref.current = setTimeout(() => {
+            const filteredData = users.filter((user) => {
+                if (user.firstName.toLowerCase().includes(value)) {
+                    return user;
+                }
+            });
+            setUsers(filteredData);
+        }, 2200);
+    }
+
     return (
         <>
             {
@@ -176,7 +213,13 @@ const G_chatApp = ({ renderPart }) => {
                                 </h1>
                                 <div className='w-full md:h-[5%] h-[7%] my-2 rounded-md flex justify-start items-center gap-x-[4%]'>
                                     <div
-                                        onClick={() => { setUsers(ConnectedUserList); }}
+                                        ref={(el) => {
+                                            refAcc.current[9] = el;
+                                        }}
+                                        onClick={() => {
+                                            setTypeKnower('default');
+                                            setUsers(ConnectedUserList);
+                                        }}
                                         className='md:w-[20%] w-[30%] h-[80%] border-2 border-gray-500 border-dotted rounded-md content-center text-center
                              text-gray-300 hover:bg-gray-600 hover:border-solid cursor-pointer active:bg-gray-400 font-normal'>Chat</div>
                                     <div
@@ -190,6 +233,7 @@ const G_chatApp = ({ renderPart }) => {
                                         type="text"
                                         placeholder="Search friends..."
                                         className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                        onChange={(e) => inputChangeHandler(e)}
                                     />
                                 </div>
 
@@ -202,7 +246,7 @@ const G_chatApp = ({ renderPart }) => {
                             </aside>
                             {
                                 mobileListShow && <div className={`md:hidden flex w-full h-[90%] bg-gray-900/90 absolute bottom-1 right-0 transition duration-700`}>
-                                    <MobileActionList setMobileActionList={setMobileActionList} />
+                                    <MobileActionList setMobileActionList={setMobileActionList} refAcc={refAcc} />
                                 </div>
                             }
 
@@ -215,7 +259,7 @@ const G_chatApp = ({ renderPart }) => {
                             </div>
 
                             <div className='md:w-[200px] w-[30px] text-white hidden md:flex justify-center pt-[100px] bg-gray-800 h-full'>
-                                <MobileActionList setMobileActionList={setMobileActionList} />
+                                <MobileActionList setMobileActionList={setMobileActionList} refAcc={refAcc} />
                             </div>
 
                             <main className="flex-1 md:flex flex-col hidden">
