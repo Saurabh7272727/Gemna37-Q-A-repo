@@ -190,13 +190,13 @@ const G_chatApp = ({ renderPart }) => {
             clearTimeout(debouncingref.current);
         }
         debouncingref.current = setTimeout(() => {
-            const filteredData = users.filter((user) => {
+            const filteredData = ActiveUserList.filter((user) => {
                 if (user.firstName.toLowerCase().includes(value)) {
                     return user;
                 }
             });
             setUsers(filteredData);
-        }, 2200);
+        }, 1050);
     }
 
     return (
