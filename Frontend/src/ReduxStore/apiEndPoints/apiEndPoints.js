@@ -85,8 +85,6 @@ class ApiEndPoints {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `bearer ${token?.jwt_token}`,
-                    "Cache-Control": public, "max-age": 60
-
                 },
             });
 
