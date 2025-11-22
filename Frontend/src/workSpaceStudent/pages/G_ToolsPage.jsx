@@ -11,6 +11,9 @@ import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 // import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js' // clean-up the active users
 import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
+import { startTransition } from "react";
+
+
 
 
 const GTools = () => {
@@ -166,7 +169,9 @@ const GTools = () => {
                                     key={index}
                                     onClick={() => {
                                         if (tool.redirect) {
-                                            navi("/app/chat");
+                                            startTransition(() => {
+                                                navi("/app/chat");
+                                            })
                                         }
                                     }}
                                     className={`${tool.color} transform hover:scale-90  rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center space-y-3 hover:shadow-xl transition-shadow duration-300 cursor-pointer`}

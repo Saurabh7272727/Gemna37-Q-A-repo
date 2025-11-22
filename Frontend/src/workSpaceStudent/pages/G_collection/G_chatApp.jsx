@@ -34,7 +34,7 @@ const G_chatApp = ({ renderPart }) => {
 
     // if any error;
     if (!renderPart) {
-        console.log("expire token")
+        console.log("expire token", renderPart);
         localStorage.clear();
         return (
             <>
@@ -59,7 +59,6 @@ const G_chatApp = ({ renderPart }) => {
                     if (result.success) {
                         // process write filteration;
                         const { data } = result;
-                        console.log(data)
                         const arrangeData = data.reduce((acum, item) => {
                             if (item.member_one._id == studentProfile.ref_id._id) {
                                 acum?.push({ ...item.member_two, chatID: item.id });
@@ -107,6 +106,7 @@ const G_chatApp = ({ renderPart }) => {
                         setTest(false);
                     } else {
                         localStorage.clear();
+                        console.log("Erro G_chat ========================", result);
                         navi('/error_page');
                     }
                 });

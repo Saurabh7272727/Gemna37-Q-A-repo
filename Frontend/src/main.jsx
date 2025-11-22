@@ -19,15 +19,16 @@ const queryClient = new QueryClient();
 window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
 createRoot(document.getElementById('root')).render(
+  <QueryClientProvider client={queryClient}>
+    <StoreAdminContextCom>
+      <Provider store={store}>
+        <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
 
-  <StoreAdminContextCom>
-    <Provider store={store}>
-      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
           <App />
-        </QueryClientProvider>
-      </PersistGate>
-    </Provider>
-  </StoreAdminContextCom>
+
+        </PersistGate>
+      </Provider>
+    </StoreAdminContextCom>
+  </QueryClientProvider>
 
 )

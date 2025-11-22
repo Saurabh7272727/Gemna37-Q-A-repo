@@ -123,7 +123,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
             console.log("152 chatArea  ", error)
             localStorage.clear();
             navi('/error_page');
-            throw error;
         }
     }
 
@@ -138,7 +137,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
     const { isLoading, isError, error, data, isSuccess } = query;
 
     useEffect(() => {
-        console.log("data query  ==========", state?.data.email, data);
         if (state.data?.email) {
             query.refetch();
             return;
@@ -175,18 +173,29 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 }
             });
         } else {
-            alert("type your message")
+            alert("Empty payload don't be send")
         }
+    }
+
+    const compareToHolders = (destination) => {
+        const findPayload = connectedUser.find((item) => item._id === UserId);
+        if (findPayload.chatID === destination?.chatID || findPayload.chatID === destination.distination) {
+            console.log(destination.distination, findPayload.chatID);
+            return true;
+        }
+        return false;
     }
 
     useEffect(() => {
         const handleNewMessage = (data) => {
             if (data.distination === `${currentStudent?.ref_id?._id}/${currentStudent?.ref_id?._id}`) {
                 return;
-            } else if (data.notify === "you receive new message") {
+            } else if (data.notify === "you receive new message" && compareToHolders(data)) {
                 setMessages((sau) => {
                     return [...sau, { ref_id: { ...data.message } }]
                 })
+            } else {
+                prompt("you have new message");
             }
         };
         socket.on("notification_new_message", handleNewMessage);

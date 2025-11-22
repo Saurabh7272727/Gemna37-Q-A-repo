@@ -33,6 +33,7 @@ import convertMapToArray from './ReduxStore/utils/ConvertMapToArray.js';
 
 // g-tool import
 import WorkSpaceContainerSize from './workSpaceStudent/componentSpace/WorkSpaceContainerSize.jsx';
+
 const G_chatApp = lazy(() => import('./workSpaceStudent/pages/G_collection/G_chatApp.jsx'));
 const ChatArea = lazy(() => import('./workSpaceStudent/pages/G_collection/component_apps/ChatArea.jsx'))
 // Fetch current student data;

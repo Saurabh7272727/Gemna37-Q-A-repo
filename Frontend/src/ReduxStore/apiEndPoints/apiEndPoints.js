@@ -88,10 +88,10 @@ class ApiEndPoints {
                 },
             });
 
-            const result = response.json();
+            const result = await response.json();
             return result;
         } catch (error) {
-            return { message: "External forntend Error - api - 70", success: false };
+            return { message: "External forntend Error - api - 70", success: false, errorPoint: error };
         }
     }
 
