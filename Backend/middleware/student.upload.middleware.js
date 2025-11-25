@@ -23,8 +23,8 @@ const verifyStudentFormSubmit = async (req, res, next) => {
             return;
         }
 
-        const find = await StudentModel.findOne({ email: email }).maxTimeMS(20000);
-        const rollNumberfind = await StudentModel.findOne({ rollNumber: rollNumber }).maxTimeMS(20000);
+        const find = await StudentModel.findOne({ email: email });
+        const rollNumberfind = await StudentModel.findOne({ rollNumber: rollNumber });
         if (find || rollNumberfind) {
             return res.status(404).json({ message: "student are already have account", success: false });
         }
