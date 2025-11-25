@@ -22,7 +22,7 @@ class Service {
             const end = Date.now();
             console.log(end - start, "ms")
             const result = await response.json();
-            await new Promise(resolve => setTimeout(resolve, 2000));//forcefully pause the response 3sec
+            await new Promise(resolve => setTimeout(resolve, 1600)); //forcefully pause the response 3sec
             return result;
         } catch (error) {
             console.log("Error service page requestToStudentForm", error);
@@ -32,7 +32,7 @@ class Service {
 
     async sendFormToServer(formData) {
         try {
-            const res = await fetch(`${BACKEND_URL}/student/singup_with_gemna`, {
+            const res = await fetch(`${import.meta.env.VITE_APP_VERCEL_BACKEND}/student/singup_with_gemna`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -43,7 +43,7 @@ class Service {
             const result = await res.json();
             return result;
         } catch (error) {
-            console.log("Error service page sendFormToServer", error.message);
+            console.log("Error service page sendFormToServer ============= ", error);
             return { success: false, message: "somrthing was wrong external-react" };
         }
     }
