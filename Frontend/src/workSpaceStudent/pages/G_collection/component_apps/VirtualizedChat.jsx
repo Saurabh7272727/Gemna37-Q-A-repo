@@ -1,124 +1,117 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { HiOutlineDotsVertical } from "react-icons/hi";
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 const VirtualizedChat = ({ currentUserId, messages = [] }) => {
+    const parentRef = useRef(null);
     const messagesEndRef = useRef();
-    const containerRef = useRef();
-    const safeMessages = Array.isArray(messages) ? messages : [];
     const [detailsCot, setDetailsCot] = useState({ id: "" });
-    const [visibleCount, setVisibleCount] = useState(10);
+    const safeMessages = Array.isArray(messages) ? messages : [];
 
 
+    // implement virtualization window => to optimize message cost on node creation;
+    const rowVirtualizer = useVirtualizer({
+        count: safeMessages.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 100,
+        overscan: 4
+    });
+
+
+    // to smooth scroll to end of the message stack
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [safeMessages.length]);
 
 
-    const handleScroll = useCallback((e) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.target;
-
-
-        if (scrollTop === 0 && visibleCount < safeMessages.length) {
-            const newCount = Math.min(safeMessages.length, visibleCount + 10);
-            setVisibleCount(newCount);
-        }
-    }, [visibleCount, safeMessages.length]);
-
-
-    useEffect(() => {
-        setVisibleCount(10);
-    }, [safeMessages.length]);
-
-
-    const visibleMessages = safeMessages.slice(-visibleCount);
-
+    // return date , month and year
     const timeGetter = (time) => {
         const timer = new Date(time);
-        return `${timer.getDate()}/${timer.getMonth() + 1}/${timer.getFullYear()}`
+        return `${timer.getDate()} /${timer.getMonth() + 1}/${timer.getFullYear()}`
     }
 
+    // confine the day of message
     const WeekDay = (time) => {
         const timer = new Date(time);
-        const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thusday', 'Friday', 'Saturaday']
+        const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thusday', 'Friday', 'Saturaday'];
         return `${week[timer.getDay()]}`;
     }
 
+
     return (
         <div
-            ref={containerRef}
-            onScroll={handleScroll}
+            ref={parentRef}
             onClick={() => setDetailsCot({ id: "" })}
-            className="h-full md:w-[80%] w-full overflow-y-auto scrollbar-none bg-gray-900 rounded-lg border border-gray-900 p-4"
+            className="h-full w-full overflow-y-auto bg-gray-900 md:pr-9 rounded-lg border border-gray-900 p-4"
         >
-            {safeMessages.length === 0 ? (
-                <div className="h-full flex items-center justify-center pt-[10%] text-gray-500">
-                    <div className="text-center">
-                        <div className="text-4xl mb-2">Gemna.ai G-Chat</div>
-                        <p className="text-lg font-medium">No messages yet</p>
-                        <p className="text-sm">Start a conversation!</p>
-                    </div>
-                </div>
-            ) : (
-                <div className="space-y-3">
+            <div
+                style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                }}
+            >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const msg = safeMessages[virtualRow.index];
+                    const isCurrentUser = msg?.ref_id?.senderId === currentUserId;
 
-                    {visibleCount < safeMessages.length && (
-                        <div className="text-center py-2 text-gray-400 text-sm">
-                            JS-37 Scroll to top to load {safeMessages.length - visibleCount} more messages
-                        </div>
-                    )}
-
-
-                    {visibleMessages.map((message, index) => {
-                        const isCurrentUser = message?.ref_id?.senderId === currentUserId;
-
-                        return (
+                    return (
+                        <>
                             <div
-                                key={message._id || index}
-                                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
+                                key={msg?._id || virtualRow.key}
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: "100%",
+                                    transform: `translateY(${virtualRow.start}px)`,
+                                    height: virtualRow.size,
+                                }}
+                                className={`flex pb-3 h-auto ${isCurrentUser ? "justify-end" : "justify-start"}`}
                             >
-                                <div className={`max-w-xs w-[70%] lg:max-w-md rounded-2xl px-4 py-3 relative ${isCurrentUser
-                                    ? 'bg-gray-800 text-white rounded-br-none'
-                                    : 'bg-gray-600 text-white rounded-bl-none border border-gray-900'
-                                    }`}>
-
+                                <div
+                                    className={`w-[60%] h-auto lg:max-w-md rounded-2xl px-4 py-3 ${isCurrentUser
+                                        ? "bg-gray-800 text-white rounded-br-none"
+                                        : "bg-gray-600 text-white rounded-bl-none"
+                                        }`}
+                                >
                                     <div className="text-sm break-words">
-                                        {message?.ref_id?.message}
+                                        {msg?.ref_id?.message}
                                     </div>
-                                    {
-                                        detailsCot.id === message?.ref_id?._id && <div className={`${isCurrentUser ? "text-gray-500" : "text-gray-400"}`}>
-                                            <p className='text-xs pt-2'>type - {message?.ref_id?.type}</p>
-                                            <p className='text-xs'>Message Date - {timeGetter(message?.ref_id?.createdAt)}</p>
-                                            <p className='text-xs'>Week day - {WeekDay(message?.ref_id?.createdAt)}</p>
-                                        </div>
-                                    }
 
+                                    <div className="text-xs mt-2 flex justify-between text-gray-300">
+                                        {new Date(msg?.ref_id?.createdAt).toLocaleTimeString([], {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
 
-                                    <div className={`text-xs mt-2 flex justify-between ${isCurrentUser ? 'text-blue-100' : 'text-gray-400'
-                                        }`}>
-                                        {message?.ref_id?.createdAt ?
-                                            new Date(message?.ref_id?.createdAt).toLocaleTimeString([], {
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }) :
-                                            'Just now'
-                                        }
-                                        <span
-                                            onClick={(e) => {
-                                                console.log("message -id ", message._id);
-                                                e.stopPropagation();
-                                                setDetailsCot({ id: message?.ref_id?._id });
-                                            }}
+                                        <span onClick={(e) => {
+                                            console.log("message -id ", messages[virtualRow.index]._id);
+                                            e.stopPropagation();
+                                            setDetailsCot({ id: messages[virtualRow.index]?.ref_id?._id });
+                                        }}
                                             className='pl-[40%] text-white font-bold cursor-pointer active:text-blue-600'>
                                             <HiOutlineDotsVertical />
                                         </span>
                                     </div>
                                 </div>
+
+                                {detailsCot.id === safeMessages[virtualRow.index]?.ref_id?._id &&
+                                    <div className={`${isCurrentUser ? "text-gray-500 bg-gray-800 rounded-br-none translate-x-[-30px] rounded-2xl md:pr-7" : "text-gray-400 bg-gray-800 rounded-br-none translate-x-[-30px] rounded-2xl md:pr-7"}`}>
+                                        <p className='text-xs pt-2'>type - {safeMessages[virtualRow.index]?.ref_id?.type}</p>
+                                        <p className='text-xs'>Message Date - {timeGetter(safeMessages[virtualRow.index]?.ref_id?.createdAt)}</p>
+                                        <p className='text-xs'>Week day - {WeekDay(safeMessages[virtualRow.index]?.ref_id?.createdAt)}</p>
+                                    </div>}
                             </div>
-                        );
-                    })}
-                    <div ref={messagesEndRef} />
-                </div>
-            )}
+
+                        </>
+
+                    );
+                })}
+
+                <div ref={messagesEndRef} style={{ position: 'absolute', bottom: 0, left: 0, }} />
+            </div>
         </div>
     );
 };

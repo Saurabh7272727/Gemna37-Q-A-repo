@@ -56,9 +56,6 @@ const Admin = () => {
                 </div>
             }
             {
-
-            }
-            {
                 !state.loading && <div className='w-screen md:h-screen h-auto flex flex-col 
                 md:flex-row justify-center items-center bg-gray-900 md:gap-x-3
                 md:pt-4 pt-[80px]
