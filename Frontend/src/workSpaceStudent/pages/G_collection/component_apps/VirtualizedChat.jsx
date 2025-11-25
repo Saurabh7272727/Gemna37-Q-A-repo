@@ -37,6 +37,17 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
         return `${week[timer.getDay()]}`;
     }
 
+    if (safeMessages.length === 0) {
+        return (
+            <div className="h-full flex items-center justify-center pt-[10%] text-gray-500">
+                <div className="text-center"> <div className="text-4xl mb-2">Gemna.ai G-Chat</div>
+                    <p className="text-lg font-medium">No messages yet</p>
+                    <p className="text-sm">Start a conversation!</p>
+                </div>
+            </div>
+        )
+    }
+
 
     return (
         <div
@@ -51,7 +62,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                     position: 'relative',
                 }}
             >
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                {rowVirtualizer.getVirtualItems()?.map((virtualRow) => {
                     const msg = safeMessages[virtualRow.index];
                     const isCurrentUser = msg?.ref_id?.senderId === currentUserId;
 
