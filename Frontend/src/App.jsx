@@ -163,7 +163,11 @@ const App = () => {
           {/* <Route path='/test' element={<Test />} /> */}
           <Route path='/validation' element={<GemIDValidation />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/admin/registeration' element={<Admin />} />
+          <Route path='/admin/registeration' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <Admin />
+            </Suspense>
+          } />
           <Route path='/error_page' element={<Error404Page />} />
           <Route path='/student' element={<WorkSpace />} />
           <Route path='/gtools/page/*' element={
