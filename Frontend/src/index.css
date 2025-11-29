@@ -34,3 +34,21 @@ html {
   font-weight: <weight>;
   font-style: normal;
 } */
+
+
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}

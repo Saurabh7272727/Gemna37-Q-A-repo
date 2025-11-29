@@ -83,7 +83,7 @@ const connectWithSocket = (server) => {
                         await savedataMessage.save();
                         findConnectionfirst.messages.push({ ref_id: savedataMessage._id });
                         await findConnectionfirst.save();
-                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}`, chatID: findConnectionfirst?.id })
+                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}`, chatID: findConnectionfirst?._id, senderId })
                         callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}` });
                     } else if (findConnectionSecond) {
                         const messagePayload = {
@@ -98,7 +98,7 @@ const connectWithSocket = (server) => {
                         const instanceMessage = await savedataMessage.save();
                         findConnectionSecond.messages.push({ ref_id: instanceMessage._id });
                         await findConnectionSecond.save();
-                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}`, chatID: findConnectionfirst?.id })
+                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}`, chatID: findConnectionSecond?._id, senderId })
                         callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}` });
                     } else {
                         const createNewConnection = new connectionModel({
@@ -118,8 +118,12 @@ const connectWithSocket = (server) => {
                         const instanceMessage = await savedataMessage.save();
                         createNewConnection.messages.push({ ref_id: instanceMessage._id });
                         await createNewConnection.save();
-                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}` })
-                        callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}` });
+                        io.to(findKey).emit("notification_new_message", {
+                            notify: "you receive new message",
+                            index, message: savedataMessage,
+                            distination: `${receiverId}/${senderId}`
+                        })
+                        callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId });
                     }
                 } else {
                     callback({ notify: "something was wrong , don't send any message" });

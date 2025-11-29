@@ -12,6 +12,8 @@ import ApiEndPoints from '../../../ReduxStore/apiEndPoints/apiEndPoints.js';
 import { addActiveUserList, addConnectionList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
 import { useNavigate } from 'react-router-dom';
 import ChatArea from './component_apps/ChatArea.jsx'
+import { PulseLoadingSpinner } from '../../../Components/LodingSpinners/LoadingDemo.jsx'
+import { AiFillFire } from 'react-icons/ai';
 
 
 const G_chatApp = ({ renderPart }) => {
@@ -84,8 +86,6 @@ const G_chatApp = ({ renderPart }) => {
             navi('/error_page');
         }
     }, [ConnectedUserList.length])
-
-
 
 
     useEffect(() => {
@@ -264,7 +264,14 @@ const G_chatApp = ({ renderPart }) => {
 
                             <main className="flex-1 md:flex flex-col hidden">
                                 {
-                                    emit?.mode && <ChatArea renderPart={true} idByProps={emit?.id} />
+                                    emit?.mode ? <ChatArea renderPart={true} idByProps={emit?.id} /> : <div className="w-full h-full bg-gray-900 flex justify-center items-start pt-10 md:items-center md:pt-0 flex-col">
+                                        <PulseLoadingSpinner /><br />
+                                        <h2 className="text-white font-medium flex justify-center items-center shadow-xls gap-2 mx-auto">
+                                            Geman.ai feels to connect<AiFillFire className="text-red-500" />
+                                            <p>v-0.0.01</p>
+                                        </h2>
+                                        <p className='text-white font-medium text-sm flex justify-center items-center shadow-xls gap-2 mx-auto'>start chatting with friends</p>
+                                    </div>
                                 }
 
                             </main>

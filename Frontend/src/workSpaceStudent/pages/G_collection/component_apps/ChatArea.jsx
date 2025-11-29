@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import MessageAlert from '../../../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { useMediaQuery } from 'react-responsive';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     FiPaperclip,
     FiImage,
@@ -15,6 +15,8 @@ import socket from '../../../../socket_client/socket_client.js';
 import ApiEndPoints from '../../../../ReduxStore/apiEndPoints/apiEndPoints.js';
 import VirtualizedChat from './VirtualizedChat.jsx';
 import { useQuery } from '@tanstack/react-query';
+import NewMessagePopup from '../../../../Components/NewMessagePop.jsx';
+import { setfirstMessagerSet } from '../../../../ReduxStore/Slices/ListSliceOfStudents.js';
 
 const ChatArea = ({ idByProps, renderPart }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -25,19 +27,20 @@ const ChatArea = ({ idByProps, renderPart }) => {
     const onlineStudent = useSelector((state) => state?.ListSliceOdfStudent?.OnlineUserList ?? []);
     const currentStudent = useSelector((state) => state?.userinfoSlice?.user);
     const connectedUser = useSelector((state) => state?.ListSliceOdfStudent?.ConnectedUserList ?? []);
-
+    const dispatch = useDispatch();
     const ref = useRef()
 
     const [state, setState] = useState({
         data: "",
         error: "",
     });
-
+    const [testID, setTestID] = useState("");
     const [inputState, setInputState] = useState({
         message: ""
     });
-
     const [messages, setMessages] = useState([]);
+
+    const [pop_up_message, setPop_up_message] = useState({});
 
     useEffect(() => {
 
@@ -107,6 +110,7 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 const result = await api.fetchAllConnectionMessage(`/api/v1/students/connection/${findPayload.chatID}`);
 
                 if (result?.success) {
+                    setTestID(result.id);
                     setMessages(result.data);
                     return result.data;
                 } else {
@@ -167,9 +171,10 @@ const ChatArea = ({ idByProps, renderPart }) => {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
                     });
-                    setInputState({ message: "" })
+                    setInputState({ message: "" });
+                    ref.current.focus();
                 } else {
-                    console.log(data.notify);
+                    alert("Something was wrong -  gemna no responed => ChatArea file");
                 }
             });
         } else {
@@ -177,32 +182,40 @@ const ChatArea = ({ idByProps, renderPart }) => {
         }
     }
 
-    const compareToHolders = (destination) => {
-        const findPayload = connectedUser.find((item) => item._id === UserId);
-        if (findPayload.chatID === destination?.chatID || findPayload.chatID === destination.distination) {
-            console.log(destination.distination, findPayload.chatID);
-            return true;
+
+    const compareID = (id) => {
+        if (testID) {
+            if (testID === id) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false
         }
-        return false;
     }
+
 
     useEffect(() => {
         const handleNewMessage = (data) => {
             if (data.distination === `${currentStudent?.ref_id?._id}/${currentStudent?.ref_id?._id}`) {
+                dispatch(setfirstMessagerSet(currentStudent?.ref_id?._id))
                 return;
-            } else if (data.notify === "you receive new message" && compareToHolders(data)) {
+            } else if (data.notify === "you receive new message" && compareID(data?.chatID)) {
+                dispatch(setfirstMessagerSet(data?.senderId))
                 setMessages((sau) => {
                     return [...sau, { ref_id: { ...data.message } }]
                 })
             } else {
-                prompt("you have new message");
+                setPop_up_message({ new_message_arrived: true });
+                dispatch(setfirstMessagerSet(data?.senderId))
             }
         };
         socket.on("notification_new_message", handleNewMessage);
         return () => {
             socket.off("notification_new_message", handleNewMessage);
         };
-    }, [currentStudent?.ref_id?._id]);
+    }, [currentStudent?.ref_id?._id, testID]);
 
     if (isLoading) {
         return (
@@ -237,6 +250,9 @@ const ChatArea = ({ idByProps, renderPart }) => {
                                             <span className="text-white text-sm sm:text-base font-medium">
                                                 {state?.data?.firstName?.charAt(0)}
                                             </span>
+                                        }
+                                        {
+                                            pop_up_message.new_message_arrived && <NewMessagePopup setPop_up_message={setPop_up_message} message={'new message! - JS37'} show={true} />
                                         }
                                     </div>
                                     <div className="max-w-[140px] sm:max-w-none">
