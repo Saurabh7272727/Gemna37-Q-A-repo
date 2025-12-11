@@ -62,7 +62,7 @@ const App = () => {
     socket.on("connect_error", (err) => {
       console.log("socket message --- ", err.message);
       setTokenexpire(true);
-      // prints the message associated with the error
+      // prints the message related with the error
     });
 
     const jwtToken = localStorage.getItem("jwt_token");

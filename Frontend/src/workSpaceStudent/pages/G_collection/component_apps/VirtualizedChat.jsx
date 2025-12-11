@@ -53,7 +53,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
         <div
             ref={parentRef}
             onClick={() => setDetailsCot({ id: "" })}
-            className="h-full w-full overflow-y-auto bg-gray-900 md:pr-9 rounded-lg border border-gray-900 p-4"
+            className="h-full scrollbar-track-yellow-500 scrollbar-thin w-full overflow-y-auto bg-gray-900 md:pr-9 rounded-lg border border-gray-900 p-4"
         >
             <div
                 style={{
@@ -86,7 +86,7 @@ const VirtualizedChat = ({ currentUserId, messages = [] }) => {
                                         : "bg-gray-600 text-white rounded-bl-none"
                                         }`}
                                 >
-                                    <div className="text-sm break-words">
+                                    <div className="break-words pt-2/3 md:pt-2 font-semibold text-[15px] md:text-[17px] font-sans text-pretty">
                                         {msg?.ref_id?.message}
                                     </div>
 

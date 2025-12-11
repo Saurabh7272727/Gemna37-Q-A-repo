@@ -11,6 +11,7 @@ export default function PersonalInfoCard({ info }) {
     const commonInputStyle = {
         color: "white",
     };
+
     return (
         <div className="bg-black ring-[0.5px] ring-gray-400 p-6 rounded-2xl space-y-4">
             <div className="flex items-center justify-between">

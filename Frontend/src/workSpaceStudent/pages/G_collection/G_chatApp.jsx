@@ -166,9 +166,8 @@ const G_chatApp = ({ renderPart }) => {
     const refAcc = useRef([]);
 
     const inputChangeHandler = (e) => {
-        const value = e.target.value.toLowerCase();
+        const value = e.target.value.toLowerCase().trim();
         if (value === '') {
-
             switch (typeKnower) {
                 case "Add Active Student":
                     refAcc.current[1].click();
@@ -273,7 +272,6 @@ const G_chatApp = ({ renderPart }) => {
                                         <p className='text-white font-medium text-sm flex justify-center items-center shadow-xls gap-2 mx-auto'>start chatting with friends</p>
                                     </div>
                                 }
-
                             </main>
                         </div>
                     </div>

@@ -240,7 +240,8 @@ const ChatArea = ({ idByProps, renderPart }) => {
                             <div className="flex items-center justify-between">
                                 {/* User Info */}
                                 <div className="flex items-center space-x-3 sm:space-x-4">
-                                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-blue-500">
+                                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-blue-500" title={state?.data?.firstName}
+                                    >
                                         {state?.data?.imageURL ?
                                             <img
                                                 className='h-full w-full rounded-full object-cover'

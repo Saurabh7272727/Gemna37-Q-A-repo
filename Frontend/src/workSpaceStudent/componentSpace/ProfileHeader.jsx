@@ -51,6 +51,11 @@ export default function ProfileHeader({ user }) {
         setPreview(!preview);
     }
 
+    function capitalizeFirstChar(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     return (
         <>
             {
@@ -71,8 +76,8 @@ export default function ProfileHeader({ user }) {
                     </div>
                 </div>
                 <div className="mt-12 pl-19" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>
-                    <h2 className="text-xl font-semibold">{user?.ref_id?.firstName} {user?.ref_id?.lastName}</h2>
-                    <p className="text-xl text-gray-400">{user?.ref_id?.branch.label} <sup>{user?.ref_id?.year?.label}</sup></p>
+                    <h2 className="text-xl font-semibold">{capitalizeFirstChar(user?.ref_id?.firstName)} {capitalizeFirstChar(user?.ref_id?.lastName)}</h2>
+                    <p className="text-xl text-gray-400">{capitalizeFirstChar(user?.ref_id?.branch.label)} <sup>{user?.ref_id?.year?.label}</sup></p>
                 </div>
                 <div className="absolute top-5 right-7">
                     <Button onClick={() => {
