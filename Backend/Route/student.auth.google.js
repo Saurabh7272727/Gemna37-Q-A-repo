@@ -72,7 +72,7 @@ router.get('/auth/google/callback', async (req, res) => {
         }
     } catch (error) {
         console.error('Google OAuth error:', error.response?.data || error.message);
-        res.redirect(`${process.env.FRONTEND_URL}/error/google/auth`);
+        res.redirect(`${process.env.FRONTEND_URL}/#/error/google/auth`);
     }
 });
 
