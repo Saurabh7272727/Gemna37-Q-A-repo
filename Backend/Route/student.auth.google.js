@@ -51,7 +51,7 @@ router.get('/auth/google/callback', async (req, res) => {
         const { email, id: googleId, name, picture } = userInfoResponse.data;
         try {
             if (!name || !email) {
-                res.redirect(`${process.env.FRONTEND_URL}/error/google/auth`);
+                res.redirect(`${process.env.FRONTEND_URL}/#/error/google/auth`);
             }
 
             let findByEmail = await StudentModelMain.findOne({ email: email }).maxTimeMS(30000);
