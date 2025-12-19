@@ -198,8 +198,8 @@ const App = () => {
 
           <Route path='/auth/google/verification' element={<GoogleStyleAuthPage />} />
           <Route path='/success/google/*' element={<Login />} />
-          <Route path='/error/google/auth' element={<div className='pt-[100px]'>Verification failed by GAS team</div>} />
-          <Route path='*' element={<div className='pt-[100px]'>Gemna.ai does not support your unauth router call</div>} />
+          <Route path='/error/google/auth' element={<div className='pt-[100px]'>Verification failed -- Email not fouund</div>} />
+          <Route path='*' element={<Error404Page />} />
         </Routes>
         <Footer renderPart={login} />
       </HashRouter>

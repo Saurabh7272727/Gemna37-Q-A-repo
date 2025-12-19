@@ -32,23 +32,23 @@ const Footer = ({ renderPart }) => {
                         <div className="container mx-auto relative z-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                                 <div className="lg:col-span-1">
-                                    <h3 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Gemna.ai</h3>
+                                    <h3 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Gemnaworld</h3>
                                     <p className="text-gray-400 mb-6 max-w-md">
                                         Transforming education through innovative AI-powered solutions for college management, student engagement, and academic excellence.
                                     </p>
                                     <div className="flex space-x-4">
-                                        <a href="#" className="bg-gray-800 hover:bg-blue-600 transition-all duration-300 p-3 rounded-full">
+                                        {/* <a href="#" className="bg-gray-800 hover:bg-blue-600 transition-all duration-300 p-3 rounded-full">
                                             <FaFacebookF className="text-lg" />
                                         </a>
                                         <a href="#" className="bg-gray-800 hover:bg-blue-400 transition-all duration-300 p-3 rounded-full">
                                             <FaTwitter className="text-lg" />
-                                        </a>
-                                        <a href="#" className="bg-gray-800 hover:bg-pink-600 transition-all duration-300 p-3 rounded-full">
+                                        </a> */}
+                                        <a href="https://x.com/SaurabhSha99299" className="bg-gray-800 hover:bg-green-600 transition-all duration-300 p-3 rounded-full">
                                             <FaInstagram className="text-lg" />
                                         </a>
-                                        <a href="#" className="bg-gray-800 hover:bg-blue-700 transition-all duration-300 p-3 rounded-full">
+                                        {/* <a href="#" className="bg-gray-800 hover:bg-blue-700 transition-all duration-300 p-3 rounded-full">
                                             <FaLinkedinIn className="text-lg" />
-                                        </a>
+                                        </a> */}
                                     </div>
                                 </div>
                                 <div>
@@ -91,7 +91,7 @@ const Footer = ({ renderPart }) => {
                                 <div className="flex items-center text-gray-400 mb-4 md:mb-0">
                                     <span>© {currentYear} Gemna.edu.support Made with</span>
                                     <FaHeart className="text-red-500 mx-1" />
-                                    <span>for better education and integrity</span>
+                                    <span>for better education tools</span>
                                 </div>
 
                                 <div className="flex space-x-6">

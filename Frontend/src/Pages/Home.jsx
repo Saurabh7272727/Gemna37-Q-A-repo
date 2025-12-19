@@ -24,7 +24,7 @@ export default function Home() {
                 </div>
                 <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
                     <div className="ml-6 mb-3 sm:mb-8 sm:flex sm:justify-center">
-                        <div className="w-[100%] text-wrap text-[10px] relative rounded-full md:w-[80%] px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
+                        <div className="w-[100%] text-wrap text-[10px] relative rounded-full md:w-[80%] px-4 py-1 md:text-[13px] text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
                             Gemna AI Manager helps institutions save time, reduce costs, and improve student outcomes..{' '}
                             <a href="#" className="font-semibold text-indigo-400">
                                 <span aria-hidden="true" className="absolute inset-0" />
@@ -37,7 +37,7 @@ export default function Home() {
                             All Your Campus Tools. One Unified Platform.
                         </h1>
                         <p className="mt-5 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-                            Streamline student profiles, attendance tracking, live classes, and team collaboration from a single dashboard.
+                            Built for Indian colleges to manage students, faculty, classes, and AI-powered workflows — all in one place.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <button

@@ -18,7 +18,7 @@ const ShowFeatureInLanding = React.memo(({ dataSet }) => {
                             return (
                                 <div key={item.title} className='w-full h-[350px] flex flex-col gap-4 justify-center items-center'>
                                     <div className='w-[90%] h-[56%] overflow-hidden'>
-                                        <img className='w-full h-full ' src={item.pictureSource} alt="picture demo" />
+                                        <img className='w-full h-full' loading='lazy' src={item.pictureSource} alt="picture demo" />
                                     </div>
                                     <div className='w-[80%] h-[42%] text-start'>
                                         <h1 className='text-[19px] font-bold text-white'>{item.title}</h1>

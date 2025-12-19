@@ -4,6 +4,8 @@ import Home from '../../Pages/Home.jsx';
 // lazy approach 
 const ShowFeatureInLanding = lazy(() => import('./ShowFeatureInLanding.jsx'));
 const ChatDemoLanding = lazy(() => import('./ChatDemoLanding.jsx'));
+import LandingPage from '../NewHomePage.jsx';
+
 
 const Landing = () => {
 
@@ -35,9 +37,9 @@ const Landing = () => {
     return (
         <>
             <Home />
+            <LandingPage />
             <Suspense fallback={<div style={{ color: "red", padding: "2px" }}>loading Gemna.AI log source-data</div>}>
                 <ShowFeatureInLanding dataSet={dataSet} />
-                <ChatDemoLanding />
             </Suspense>
         </>
     )
