@@ -31,7 +31,7 @@ const StudentDetailsDisplay = ({ responseData }) => {
     const EmailHandler = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/student/email/verification`, {
+            const response = await fetch(`${import.meta.env.VITE_APP_VERCEL_BACKEND}/student/email/verification`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
