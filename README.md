@@ -1,7 +1,7 @@
-# 📌 Gemna.ai
+# 📌 Gemnaworld
 
 > show demo link under the development
-> https://gemna37-q-a-repo.vercel.app/
+> https://gemnaworld.vercel.app/
 
 > All Your Campus Tools. One Unified Platform.
 > Streamline student profiles, attendance tracking, live classes, and team collaboration from a single dashboard.
