@@ -191,7 +191,7 @@ const App = () => {
           <Route path='/chat/app/:id' element={
             <Suspense fallback={<LazyLaodingDemo />}>
               <WorkSpaceContainerSize>
-                <ChatArea renderPart={login} idByProps={" "} />
+                <ChatArea renderPart={login} idByProps={""} />
               </WorkSpaceContainerSize>
             </Suspense>
           } />

@@ -16,9 +16,9 @@ import ApiEndPoints from '../../../../ReduxStore/apiEndPoints/apiEndPoints.js';
 import VirtualizedChat from './VirtualizedChat.jsx';
 import { useQuery } from '@tanstack/react-query';
 import NewMessagePopup from '../../../../Components/NewMessagePop.jsx';
-import { setfirstMessagerSet } from '../../../../ReduxStore/Slices/ListSliceOfStudents.js';
+import { setfirstMessagerSet, testPurpose } from '../../../../ReduxStore/Slices/ListSliceOfStudents.js';
 
-const ChatArea = ({ idByProps, renderPart }) => {
+const ChatArea = ({ idByProps = false, renderPart }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
     const { id } = useParams();
     const UserId = id || idByProps;
@@ -103,7 +103,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
     const getSingleMessage = async () => {
         const findPayload = connectedUser.find((item) => item.email === state.data.email);
-
         try {
             if (findPayload) {
                 const api = new ApiEndPoints();
@@ -125,7 +124,6 @@ const ChatArea = ({ idByProps, renderPart }) => {
             }
         } catch (error) {
             console.log("152 chatArea  ", error)
-            localStorage.clear();
             navi('/error_page');
         }
     }
@@ -165,17 +163,24 @@ const ChatArea = ({ idByProps, renderPart }) => {
                 type: "text",
                 r_email: state?.data?.email.trim()
             }
+            // callback({ notify: "successfully send your message", index, 
+            // message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId, receiverId ;
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
-                if (data.notify === "successfully send your message") {
+                setInputState({ message: "" });
+                if (data?.notify === "successfully send your message") {
                     setMessages((sau) => {
                         return [...sau, { ref_id: { ...data.message } }]
                     });
-                    setInputState({ message: "" });
-                    ref.current.focus();
+                } else if (data?.notify === "successfully send your message first time") {
+                    setMessages((sau) => {
+                        return [...sau, { ref_id: { ...data.message } }]
+                    });
+                    dispatch(testPurpose(data));
                 } else {
                     alert("Something was wrong -  gemna no responed => ChatArea file");
                 }
+                ref.current.focus();
             });
         } else {
             alert("Empty payload don't be send")
@@ -207,10 +212,15 @@ const ChatArea = ({ idByProps, renderPart }) => {
                     return [...sau, { ref_id: { ...data.message } }]
                 })
             } else {
+                console.log(`message ==================== ${data}`);
                 setPop_up_message({ new_message_arrived: true });
-                dispatch(setfirstMessagerSet(data?.senderId))
+                dispatch(setfirstMessagerSet(data));
+                setMessages((sau) => {
+                    return [...sau, { ref_id: { ...data.message } }]
+                })
             }
         };
+
         socket.on("notification_new_message", handleNewMessage);
         return () => {
             socket.off("notification_new_message", handleNewMessage);
@@ -226,7 +236,10 @@ const ChatArea = ({ idByProps, renderPart }) => {
 
     if (isError) {
         return (
-            <div className='w-full h-full flex justify-center items-center text-white'>{String(error)}</div>
+            <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
+                <h1>Error - {String(error)}</h1><br />
+                <p>Note : Message not found</p>
+            </div>
         )
     }
 
@@ -235,10 +248,10 @@ const ChatArea = ({ idByProps, renderPart }) => {
             <>
                 <div className='text-white w-full h-full'>
                     <div className="flex flex-col h-full bg-gray-900 relative">
-                        {/* Header - Responsive */}
+
                         <div className="border-b z-50 bg-gray-900 md:w-[59%] w-auto border-gray-700 px-4 py-3 sm:px-6 sm:py-4 fixed top-[8%]">
                             <div className="flex items-center justify-between">
-                                {/* User Info */}
+
                                 <div className="flex items-center space-x-3 sm:space-x-4">
                                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-blue-500" title={state?.data?.firstName}
                                     >

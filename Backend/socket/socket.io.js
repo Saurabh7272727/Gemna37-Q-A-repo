@@ -98,7 +98,10 @@ const connectWithSocket = (server) => {
                         const instanceMessage = await savedataMessage.save();
                         findConnectionSecond.messages.push({ ref_id: instanceMessage._id });
                         await findConnectionSecond.save();
-                        io.to(findKey).emit("notification_new_message", { notify: "you receive new message", index, message: savedataMessage, distination: `${receiverId}/${senderId}`, chatID: findConnectionSecond?._id, senderId })
+                        io.to(findKey).emit("notification_new_message", {
+                            notify: "you receive new message", index, message: savedataMessage,
+                            distination: `${receiverId}/${senderId}`, chatID: findConnectionSecond?._id, senderId
+                        })
                         callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}` });
                     } else {
                         const createNewConnection = new connectionModel({
@@ -119,11 +122,12 @@ const connectWithSocket = (server) => {
                         createNewConnection.messages.push({ ref_id: instanceMessage._id });
                         await createNewConnection.save();
                         io.to(findKey).emit("notification_new_message", {
-                            notify: "you receive new message",
+                            notify: "you receive new message (new connection)",
                             index, message: savedataMessage,
-                            distination: `${receiverId}/${senderId}`
+                            distination: `${senderId}/${receiverId}`,
+                            chatID: createNewConnection?._id, senderId
                         })
-                        callback({ notify: "successfully send your message", index, message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId });
+                        callback({ notify: "successfully send your message first time", index, message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId, receiverId });
                     }
                 } else {
                     callback({ notify: "something was wrong , don't send any message" });

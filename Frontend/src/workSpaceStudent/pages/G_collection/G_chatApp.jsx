@@ -9,12 +9,15 @@ import { SiGooglegemini } from "react-icons/si";
 import MobileActionList from './component_apps/GChatTools.jsx';
 import ShowConnectedFri from './component_apps/ShowConnectedFri.jsx';
 import ApiEndPoints from '../../../ReduxStore/apiEndPoints/apiEndPoints.js';
-import { addActiveUserList, addConnectionList } from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
+import {
+    addActiveUserList, addConnectionList, setfirstMessagerSet
+    , removeDuplicateValue
+} from '../../../ReduxStore/Slices/ListSliceOfStudents.js';
 import { useNavigate } from 'react-router-dom';
 import ChatArea from './component_apps/ChatArea.jsx'
 import { PulseLoadingSpinner } from '../../../Components/LodingSpinners/LoadingDemo.jsx'
 import { AiFillFire } from 'react-icons/ai';
-
+import socket from '../../../socket_client/socket_client.js';
 
 const G_chatApp = ({ renderPart }) => {
     const dispatch = useDispatch();
@@ -62,7 +65,7 @@ const G_chatApp = ({ renderPart }) => {
                         // process write filteration;
                         const { data } = result;
                         const arrangeData = data.reduce((acum, item) => {
-                            if (item.member_one._id == studentProfile.ref_id._id) {
+                            if (item.member_one?._id == studentProfile.ref_id?._id) {
                                 acum?.push({ ...item.member_two, chatID: item.id });
                             } else {
                                 acum?.push({ ...item.member_one, chatID: item.id });
@@ -85,6 +88,24 @@ const G_chatApp = ({ renderPart }) => {
             localStorage.clear();
             navi('/error_page');
         }
+    }, [ConnectedUserList.length])
+
+
+    useEffect(() => {
+        const handleNewMessage = (data) => {
+            if (data.notify === "you receive new message (new connection)") {
+                console.log('new connection');
+                dispatch(setfirstMessagerSet(data))
+            }
+        };
+        socket.on("notification_new_message", handleNewMessage);
+        return () => {
+            socket.off("notification_new_message", handleNewMessage);
+        };
+    }, [studentProfile?.ref_id?._id, ConnectedUserList.length]);
+
+    useEffect(() => {
+        dispatch(removeDuplicateValue());
     }, [ConnectedUserList.length])
 
 

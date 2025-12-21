@@ -28,6 +28,7 @@ const ListSliceOdfStudent = createSlice({
         },
         setfirstMessagerSet: (state, action) => {
             const id = action.payload;
+
             if (!id) {
                 console.error("ListSliceOfStudent me id pass karo ------------ sender kaaa");
                 return;
@@ -46,17 +47,59 @@ const ListSliceOdfStudent = createSlice({
                 });
                 state.ConnectedUserList.unshift(findConnectedUser);
             } else {
-                const fing = state.ActiveUserList.find((user) => {
-                    if (user._id === id) {
-                        return user;
+                try {
+                    const fing = state.ActiveUserList.find((user) => {
+                        if (user._id === id?.senderId) {
+                            return user;
+                        }
+                    });
+
+                    if (fing?.email) {
+                        state.ConnectedUserList.unshift({ ...fing, chatID: id?.distination });
                     }
-                });
-                state.ConnectedUserList.unshift(fing);
+                    return;
+                } catch (error) {
+                    console.log(`Error on listslice ============== ${error}`);
+                }
+
             }
+        },
+
+        testPurpose: (state, action) => {
+            if (action?.payload?.notify === 'successfully send your message first time') {
+                try {
+                    const fing = state.ActiveUserList.find((user) => {
+                        if (user._id === action?.payload?.receiverId) {
+                            return user;
+                        }
+                    });
+                    state.ConnectedUserList.unshift({ ...fing, chatID: action?.payload?.distination });
+                    if (!fing?.email) {
+                        throw Error("User not found in active user list")
+                    }
+                } catch (err) {
+                    alert("service error - ListSliceOfStudent")
+                    console.log(err.message, '===========', "ListSliceOfStudent");
+                    state.ConnectedUserList = [];
+                }
+            }
+        },
+        removeDuplicateValue: (state, action) => {
+            const map = new Map();
+            const removeduplicate = state.ConnectedUserList.reduce((acum, user) => {
+                if (!map.has(`${user.email}`)) {
+                    map.set(`${user.email}`, user);
+                }
+
+                return acum = map;
+            }, []);
+
+            state.ConnectedUserList = [...removeduplicate.values()];
         }
+
     }
 })
 
 export const { addActiveUserList, addOnlineUserList, clearTheList,
-    addConnectionList, setfirstMessagerSet } = ListSliceOdfStudent.actions;
+    addConnectionList, setfirstMessagerSet, testPurpose, removeDuplicateValue } = ListSliceOdfStudent.actions;
 export default ListSliceOdfStudent.reducer;
