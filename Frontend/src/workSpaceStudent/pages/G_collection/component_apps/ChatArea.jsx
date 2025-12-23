@@ -163,8 +163,6 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                 type: "text",
                 r_email: state?.data?.email.trim()
             }
-            // callback({ notify: "successfully send your message", index, 
-            // message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId, receiverId ;
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
                 setInputState({ message: "" });

@@ -29,6 +29,7 @@
     "crypto-js": "^4.2.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "inngest": "^3.48.1",
     "ioredis": "^5.7.0",
     "jsonwebtoken": "^9.0.2",
     "mailgen": "^2.0.30",
@@ -38,5 +39,8 @@
     "nodemailer": "^7.0.6",
     "pdfkit": "^0.17.2",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
