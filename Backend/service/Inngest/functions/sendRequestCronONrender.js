@@ -14,7 +14,7 @@ export const sendRequestCronOnRender = inngest.createFunction(
                 }
             });
             const result = await response.json();
-            console.log(result);
+            return result;
         })
     }
 );
