@@ -8,11 +8,13 @@ import initialresponseonhomeroute from './ResponseStructure/initialResponse.js';
 import morgan from 'morgan';
 import connectDataBaseURL from './service/db.js';
 import cookieParser from 'cookie-parser';
-import serve_inngest from './service/Inngest/handlerFile.js'
+import serve_inngest from './service/Inngest/handlerFile.js';
+import helmet from 'helmet'
 const app = express();
 
 
 connectDataBaseURL();
+app.use(helmet());
 app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({

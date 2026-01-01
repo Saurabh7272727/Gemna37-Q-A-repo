@@ -5,8 +5,14 @@ const messageschema = new Schema(new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['text', 'image'],
-        default: "text"
+        enum: ['Text', 'Image', "Code"],
+        default: "Text"
+    },
+    language: {
+        type: String,
+        required: true,
+        enum: ['javascript', "python", 'java', 'c', "plaintext"],
+        default: "plaintext"
     },
     senderId: {
         type: mongoose.Schema.Types.ObjectId,

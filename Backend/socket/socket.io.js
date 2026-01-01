@@ -59,7 +59,7 @@ const connectWithSocket = (server) => {
 
 
             socket.on('socket_send_payload', async (data, callback) => {
-                const { senderId, receiverId, message, index, socketId, type, r_email } = data;
+                const { senderId, receiverId, message, index, socketId, type, r_email, language } = data;
                 const findKey = [...tempStorage].reduce((acum, item) => {
                     if (item[1].email.trim() == r_email.trim()) {
                         acum = item[0];
@@ -77,7 +77,8 @@ const connectWithSocket = (server) => {
                             senderId,
                             receiverId,
                             message: message,
-                            saveID: true
+                            saveID: true,
+                            language
                         };
                         const savedataMessage = new messagemodel(messagePayload);
                         await savedataMessage.save();
@@ -91,7 +92,8 @@ const connectWithSocket = (server) => {
                             senderId,
                             receiverId,
                             message,
-                            saveID: true
+                            saveID: true,
+                            language
                         };
 
                         const savedataMessage = new messagemodel(messagePayload);
@@ -115,7 +117,8 @@ const connectWithSocket = (server) => {
                             senderId,
                             receiverId,
                             message,
-                            saveID: true
+                            saveID: true,
+                            language
                         };
                         const savedataMessage = new messagemodel(messagePayload);
                         const instanceMessage = await savedataMessage.save();

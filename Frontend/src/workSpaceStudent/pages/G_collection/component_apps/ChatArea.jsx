@@ -17,6 +17,15 @@ import VirtualizedChat from './VirtualizedChat.jsx';
 import { useQuery } from '@tanstack/react-query';
 import NewMessagePopup from '../../../../Components/NewMessagePop.jsx';
 import { setfirstMessagerSet, testPurpose } from '../../../../ReduxStore/Slices/ListSliceOfStudents.js';
+import AppsRoundedIcon from '@mui/icons-material/AppsRounded';
+import CodeIcon from '@mui/icons-material/Code';
+import { motion } from "framer-motion";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import TextsmsIcon from '@mui/icons-material/Textsms';
+import { detectLanguage } from '../../../../functions/highlight.js';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 const ChatArea = ({ idByProps = false, renderPart }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -39,8 +48,9 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         message: ""
     });
     const [messages, setMessages] = useState([]);
-
     const [pop_up_message, setPop_up_message] = useState({});
+    const [popBox, setPopBox] = useState(false);
+    const [setShareCode, onSetShareCode] = useState({ type: 'Text', language: "text" });
 
     useEffect(() => {
 
@@ -147,21 +157,40 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         }
     }, [state.data?.email]);
 
-    const sendHandler = (e) => {
+    const sendHandler = async (e) => {
         e.stopPropagation()
         if (!state?.data?.socketId) {
             return alert("user are offline , and do not send any message");
         }
 
-        if (inputState.message && state.data.socketId) {
+        if (inputState.message && state.data.socketId && currentStudent?.ref_id?._id) {
+
+            // detect user - select or not code share;
+            let highlight = await detectLanguage(inputState?.message);
+            console.log("language =============", highlight);
+            if (setShareCode?.type === 'Code') {
+                console.log("sending a code.............", 'file ChatArea.jsx');
+                if (['javascript', "python", 'java', 'c'].includes(highlight)) {
+                    highlight = highlight;
+                    console.log("language =============", highlight);
+                } else {
+                    highlight = 'plaintext';
+                }
+            } else {
+                highlight = 'plaintext';
+            }
+
+            // then send payload to socket.io
+
             const payload = {
                 senderId: currentStudent?.ref_id?._id,
                 receiverId: state?.data?._id,
-                message: inputState.message,
-                socketId: state.data.socketId,
-                index: messages.length,
-                type: "text",
-                r_email: state?.data?.email.trim()
+                message: inputState?.message,
+                socketId: state?.data.socketId,
+                index: messages?.length,
+                type: setShareCode?.type,
+                r_email: state?.data?.email.trim(),
+                language: highlight
             }
 
             socket.emit("socket_send_payload", { ...payload }, (data) => {
@@ -185,7 +214,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         }
     }
 
-
+    // compare chat id = means that is new connection or not - GChat
     const compareID = (id) => {
         if (testID) {
             if (testID === id) {
@@ -241,10 +270,37 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         )
     }
 
+    const showPopBoxDotted = () => {
+        setPopBox(!popBox);
+    }
+
+    //Array of feature that show in popBox - Code Shar etc...
+    const features = [
+        {
+            type: "Code",
+            titleName: "Code Share",
+            banner: <CodeIcon className="w-6 h-6" />,
+            action: "Active",
+        },
+        {
+            type: "Docs",
+            titleName: "Docs Share",
+            banner: <AttachFileIcon className="w-6 h-6" />,
+            action: "Inactive",
+        },
+        {
+            type: "Text",
+            titleName: "Text Share",
+            banner: <TextsmsIcon className="w-6 h-6" />,
+            action: "Active",
+        }
+    ];
+
+
     if (isSuccess) {
         return (
             <>
-                <div className='text-white w-full h-full'>
+                <div className='text-white w-full h-full relative'>
                     <div className="flex flex-col h-full bg-gray-900 relative">
 
                         <div className="border-b z-50 bg-gray-900 md:w-[59%] w-auto border-gray-700 px-4 py-3 sm:px-6 sm:py-4 fixed top-[8%]">
@@ -308,36 +364,124 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                             <VirtualizedChat
                                 currentUserId={currentStudent?.ref_id?._id}
                                 messages={messages}
+                                showPopBoxDotted={showPopBoxDotted}
+                                popBox={popBox}
                             />
                         </div>
 
                         <div className="border-t z-50 border-gray-700 px-4 py-3 sm:px-6 sm:py-4 bg-gray-800">
                             <div className="flex items-center space-x-3 sm:space-x-4">
-
                                 <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-                                    <button className="p-2 hover:bg-gray-700 rounded-full transition-colors">
-                                        <FiPaperclip className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                                    <button
+                                        onClick={() => showPopBoxDotted()}
+                                        title={`${setShareCode?.type === 'Code' ? "Code Share" : "Add Store"}`}
+                                        className="p-2 hover:bg-gray-700 rounded-full transition-colors">
+                                        {
+                                            setShareCode?.type === 'Code' ? <CodeIcon className='w-4 h-4 sm:w-5 sm:h-5 text-green-600' /> : <AppsRoundedIcon className='w-4 h-4 sm:w-5 sm:h-5' />
+                                        }
                                     </button>
-                                    <button className="p-2 hover:bg-gray-700 rounded-full transition-colors">
+                                    <button title='Add image' className="p-2 hover:bg-gray-700 rounded-full transition-colors">
                                         <FiImage className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                                     </button>
                                 </div>
 
+                                {
+                                    popBox && <div className='md:w-[30%] w-[80%] gap-3 h-[35%] flex flex-wrap pl-[4%] py-1 items-center
+                                     bg-gray-800 rounded-md rounded-br-2xl absolute bottom-[10%] px-3'>
+                                        {features.map((ele, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.4, delay: index * 0.1 }}
+                                                whileHover={{ scale: 1.05 }}
+                                                className="bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-xl border border-gray-700 flex flex-col items-center text-center cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
 
+                                                    if (ele.action === 'Inactive') {
+                                                        alert("service unavailable");
+                                                        return;
+                                                    }
+                                                    if (ele?.titleName === 'Code Share') {
+                                                        onSetShareCode({ type: "Code", language: "" });
+                                                        setPopBox(!popBox);
+                                                    } else if (ele?.titleName === 'Text Share') {
+                                                        onSetShareCode({ type: "Text", language: "text" });
+                                                        setPopBox(!popBox);
+                                                    }
+
+                                                }}
+                                            >
+
+                                                <div className="mb-3 text-indigo-400">
+                                                    {ele.banner}
+                                                </div>
+
+
+                                                <h2 className="text-sm md:text-base font-semibold text-white">
+                                                    {ele.titleName}
+                                                </h2>
+
+
+                                                <p
+                                                    className={`mt-1 text-xs font-medium ${ele.action === "Active"
+                                                        ? "text-green-400"
+                                                        : "text-gray-400"
+                                                        }`}>
+                                                    {ele.action}
+                                                </p>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                }
                                 <div className="flex-1 min-w-0">
-                                    <input
-                                        onChange={(e) => inputHandler(e)}
-                                        value={inputState?.message}
-                                        name='message'
-                                        type="text"
-                                        required
-                                        ref={ref}
-                                        placeholder="Type a message..."
-                                        className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-700 text-white placeholder-gray-400"
-                                    />
+
+                                    {
+                                        setShareCode?.type === 'Code' ?
+                                            <textarea
+                                                onChange={(e) => inputHandler(e)}
+                                                value={inputState?.message}
+                                                rows={1}
+                                                name='message'
+                                                type="text"
+                                                required
+                                                ref={ref}
+                                                placeholder="type or paste your code............"
+                                                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border 
+                                        ${setShareCode?.type === 'Code' ? "border-red-600 focus:ring-green-500"
+                                                        : "border-gray-600 focus:ring-blue-500"}  
+                                                rounded-full focus:outline-none focus:ring-2
+                                                focus:border-transparent text-sm bg-gray-700 text-white
+                                                 placeholder-gray-400`}
+                                            />
+                                            :
+                                            <input
+                                                onChange={(e) => inputHandler(e)}
+                                                value={inputState?.message}
+                                                name='message'
+                                                type="text"
+                                                required
+                                                ref={ref}
+                                                placeholder="Type a message..."
+                                                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border 
+                                        ${setShareCode?.type === 'Code' ? "border-red-600 focus:ring-green-500"
+                                                        : "border-gray-600 focus:ring-blue-500"}  
+                                                rounded-full focus:outline-none focus:ring-2
+                                                focus:border-transparent text-sm bg-gray-700 text-white
+                                                 placeholder-gray-400`}
+                                            />
+
+                                    }
+
+
+
                                 </div>
                                 <button
-                                    onClick={(e) => sendHandler(e)}
+                                    onClick={(e) => {
+                                        sendHandler(e)
+                                        onSetShareCode({ type: "Text", language: "text" });
+                                    }}
                                     className="p-2 sm:p-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-sm flex-shrink-0">
                                     <FiSend className="w-5 h-4 sm:w-5 sm:h-5 text-white" />
                                 </button>
@@ -345,6 +489,8 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                         </div>
                     </div>
                 </div>
+
+
 
             </>
         )

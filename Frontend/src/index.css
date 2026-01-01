@@ -52,3 +52,12 @@ html {
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
+
+
+pre {
+  white-space: pre !important;
+}
+
+code {
+  white-space: pre !important;
+}
