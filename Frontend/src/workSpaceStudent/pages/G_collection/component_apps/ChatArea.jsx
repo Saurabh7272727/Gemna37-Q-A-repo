@@ -23,9 +23,7 @@ import { motion } from "framer-motion";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import TextsmsIcon from '@mui/icons-material/Textsms';
 import { detectLanguage } from '../../../../functions/highlight.js';
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+
 
 const ChatArea = ({ idByProps = false, renderPart }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -117,11 +115,10 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
             if (findPayload) {
                 const api = new ApiEndPoints();
                 const result = await api.fetchAllConnectionMessage(`/api/v1/students/connection/${findPayload.chatID}`);
-
                 if (result?.success) {
-                    setTestID(result.id);
-                    setMessages(result.data);
-                    return result.data;
+                    setTestID(result?.id);
+                    setMessages(result?.data);
+                    return result?.data;
                 } else {
                     localStorage.clear();
                     navi(-1);
@@ -157,7 +154,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         }
     }, [state.data?.email]);
 
-    const sendHandler = async (e) => {
+    const sendHandler = (e) => {
         e.stopPropagation()
         if (!state?.data?.socketId) {
             return alert("user are offline , and do not send any message");
@@ -166,7 +163,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         if (inputState.message && state.data.socketId && currentStudent?.ref_id?._id) {
 
             // detect user - select or not code share;
-            let highlight = await detectLanguage(inputState?.message);
+            let highlight = detectLanguage(inputState?.message);
             console.log("language =============", highlight);
             if (setShareCode?.type === 'Code') {
                 console.log("sending a code.............", 'file ChatArea.jsx');
@@ -242,9 +239,6 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                 console.log(`message ==================== ${data}`);
                 setPop_up_message({ new_message_arrived: true });
                 dispatch(setfirstMessagerSet(data));
-                setMessages((sau) => {
-                    return [...sau, { ref_id: { ...data.message } }]
-                })
             }
         };
 

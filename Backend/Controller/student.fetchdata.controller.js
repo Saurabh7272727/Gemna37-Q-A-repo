@@ -60,7 +60,16 @@ const fetchAllMessage = async (req, res) => {
 
     const { message, message2 } = req.params;
     try {
-        const findAllconnections = await connectionModel.findOne({ id: `${message}/${message2}` }).populate('messages.ref_id');
+        // new code
+        const findAllconnections = await connectionModel.findOne({
+            $or: [
+                { id: `${message}/${message2}` },
+                { id: `${message2}/${message}` }
+            ]
+        }).populate('messages.ref_id');
+
+        // fix - this code is bug & not relay
+        // const findAllconnections = await connectionModel.findOne({ id: `${message}/${message2}` }).populate('messages.ref_id');
         return res.status(200).json({ message: "get are successfully", success: true, data: findAllconnections?.messages, id: findAllconnections?._id })
     } catch (error) {
         return res.status(402).json({ message: `Data fetching Error - ${error.message}`, success: false });

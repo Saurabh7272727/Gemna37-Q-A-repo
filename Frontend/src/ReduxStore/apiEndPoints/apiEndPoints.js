@@ -109,7 +109,8 @@ class ApiEndPoints {
                 },
             });
 
-            const result = response.json();
+            const result = await response.json();
+            console.log('test -2 ==== apiendpoint', result);
             return result;
         } catch (error) {
             return { message: "External forntend Error - api - 70", success: false };

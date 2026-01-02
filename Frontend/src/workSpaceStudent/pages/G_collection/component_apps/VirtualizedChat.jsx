@@ -90,15 +90,15 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                             >
 
                                 {
-                                    (showcodeblack.show && showcodeblack.message && showcodeblack.id === msg?._id) && <div
-                                        className='md:w-[50%] w-full md:h-fit h-fit md:sticky absolute top-1 block overflow-x-auto md:left-6 left-0'
+                                    (showcodeblack.show && showcodeblack.message && showcodeblack.id === msg?.ref_id?._id) && <div
+                                        className='md:w-[50%] w-full md:h-fit h-fit md:sticky mb-4 absolute top-[300px] block overflow-x-auto md:left-6 left-0'
                                     >
                                         <CodeShareCard code={showcodeblack.message} language={showcodeblack.type} ShowCodeInBlackBox={ShowCodeInBlackBox} />
                                     </div>
                                 }
 
                                 {
-                                    (showcodeblack.show && showcodeblack.message && showcodeblack.id === msg?._id) && <div
+                                    (showcodeblack.show && showcodeblack.message && showcodeblack.id === msg?.ref_id?._id) && <div
                                         className='md:w-[50%] hidden h-fit sticky md:block top-1 overflow-x-auto left-6'
                                     >
                                         <div className='w-[10%]'></div>
@@ -114,14 +114,22 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                                             }`}
 
 
-                                        onClick={() => ShowCodeInBlackBox({ show: true, message: msg?.ref_id?.message, id: msg?._id, type: msg?.ref_id?.language })}
+                                        onClick={() => {
+                                            ShowCodeInBlackBox({
+                                                show: true,
+                                                message: msg?.ref_id?.message,
+                                                id: msg?.ref_id?._id,
+                                                type: msg?.ref_id?.language,
+                                            });
+
+                                        }}
                                     >
                                         <motion.div
                                             initial={{ opacity: 0, y: 16, scale: 0.96 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             whileHover={{ scale: 1.03 }}
                                             transition={{ duration: 0.3 }}
-                                            className="w-full sm:w-full  bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer shadow-md hover:shadow-lg"
+                                            className="w-full sm:w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer shadow-md hover:shadow-lg"
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="text-2xl">
@@ -143,7 +151,7 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                                         </motion.div>
                                     </div> :
                                         <div
-                                            className={`h-auto max-w-[75%] md:max-w-[60%] w-fit break-words overflow-wrap-anywhere rounded-2xl px-4 py-3 ${isCurrentUser
+                                            className={`h-auto max-w-[75%]  md:max-w-[60%] w-fit break-words overflow-wrap-anywhere rounded-2xl px-4 py-3 ${isCurrentUser
                                                 ? "bg-gray-800 text-white rounded-br-none"
                                                 : "bg-gray-600 text-white rounded-bl-none"
                                                 }`}
