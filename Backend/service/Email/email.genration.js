@@ -4,6 +4,13 @@ import generatePdfBuffer from '../pdf.generation.js';
 
 const emailSender = async (email, messages, OTP, person) => {
     try {
+
+
+        // test case
+        // throw Error("test the case of inngest");
+        // end
+
+
         const pdfBuffer = await generatePdfBuffer(person);
         let mailGenerator = new Mailgen({
             theme: 'default',

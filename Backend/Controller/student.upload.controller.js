@@ -12,6 +12,8 @@ import StudentModelMain from '../model/Students.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
+import { inngest } from './../service/Inngest/client.js';
+
 
 dotenv.config();
 const studentUplaodController = async (req, res) => {
@@ -142,28 +144,72 @@ const registerationGEMID = async (req, res) => {
         console.log('Client disconnected');
         abortController.abort(); // Cancel async operation
     });
+
     if (abortController.signal.aborted) {
         return res.end();
     }
 
     try {
-        const person = await emailSender(email, "We are supporting your goal and provide a enivorment to work with real world problem", generateSecureOTP(), { ...req.body });
-        if (person) {
-            const submitLastModel = new StudentModel({ ...person, Indb: true });
-            await submitLastModel.save();
-            res.status(201).json({
-                message: "email are send by service", success: true,
-                status: "ACCEPTED", studentData: { ...person, Indb: true }
+        if (!req?.body?.email) {
+            return res.status(400).json({
+                message: "Email is required",
+                success: false,
+                status: "VALIDATION_ERROR",
             });
-            return;
-        } else {
-            res.status(404).json({ message: "something was wrong", success: false, status: "VALIDATION_ERROR" });
         }
+
+        const submitLastModel = new StudentModel({
+            ...req.body,
+            Indb: true,
+        });
+
+        await submitLastModel.save();
+        const isNew =
+            submitLastModel.createdAt ==
+            submitLastModel.updatedAt;
+
+        console.log("Find Error ====================", isNew);
+
+        const otp = generateSecureOTP();
+
+        try {
+            await inngest.send({
+                name: "mail-sender-by-gemna",
+                data: {
+                    id: submitLastModel._id,
+                    emailID: req.body.email,
+                    OTP: otp,
+                    message: "inQueue the email in inngest",
+                },
+            });
+        } catch (inngestError) {
+            submitLastModel.emailAreSendStatus = "failed";
+            await submitLastModel.save();
+
+            return res.status(500).json({
+                message: "Failed to enqueue email job",
+                success: false,
+                status: "INNGEST_ERROR",
+            });
+        }
+
+        return res.status(201).json({
+            message: "email are send by service",
+            success: true,
+            status: "ACCEPTED",
+            studentData: {
+                ...req.body,
+                Indb: true,
+                _id: submitLastModel._id,
+            },
+        });
     } catch (error) {
-        res.status(902).json({ message: error.message, success: false, status: "VALIDATION_ERROR" });
+        return res.status(500).json({
+            message: error.message,
+            success: false,
+            status: "SERVER_ERROR",
+        });
     }
-
-
 
 }
 

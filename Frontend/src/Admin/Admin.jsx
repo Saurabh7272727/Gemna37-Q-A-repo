@@ -9,6 +9,7 @@ import { useContext } from 'react';
 import { StoreAdminContext } from './store/store.jsx';
 import AddStudentDashBoard from './AddStudentDashBoard.jsx';
 import { useNavigate } from 'react-router-dom';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 const Admin = () => {
     const { dispatch, state } = useContext(StoreAdminContext);
     const [student_com, setStudent_Com] = useState(false);
@@ -71,6 +72,12 @@ const Admin = () => {
                                 onClick={() => QueryRouterChange()}
                             >
                                 <PiStudentFill /> Add Student</button>
+
+                            <button
+                                onClick={() => alert("hello")}
+                                className={` px-2 py-1 ring-1 ring-gray-900 ${student_com ? "text-white" : "bg-gray-900 text-gray-400"} font-semibold md:w-[90%] w-[50%] text-start rounded-sm flex items-center gap-x-1`}>
+                                <FiberNewIcon />
+                                Check Status</button>
                         </div>
                     </div>
                     <div className='md:w-[68%] md:h-[90%] w-[100%] h-full'>

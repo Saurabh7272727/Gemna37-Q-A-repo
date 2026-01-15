@@ -13,6 +13,7 @@ const StudentTable = ({ students }) => {
               <th className="p-4">COURSE</th>
               <th className="p-4">YEAR</th>
               <th className="p-4">status</th>
+              <th className='p-4'>Queue</th>
             </tr>
           </thead>
           <tbody>
@@ -31,6 +32,7 @@ const StudentTable = ({ students }) => {
                 <td className="p-4 text-gray-700">{product?.course?.label}</td>
                 <td className="p-4 text-gray-600 max-w-xs truncate">{product?.year?.label}</td>
                 <td className="p-4 text-indigo-600 font-semibold">{product?.status?.label}</td>
+                <td className="p-4 text-indigo-600 font-semibold">{product?.emailAreSendStatus}</td>
               </tr>
             ))}
           </tbody>

@@ -22,6 +22,11 @@ const model = new Schema(new mongoose.Schema({
         default: "NA",
         trim: true,
     },
+    emailAreSendStatus: {
+        type: String,
+        enum: ['failed', 'successed', 'processing'],
+        default: "processing"
+    },
     email: {
         type: String,
         required: true,
