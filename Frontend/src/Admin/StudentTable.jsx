@@ -32,7 +32,10 @@ const StudentTable = ({ students }) => {
                 <td className="p-4 text-gray-700">{product?.course?.label}</td>
                 <td className="p-4 text-gray-600 max-w-xs truncate">{product?.year?.label}</td>
                 <td className="p-4 text-indigo-600 font-semibold">{product?.status?.label}</td>
-                <td className="p-4 text-indigo-600 font-semibold">{product?.emailAreSendStatus}</td>
+                <td className={`p-4 
+                 ${product?.emailAreSendStatus === 'failed' ? "text-red-600" :
+                    product?.emailAreSendStatus === "successed" ? "text-green-600" :
+                      "text-blue-600"} font-semibold `}>{product?.emailAreSendStatus}</td>
               </tr>
             ))}
           </tbody>
