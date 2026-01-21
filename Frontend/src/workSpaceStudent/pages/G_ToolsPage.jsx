@@ -25,7 +25,8 @@ const GTools = () => {
         {
             name: 'Attendance bit',
             icon: <FaCalendarCheck className="text-2xl" />,
-            color: 'bg-blue-400'
+            color: 'bg-blue-400',
+            redirect: "/app/attendence"
         },
         {
             name: 'G-Post',
@@ -170,7 +171,7 @@ const GTools = () => {
                                     onClick={() => {
                                         if (tool.redirect) {
                                             startTransition(() => {
-                                                navi("/app/chat");
+                                                navi(`${tool.redirect}`);
                                             })
                                         }
                                     }}
