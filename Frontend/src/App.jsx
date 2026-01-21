@@ -47,7 +47,8 @@ import socket from './socket_client/socket_client.js';
 import GoogleStyleAuthPage from './Auth/LoginUser/GoogleAuth.jsx';
 
 
-
+// test
+import AttendancePage from './workSpaceStudent/AttendenceSystem/Main.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -192,6 +193,13 @@ const App = () => {
             <Suspense fallback={<LazyLaodingDemo />}>
               <WorkSpaceContainerSize>
                 <ChatArea renderPart={login} idByProps={""} />
+              </WorkSpaceContainerSize>
+            </Suspense>
+          } />
+          <Route path='/app/attendence' element={
+            <Suspense fallback={<LazyLaodingDemo />}>
+              <WorkSpaceContainerSize>
+                <AttendancePage />
               </WorkSpaceContainerSize>
             </Suspense>
           } />
