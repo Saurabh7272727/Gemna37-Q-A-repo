@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const WorkSpaceContainerSize = ({ children, css }) => {
+const WorkSpaceContainerSize = ({ children, css, renderPart }) => {
+
+    useEffect(() => {
+        if (!renderPart) {
+            navi('/')
+        }
+    }, [renderPart])
     return (
         <>
             <div

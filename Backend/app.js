@@ -10,6 +10,9 @@ import connectDataBaseURL from './service/db.js';
 import cookieParser from 'cookie-parser';
 import serve_inngest from './service/Inngest/handlerFile.js';
 import helmet from 'helmet'
+
+// Attendance-Core
+import subjectRouter from './Route/AttendanceCore/subject.route.js';
 const app = express();
 
 
@@ -38,4 +41,5 @@ app.get('/', (req, res) => {
 app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
 app.use('/', googleVerificationRouter)
+app.use('/attendance', subjectRouter)
 export default app;

@@ -2,11 +2,11 @@ import app from "./app.js";
 import http from 'http';
 import dotenv from 'dotenv';
 import connectWithSocket from './socket/socket.io.js';
-
+// main logical file --- gemna.ai server (we use two server same repo on - vercel and render for diff purpose)
 
 
 dotenv.config()
-// let io = null;
+
 const server = http.createServer(app);
 try {
     connectWithSocket(server);

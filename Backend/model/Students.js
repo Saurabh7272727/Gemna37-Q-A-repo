@@ -36,7 +36,7 @@ StudentSchema.pre("save", async function (next) {
     }
 });
 
-// Method to compare password
+// Method to compare password (for using use instance of Model = StudentModelMain);
 StudentSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };

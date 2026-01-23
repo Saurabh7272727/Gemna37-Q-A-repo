@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Users, Brain, CalendarCheck, ShieldCheck, Layers, Sparkles } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+import { useNavigate } from "react-router-dom";
 
 const MagicButton = ({ text = "Click Me" }) => {
     return (
@@ -19,17 +19,13 @@ const MagicButton = ({ text = "Click Me" }) => {
         transform hover:scale-105
         hover:from-pink-500 hover:to-yellow-500
         focus:outline-none focus:ring-4 focus:ring-purple-300
-        w-full md:w-auto float-right select-none
+        w-full md:w-auto float-right select-none md:mb-0 mb-4
       "
         >
-            <span className="relative">{text}</span>
+            <span className="relative ">{text}</span>
         </button>
     );
 };
-
-
-
-
 const Card = ({ icon: Icon, title, desc }) => (
     <motion.div
         initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -37,7 +33,7 @@ const Card = ({ icon: Icon, title, desc }) => (
         viewport={{ once: true }}
         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
         whileHover={{ scale: 1.05, y: -5, boxShadow: "0px 15px 35px rgba(99,102,241,0.3)" }}
-        className="group bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-3xl p-5 shadow-lg transition-all duration-300"
+        className="group bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-5 shadow-lg transition-all duration-300"
     >
         {
             Icon ? <motion.div
@@ -46,7 +42,7 @@ const Card = ({ icon: Icon, title, desc }) => (
                 transition={{ delay: 0.2 }}
                 className="h-14 w-14 flex items-center justify-center rounded-2xl bg-indigo-500/10 mb-2"
             >
-                <Icon className="h-7 w-7 text-indigo-400" />
+                <Icon className="h-7 w-7  text-indigo-400" />
             </motion.div> : <MagicButton text="Use me" />
         }
 
@@ -54,7 +50,7 @@ const Card = ({ icon: Icon, title, desc }) => (
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-xl font-semibold mb-1"
+            className="text-[14px] md:text-xl font-semibold mb-1"
         >
             {title}
         </motion.h3>
@@ -69,31 +65,44 @@ const Card = ({ icon: Icon, title, desc }) => (
     </motion.div>
 );
 
-export default function AttendancePage() {
-
+export default function AttendancePage({ renderPart, tokenexpire }) {
+    const navi = useNavigate()
     const chartData = [
-        { week: 'Week 1', attendance: 85 },
-        { week: 'Week 2', attendance: 90 },
-        { week: 'Week 3', attendance: 78 },
-        { week: 'Week 4', attendance: 88 },
-        { week: 'Week 5', attendance: 92 },
+        { week: '22 Jan', attendance: 85 },
+        { week: '21 Jan', attendance: 90 },
+        { week: '20 Jan', attendance: 78 },
+        { week: '19 Jan', attendance: 88 },
+        { week: '18 Jan', attendance: 92 },
     ];
 
     const teamMembers = [
-        { name: 'Alice Johnson', role: 'Frontend Developer', img: '/placeholder1.png' },
-        { name: 'Bob Smith', role: 'Backend Developer', img: '/placeholder2.png' },
-        { name: 'Carol Lee', role: 'AI Engineer', img: '/placeholder3.png' },
+        { name: 'Jemena Team COP', role: 'Team management', img: 'https://whatsyouredge.com.au/wp-content/uploads/2017/03/Jemena.png' },
+        { name: 'Gemna World', role: 'Owner & Development', img: '../../../jira.png' }
     ];
 
-    return (
-        <div className="min-h-screen bg-gray-900 text-gray-100 overflow-hidden">
+    useEffect(() => {
+        if (!renderPart) {
+            navi('/')
+        }
+    }, [renderPart])
 
-            <section className="relative max-w-7xl mx-auto px-6 py-32 text-center overflow-hidden">
+    return (
+        <div className="min-h-screen bg-gray-900 text-gray-100 overflow-hidden relative">
+            {
+                tokenexpire && <section className="absolute w-full h-screen bg-gray-950 z-30 top-10 mx-auto px-6 py-12 text-center overflow-hidden">
+                    <section className="max-w-8xl mx-auto px-6 py-10">
+                        <Card icon={Users} title="Token are expired - login again" desc="After 2 hours Token are expired automatically" />
+                    </section>
+                </section>
+            }
+            <section className="relative max-w-7xl mx-auto px-6 py-12 text-center overflow-hidden">
                 <motion.h1
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, type: "spring", stiffness: 80 }}
-                    className="text-4xl md:text-6xl font-bold"
+                    className="text-4xl md:text-6xl font-bold first-letter:text-8xl 
+                    first-letter:text-green-600 first-letter:font-semibold first-letter:font-serif 
+                     "
                 >
                     Student-First Attendance System
                 </motion.h1>
@@ -101,12 +110,12 @@ export default function AttendancePage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
-                    className="mt-6 max-w-3xl mx-auto text-gray-400 select-none"
+                    className="md:mt-6 max-w-3xl mt-3 md:text-[24px] text-[14px] justify-items-center mx-auto text-gray-400 select-none"
                 >
                     Gemna allows students to manage their attendance by subjects, predict attendance risks using AI, and track progress—all in a student-friendly environment.
                 </motion.p><br />
                 <hr />
-                <section className="max-w-7xl mx-auto px-6 py-10">
+                <section className="max-w-8xl mx-auto px-6 py-10">
                     <Card title="Gemna Attendence = Student-first attendence philosophy" desc="Timetable change hota rehta hai subject nahi change hota." />
                 </section>
             </section>

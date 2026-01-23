@@ -198,8 +198,8 @@ const App = () => {
           } />
           <Route path='/app/attendence' element={
             <Suspense fallback={<LazyLaodingDemo />}>
-              <WorkSpaceContainerSize>
-                <AttendancePage />
+              <WorkSpaceContainerSize renderPart={login}>
+                <AttendancePage renderPart={login} tokenexpire={tokenexpire} />
               </WorkSpaceContainerSize>
             </Suspense>
           } />
