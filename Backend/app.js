@@ -13,6 +13,7 @@ import helmet from 'helmet'
 
 // Attendance-Core
 import subjectRouter from './Route/AttendanceCore/subject.route.js';
+import homeController from './Route/AttendanceCore/home.route.js';
 const app = express();
 
 
@@ -26,7 +27,11 @@ app.use(cors({
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
-
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    next();
+});
 
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -40,6 +45,7 @@ app.get('/', (req, res) => {
 
 app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
-app.use('/', googleVerificationRouter)
-app.use('/attendance', subjectRouter)
+app.use('/', googleVerificationRouter);
+
+app.use('/api/attendance', homeController)
 export default app;
