@@ -15,7 +15,7 @@ import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { ToastContainer } from 'react-toastify';
 
 import Cookies from 'js-cookie';
-const StudentProfilePage = () => {
+const StudentProfilePage = ({ renderPart }) => {
     const navi = useNavigate();
     const dispatch = useDispatch();
     const data = useParams();
@@ -82,7 +82,7 @@ const StudentProfilePage = () => {
 
     return (
         <>
-            <WorkSpaceContainerSize css={'bg-black'}>
+            <WorkSpaceContainerSize css={'bg-black'} renderPart={renderPart}>
                 {
                     errorFind.findError ? <MessageAlert type={errorFind.type} message={errorFind.message} onClose={true} /> :
                         <div className="">

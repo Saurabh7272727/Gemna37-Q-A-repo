@@ -178,7 +178,7 @@ const App = () => {
           } />
           <Route path='/profile/*' element={
             <Suspense fallback={<LazyLaodingDemo />}>
-              <StudentProfilePage />
+              <StudentProfilePage renderPart={login} />
             </Suspense>
           } />
           <Route path='/app/chat' element={
