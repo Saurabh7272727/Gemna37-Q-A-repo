@@ -183,7 +183,7 @@ const App = () => {
           } />
           <Route path='/app/chat' element={
             <Suspense fallback={<LazyLaodingDemo />}>
-              <WorkSpaceContainerSize>
+              <WorkSpaceContainerSize renderPart={login}>
                 <G_chatApp renderPart={login} />
               </WorkSpaceContainerSize>
             </Suspense>
@@ -191,7 +191,7 @@ const App = () => {
 
           <Route path='/chat/app/:id' element={
             <Suspense fallback={<LazyLaodingDemo />}>
-              <WorkSpaceContainerSize>
+              <WorkSpaceContainerSize renderPart={login}>
                 <ChatArea renderPart={login} idByProps={""} />
               </WorkSpaceContainerSize>
             </Suspense>

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const WorkSpaceContainerSize = ({ children, css, renderPart }) => {
-
+    const navi = useNavigate();
     useEffect(() => {
         if (!renderPart) {
             navi('/')
