@@ -95,11 +95,21 @@ const ListSliceOdfStudent = createSlice({
             }, []);
 
             state.ConnectedUserList = [...removeduplicate.values()];
+        },
+        updateUserImage: (state, action) => {
+            const findUserInConnectionList = state.ConnectedUserList.find(user => user._id === action?.payload._id);
+            findUserInConnectionList.imageURL = action.payload.imageURL;
+
+            const findUserInOnlineList = state.OnlineUserList.find(user => user._id === action?.payload._id);
+            findUserInOnlineList.imageURL = action.payload.imageURL;
+
+            const findUserInActiveUserList = state.ActiveUserList.find(user => user._id === action?.payload._id);
+            findUserInActiveUserList.imageURL = action.payload.imageURL;
         }
 
     }
 })
 
 export const { addActiveUserList, addOnlineUserList, clearTheList,
-    addConnectionList, setfirstMessagerSet, testPurpose, removeDuplicateValue } = ListSliceOdfStudent.actions;
+    addConnectionList, setfirstMessagerSet, testPurpose, removeDuplicateValue, updateUserImage } = ListSliceOdfStudent.actions;
 export default ListSliceOdfStudent.reducer;

@@ -1,31 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Users, Brain, CalendarCheck, ShieldCheck, Layers, Sparkles } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useNavigate } from "react-router-dom";
+import MagicButton from "./components/MagicButton.jsx";
+import MagicCard from "./components/MagicCard.jsx";
 
-const MagicButton = ({ text = "Click Me" }) => {
-    return (
-        <button
-            className="
-        relative 
-        px-6 py-3 
-        bg-gradient-to-r from-purple-500 to-indigo-500 
-        text-white font-semibold 
-        rounded-xl 
-        shadow-lg 
-        overflow-hidden
-        transition-all duration-300
-        transform hover:scale-105
-        hover:from-pink-500 hover:to-yellow-500
-        focus:outline-none focus:ring-4 focus:ring-purple-300
-        w-full md:w-auto float-right select-none md:mb-0 mb-4
-      "
-        >
-            <span className="relative ">{text}</span>
-        </button>
-    );
-};
+
+
+
+
 const Card = ({ icon: Icon, title, desc }) => (
     <motion.div
         initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -66,6 +50,7 @@ const Card = ({ icon: Icon, title, desc }) => (
 );
 
 export default function AttendancePage({ renderPart, tokenexpire }) {
+
     const navi = useNavigate()
     const chartData = [
         { week: '22 Jan', attendance: 85 },
@@ -79,6 +64,12 @@ export default function AttendancePage({ renderPart, tokenexpire }) {
         { name: 'Jemena Team COP', role: 'Team management', img: 'https://whatsyouredge.com.au/wp-content/uploads/2017/03/Jemena.png' },
         { name: 'Gemna World', role: 'Owner & Development', img: '../../../jira.png' }
     ];
+
+    const submitHandler = async (setOpen) => {
+        setTimeout(() => {
+            setOpen(false);
+        }, 5000)
+    }
 
     useEffect(() => {
         if (!renderPart) {
@@ -116,7 +107,10 @@ export default function AttendancePage({ renderPart, tokenexpire }) {
                 </motion.p><br />
                 <hr />
                 <section className="max-w-8xl mx-auto px-6 py-10">
-                    <Card title="Gemna Attendence = Student-first attendence philosophy" desc="Timetable change hota rehta hai subject nahi change hota." />
+                    <MagicCard title="Gemna Attendence = Student-first attendence philosophy" desc="Timetable change hota rehta hai subject nahi change hota." />
+                    <MagicButton
+                        submitHandler={submitHandler}
+                        text="Use me" css={'float-right md:w-[200px] cursur-pointer w-[70%]'} />
                 </section>
             </section>
 

@@ -5,7 +5,7 @@ const WorkSpaceContainerSize = ({ children, css, renderPart }) => {
     const navi = useNavigate();
     useEffect(() => {
         if (!renderPart) {
-            navi('/')
+            navi('/');
         }
     }, [renderPart])
     return (

@@ -66,12 +66,6 @@ const homeController = async (req, res) => {
                 expiresIn: '10m'
             }
 
-            //     jwt.sign(
-            //     { gemidlog, timestamp: Date.now() },
-            //     process.env.JSON_SECRET_KEY,
-            //     { expiresIn: "10m" }
-            // );
-
             return res.status(202).json({
                 status: 202,
                 message: "User not found in record",
@@ -122,10 +116,10 @@ const unmountController = async (req, res) => {
                 mapHoldRecordRunning.delete(`${_id}`);
             }
         }
-        return res.end();
+        return res.json({ message: "Cleaning done ...", id: _id, data: [...mapHoldRecordRunning] });
     } catch (error) {
         console.log(error)
-        return res.end();
+        return res.send(error);
     }
 
 }

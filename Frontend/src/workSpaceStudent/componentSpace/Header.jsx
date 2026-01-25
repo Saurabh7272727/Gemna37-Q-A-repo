@@ -4,13 +4,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { ImCross } from "react-icons/im";
 import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux';;
+import { useDispatch, useSelector } from 'react-redux';;
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { clearTheList } from '../../ReduxStore/Slices/ListSliceOfStudents.js'
 import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js';
-
-
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
 const Header = ({ tokenexpire }) => {
+    const UserInfomartion = useSelector(state => state?.userinfoSlice?.user);
     const locationData = useLocation();
     const dispatch = useDispatch();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -82,7 +84,8 @@ const Header = ({ tokenexpire }) => {
                                     Cookies.remove("ErrorMessage");
                                     dispatch(accessController(false));
                                     dispatch(clearTheList());
-                                    dispatch(clearinfoSlice())
+                                    dispatch(clearinfoSlice());
+                                    sessionStorage.clear();
                                     navi('/');
                                 }}>
                                     <button
@@ -93,8 +96,18 @@ const Header = ({ tokenexpire }) => {
                                 </div>
                             </div>
                         </div>
+                        <div className='float-bottom absolute bottom-5'>
+                            <Stack sx={{ width: '100%' }} spacing={2}>
+                                <Alert variant="filled" severity="success">
+                                    <Avatar alt={`${UserInfomartion?.ref_id?.email}`} src={`${UserInfomartion?.ref_id?.imageURL}`} />
+                                    <span title='Verified User' className='font-semibold text-end'>{UserInfomartion?.ref_id?.email}</span>
+                                </Alert>
+                            </Stack>
+                        </div>
+
                     </DialogPanel>
                 </Dialog>
+
             </div>
         </>
 

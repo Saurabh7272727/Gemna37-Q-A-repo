@@ -2,12 +2,14 @@ import React, { useState, useRef } from 'react';
 import { FaCloudUploadAlt, FaTrash, FaUser } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import { UpdateUserInfo } from '../../ReduxStore/Slices/UserInfoSlice.js';
-import { useDispatch } from 'react-redux';
+import { updateUserImage } from '../../ReduxStore/Slices/ListSliceOfStudents.js';
+import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../MessageGemnaCenter/toast.js';
 import ApiEndPoints from '../../ReduxStore/apiEndPoints/apiEndPoints.js';
 
 const ImageUploadForm = ({ dropDownBtn, setError }) => {
     const dispatch = useDispatch();
+    const User_ID = useSelector(state => state?.userinfoSlice?.user?.ref_id?._id)
     const api = new ApiEndPoints();
     const [selectedImage, setSelectedImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
@@ -65,7 +67,6 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
 
 
     const handleSubmit = async (e) => {
-        console.log(Cookies.get("GASID"));
         e.preventDefault();
         setLoading(true);
         if (!selectedImage) {
@@ -101,6 +102,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
             if (imageURL) {
                 dropDownBtn(false);
                 dispatch(UpdateUserInfo(imageURL));
+                dispatch(updateUserImage({ _id: User_ID, imageURL }))
                 setLoading(false);
             }
             setSelectedImage(null);

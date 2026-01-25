@@ -17,7 +17,7 @@ const router = new Router();
 //                hearder.authorization = key
 //                to verify by - middleware auto;
 router.post('/', UserAccessMiddleware, objRouterPass.homeController);
-router.post('/unmount', express.raw({ type: "application/json" }), objRouterPass.unmountController)
+router.post('/unmount', objRouterPass.unmountController)
 
 
 
