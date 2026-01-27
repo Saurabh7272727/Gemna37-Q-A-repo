@@ -14,8 +14,8 @@ const MagicButton = ({ text, css, submitHandler }) => {
     };
 
     return (
-        <div className={`ring-2 ring-blue-600 ${css} mt-5 w-fit flex justify-center`} onClick={() => submitHandler(setOpen)}>
-            <Button className={`${css}`} onClick={handleOpen}>{open ? "searching..." : text}</Button>
+        <div className={`ring-2 ring-blue-600 float-right mt-5 w-fit flex justify-center`} onClick={() => submitHandler(setOpen)}>
+            <Button type="submit" className={`${css}`} onClick={handleOpen}>{open ? "searching..." : text}</Button>
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
                 open={open}

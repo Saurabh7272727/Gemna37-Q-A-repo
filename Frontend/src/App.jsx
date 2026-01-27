@@ -47,8 +47,10 @@ import socket from './socket_client/socket_client.js';
 import GoogleStyleAuthPage from './Auth/LoginUser/GoogleAuth.jsx';
 
 
-// test
+// working
 import AttendancePage from './workSpaceStudent/AttendenceSystem/Main.jsx';
+import DashboardOfAttendance from './workSpaceStudent/AttendenceSystem/HomePage.jsx';
+import LandingPageOfHome from './workSpaceStudent/AttendenceSystem/components/LandingPageOfHome.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -203,6 +205,12 @@ const App = () => {
               </WorkSpaceContainerSize>
             </Suspense>
           } />
+
+          {/* most protected route */}
+
+          <Route element={<DashboardOfAttendance />} >
+            <Route path='/app/attendence/verify' element={<LandingPageOfHome />} />
+          </Route>
 
           <Route path='/auth/google/verification' element={<GoogleStyleAuthPage />} />
           <Route path='/success/google/*' element={<Login />} />
