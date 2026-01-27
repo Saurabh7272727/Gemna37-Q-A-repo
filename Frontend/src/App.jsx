@@ -51,6 +51,8 @@ import GoogleStyleAuthPage from './Auth/LoginUser/GoogleAuth.jsx';
 import AttendancePage from './workSpaceStudent/AttendenceSystem/Main.jsx';
 import DashboardOfAttendance from './workSpaceStudent/AttendenceSystem/HomePage.jsx';
 import LandingPageOfHome from './workSpaceStudent/AttendenceSystem/components/LandingPageOfHome.jsx';
+import AddSubjectPage from './workSpaceStudent/AttendenceSystem/components/src/pages/AddSubjectPage.jsx';
+import DashboardLayout from './workSpaceStudent/AttendenceSystem/components/src/layout/DashBoardLayout.jsx'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -208,8 +210,11 @@ const App = () => {
 
           {/* most protected route */}
 
-          <Route element={<DashboardOfAttendance />} >
-            <Route path='/app/attendence/verify' element={<LandingPageOfHome />} />
+          <Route element={<DashboardOfAttendance renderPart={login} />} >
+            <Route path='/app/attendence/verify' element={<LandingPageOfHome renderPart={login} />} />
+            <Route path='/app/attendence/subject/link' element={<DashboardLayout>
+              <AddSubjectPage />
+            </DashboardLayout>} />
           </Route>
 
           <Route path='/auth/google/verification' element={<GoogleStyleAuthPage />} />

@@ -3,6 +3,12 @@ import mongoose, { Schema } from "mongoose";
 
 
 const model = new Schema({
+    idRelation: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+    },
     subjetId: {
         type: Schema.Types.ObjectId,
         ref: "SubjectSchema",
