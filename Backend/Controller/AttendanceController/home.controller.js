@@ -1,10 +1,17 @@
 import * as z from "zod";
-import StudentAttendanceModel from "../../model/Attendence_Section/StudentAttendenceModel.js";
 import { encryptData, decryptData } from "../../components/crypto.js";
+
+// jwt
+import jwt from 'jsonwebtoken';
 
 // redis import
 import redis from "../../service/Redis/Client.js";
 
+// schema zod
+import { registrationSchema } from '../ZodSchema/AttendanceSchema/registerationSchema.js';
+
+// model of mongo
+import StudentAttendanceModel from '../../model/Attendence_Section/StudentAttendenceModel.js';
 
 const objPayloadVerification = z.object({
     gemidlog: z.string().length(24).regex(/^[a-f\d]{24}$/i),
@@ -33,9 +40,9 @@ const homeController = async (req, res) => {
             res.status(200).json({
                 message: "User found in attendance record",
                 status: 200,
-                success: false,
+                success: true,
                 sessionToken: encryptData({
-                    gemidlog,
+                    ...findUserInAttendanceRecord._id,
                     expiration: Date.now(),
                     permission: {
                         role: "Student",
@@ -133,7 +140,7 @@ const homeController = async (req, res) => {
 
         if (redisResponseSessionExist.gemidlog && redisResponseSessionExist?.expiration) {
             res.status(409).json({
-                message: "Session will be send already, duplication are not allowed",
+                message: "Session will be save already, duplication are not allowed",
                 status: 409,
                 success: false,
             });
@@ -151,8 +158,53 @@ const homeController = async (req, res) => {
 
 };
 
-const unmountController = async (req, res) => {
-    res.end();
+const registerNewUser = async (req, res) => {
+    try {
+        const { payload } = req.body;
+
+        const validatePayload = registrationSchema.safeParse(payload);
+        if (!validatePayload.success) {
+            return res.status(404).json({
+                status: 404,
+                message: JSON.parse(validatePayload.error.message),
+                success: false
+            });
+        }
+        const saveNewUser = new StudentAttendanceModel(validatePayload?.data);
+        await saveNewUser.save();
+
+        if (saveNewUser?._id) {
+            res.status(200).json({
+                message: "Student are saved in attendance record",
+                status: 200,
+                success: true,
+                sessionToken: encryptData({
+                    ...saveNewUser._id,
+                    expiration: Date.now(),
+                    permission: {
+                        role: "Student",
+                        update: true,
+                        upload: true,
+                        admin: false,
+                        routePermission: true
+                    }
+                })
+            });
+            return;
+        } else {
+            return res.status(404).json({
+                status: 404,
+                message: "something was wrong try again",
+                success: false
+            });
+        }
+    } catch (error) {
+        return res.status(505).json({
+            status: 505,
+            message: error.message,
+            success: false
+        });
+    }
 }
 
-export default { homeController, unmountController };
+export default { homeController, registerNewUser };

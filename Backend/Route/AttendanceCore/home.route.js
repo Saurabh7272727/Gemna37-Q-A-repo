@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import objRouterPass from '../../Controller/AttendanceController/home.controller.js';
 import { UserAccessMiddleware } from '../../middleware/studentAccessMiddleware.js';
-
+import ValidateRegistrationUser from '../../middleware/AttendanceMiddleware/ValidateRegisteration.js'
 const router = new Router();
 
 // In this router have
@@ -17,7 +17,7 @@ const router = new Router();
 //                hearder.authorization = key
 //                to verify by - middleware auto;
 router.post('/', UserAccessMiddleware, objRouterPass.homeController);
-router.post('/unmount', objRouterPass.unmountController)
+router.post('/register/user', UserAccessMiddleware, ValidateRegistrationUser, objRouterPass.registerNewUser)
 
 
 

@@ -23,6 +23,7 @@ const StudentAttendanceSchema = new Schema(
 
         mobileNumber: {
             type: String,
+            unique: true,
             required: true,
             match: [/^[6-9]\d{9}$/, "Mobile number must be 10 digits"]
         },
