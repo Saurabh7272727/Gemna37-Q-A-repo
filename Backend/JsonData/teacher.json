@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Dr. Amit Sharma",
+        "shortName": "AMIT",
+        "position": "HOD",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Rakesh Kumar",
+        "shortName": "RAKESH",
+        "position": "PROFESSOR",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Neha Verma",
+        "shortName": "NEHA",
+        "position": "ASSIANT PROFESSOR",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Sandeep Singh",
+        "shortName": "SANDEEP",
+        "position": "TEACHER",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Pooja Mishra",
+        "shortName": "POOJA",
+        "position": "ASSIANT PROFESSOR",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Vikas Gupta",
+        "shortName": "VIKAS",
+        "position": "TEACHER",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Anjali Pandey",
+        "shortName": "ANJALI",
+        "position": "TEACHER",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Dr. Rajeev Saxena",
+        "shortName": "RAJEEV",
+        "position": "PROFESSOR",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Manish Tripathi",
+        "shortName": "MANISH",
+        "position": "TEACHER",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
+    }
+]

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-
+import './TeacherSchema.js';
+import './SubjectSchema.js'
 
 
 const model = new Schema({
@@ -11,13 +12,13 @@ const model = new Schema({
     },
     subjetId: {
         type: Schema.Types.ObjectId,
-        ref: "SubjectSchema",
+        ref: "subjectschema",
         required: true,
         trim: true
     },
     teacherId: {
         type: Schema.Types.ObjectId,
-        ref: "TeacherSchema",
+        ref: "teacherschema",
         required: true,
         trim: true
     },
@@ -34,6 +35,6 @@ const model = new Schema({
 
 
 
-const SubjectAndTeacherSessionSchema = mongoose.model("SubjectAndTeacherSessionSchema", model);
+const SubjectAndTeacherSessionSchema = mongoose.model("subjectandteachersessionschema", model);
 
 export default SubjectAndTeacherSessionSchema

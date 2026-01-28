@@ -3,19 +3,7 @@ import { Menu, LayoutDashboard, CalendarCheck, BarChart3, User } from "lucide-re
 
 export default function LoadingDashboard() {
     return (
-        <div className="flex min-h-screen w-full bg-slate-900 text-white overflow-hidden">
-            <aside className="w-16 md:w-20 bg-slate-800 flex flex-col animate-pulse">
-                <div className="p-4">
-                    <Menu className="opacity-30" />
-                </div>
-                <nav className="flex-1 space-y-4 px-2">
-                    {[LayoutDashboard, CalendarCheck, BarChart3, User].map((Icon, i) => (
-                        <div key={i} className="flex justify-center p-2">
-                            <Icon className="opacity-30" />
-                        </div>
-                    ))}
-                </nav>
-            </aside>
+        <div className="flex ml-[70px] min-h-screen w-full bg-slate-900 text-white overflow-hidden">
             <main className="flex-1 p-4 md:p-6 space-y-6">
                 {/* Header */}
                 <div className="h-8 w-64 bg-slate-700 rounded animate-pulse" />

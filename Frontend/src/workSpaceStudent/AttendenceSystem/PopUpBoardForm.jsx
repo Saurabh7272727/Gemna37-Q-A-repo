@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { studentAttendanceSchema } from "../Zod/AttendanceSchema.js";
 import { createPortal } from "react-dom";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import API from './ApiEndPoints/api.js';
 import { useNavigate } from 'react-router-dom';
+import { AttendanceInfoLoad } from '../../ReduxStore/Slices/AttendanceSlice.js'
 
 function Input({ label, error, children, errorVerifiedBy }) {
     return (
@@ -25,6 +26,7 @@ function Input({ label, error, children, errorVerifiedBy }) {
 }
 
 export default function StudentAttendanceForm() {
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [errorState, setErrorState] = useState({
         error: false,
@@ -71,6 +73,7 @@ export default function StudentAttendanceForm() {
                 return;
             } else {
                 sessionStorage.setItem("sessionToken", result?.sessionToken);
+                dispatch(AttendanceInfoLoad(result?.StudentAttendanceModel))
                 navi('/app/attendence/verify?college=bit&secure=true');
             }
         } catch (error) {

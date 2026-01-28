@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf28"
+  },
+  "name": "Dr. Amit Sharma",
+  "shortName": "AMIT",
+  "position": "HOD",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf29"
+  },
+  "name": "Rakesh Kumar",
+  "shortName": "RAKESH",
+  "position": "PROFESSOR",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2a"
+  },
+  "name": "Neha Verma",
+  "shortName": "NEHA",
+  "position": "ASSIANT PROFESSOR",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2b"
+  },
+  "name": "Sandeep Singh",
+  "shortName": "SANDEEP",
+  "position": "TEACHER",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2c"
+  },
+  "name": "Pooja Mishra",
+  "shortName": "POOJA",
+  "position": "ASSIANT PROFESSOR",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2d"
+  },
+  "name": "Vikas Gupta",
+  "shortName": "VIKAS",
+  "position": "TEACHER",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2e"
+  },
+  "name": "Anjali Pandey",
+  "shortName": "ANJALI",
+  "position": "TEACHER",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf2f"
+  },
+  "name": "Dr. Rajeev Saxena",
+  "shortName": "RAJEEV",
+  "position": "PROFESSOR",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "6979e06c8b02fdffe82bcf30"
+  },
+  "name": "Manish Tripathi",
+  "shortName": "MANISH",
+  "position": "TEACHER",
+  "createdAt": "2026-01-27T04:00:00.000Z",
+  "updatedAt": "2026-01-27T04:00:00.000Z"
+}]

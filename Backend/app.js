@@ -47,5 +47,6 @@ app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
 app.use('/', googleVerificationRouter);
 
-app.use('/api/attendance', homeController)
+app.use('/api/attendance', homeController);
+app.use('/api/subject', subjectRouter)
 export default app;

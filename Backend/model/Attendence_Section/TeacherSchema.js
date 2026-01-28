@@ -26,6 +26,6 @@ const model = new Schema({
 }, { timestamps: true });
 
 
-const TeacherSchema = mongoose.model("TeacherSchema", model);
+const TeacherSchema = mongoose.model("teacherschema", model);
 
 export default TeacherSchema;

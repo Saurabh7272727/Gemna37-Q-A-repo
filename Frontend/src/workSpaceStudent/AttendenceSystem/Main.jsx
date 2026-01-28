@@ -8,7 +8,8 @@ import MagicCard from "./components/MagicCard.jsx";
 import API from "./ApiEndPoints/api.js";
 import StudentAttendanceForm from './PopUpBoardForm.jsx';
 import NotifyError from '../../Components/ErrorPages/NotifyError.jsx';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { AttendanceInfoLoad } from '../../ReduxStore/Slices/AttendanceSlice.js'
 
 const Card = ({ icon: Icon, title, desc }) => (
     <motion.div
@@ -51,6 +52,7 @@ const Card = ({ icon: Icon, title, desc }) => (
 
 export default function AttendancePage({ renderPart, tokenexpire }) {
     const api = new API(import.meta.env.VITE_APP_BACKEND_URL);
+    const dispatch = useDispatch();
     const userInformation = useSelector(state => state?.userinfoSlice?.user)
     const [error, setError] = useState({
         message: "",
@@ -91,6 +93,7 @@ export default function AttendancePage({ renderPart, tokenexpire }) {
             }
             if (result.success && result.status === 200) {
                 sessionStorage.setItem("sessionToken", result?.sessionToken);
+                dispatch(AttendanceInfoLoad(result?.StudentAttendanceModel))
                 navi('/app/attendence/verify?college=bit&secure=true');
                 return;
             } else if (
