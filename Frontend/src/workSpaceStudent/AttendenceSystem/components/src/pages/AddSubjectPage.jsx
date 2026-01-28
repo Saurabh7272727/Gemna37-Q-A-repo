@@ -1,5 +1,5 @@
 import { BookOpen, CheckCircle, GraduationCap, Layers } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Label from '../ui/Label.jsx';
 import InfoIcon from '@mui/icons-material/Info';
@@ -11,28 +11,40 @@ import { decryptData } from '../../../../../Auth/Encryption/jsondataEncryption.j
 import SubjectTeacherPreview from '../ui/SubjectTeacherPreview.jsx';
 import Avatar from '@mui/material/Avatar';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import Select from 'react-select';
+import MagicButton from '../../MagicButton.jsx'
 
 export default function SubjectAddPage() {
     const navi = useNavigate();
+    const hasSet = useRef(false);
+    const baseDataRef = useRef([]);
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const userInformation = useSelector(state => state?.userinfoSlice.user);
     const userAttendanceInformation = useSelector(state => state?.AttendanceSlice);
+    const [queryData, setQueryData] = useState([]);
 
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState();
+    const options = [
+        { value: 'THEORY', label: 'THEORY' },
+        { value: 'LAB', label: 'LAB' },
+        { value: 'SKILL DEVELOPEMENT', label: 'SKILL DEVELOPEMENT' },
+        { value: 'ALL', label: 'ALL SUBJECT' }
+    ];
 
+    const [selectedOption, setSelectedOption] = useState({ value: 'ALL', label: 'ALL SUBJECT' });
     const toggleSubject = (id) => {
-        setSelectedSubjects((prev) =>
-            prev.includes(id)
-                ? prev.filter((s) => s !== id)
-                : [...prev, id]
-        );
+        setSelectedSubjects((ids = []) => {
+            return ids.includes(id)
+                ? ids.filter((x) => x !== id)
+                : [...ids, id];
+        });
     };
 
     const sessionToken = sessionStorage.getItem('sessionToken');
     const decryptedSession = decryptData(sessionToken);
 
-    const testFunction = async () => {
+    const getAllSubject = async () => {
         try {
             let token = localStorage.getItem("jwt_token");
             token = decryptData(token);
@@ -62,13 +74,22 @@ export default function SubjectAddPage() {
     }
 
     //  "is" prefix are mark as return boolean value
-    const { isError, error, data, isLoading, isSuccess } = useQuery({
+    const { isError, error, data, isLoading, isSuccess, isFetchedAfterMount } = useQuery({
         queryKey: ['subjectFetch', `${userAttendanceInformation?.AttendanceInfo?.semester}`],
         gcTime: 5 * 60 * 1000,
         staleTime: 3 * 60 * 1000,
-        queryFn: testFunction,
-        retry: 1
+        queryFn: getAllSubject,
+        retry: 2,
+        enabled: !!userAttendanceInformation?.AttendanceInfo?.semester
     })
+
+    useEffect(() => {
+        if (isSuccess && !hasSet.current) {
+            baseDataRef.current = data;
+            setQueryData(data);
+            hasSet.current = true;
+        }
+    }, [isSuccess, data]);
 
     if (isError) {
         console.log(error);
@@ -81,6 +102,29 @@ export default function SubjectAddPage() {
             </>
         )
     }
+
+    const filterHandler = (e) => {
+        const { value } = e;
+        setSelectedOption(e);
+        switch (value) {
+            case "LAB":
+                setQueryData(
+                    baseDataRef.current.filter(
+                        subject => subject?.subjetId?.type === "LAB"
+                    )
+                );
+                break;
+            case "THEORY":
+                setQueryData(
+                    baseDataRef.current.filter(
+                        subject => subject?.subjetId?.type === "THEORY"
+                    )
+                );
+                break;
+            default:
+                setQueryData(baseDataRef.current);
+        }
+    };
 
     return (
         <>
@@ -127,20 +171,26 @@ export default function SubjectAddPage() {
                 </div>
                 <hr />
                 <br />
+                <Select
+                    defaultValue={selectedOption}
+                    onChange={filterHandler}
+                    options={options}
+                    className="md:w-[50%] text-nowrap whitespace-nowrap overflow-ellipsis max-w-[90%] content-center mx-auto my-5 text-black"
+                    placeholder={"Select theory & lab or Search Subject-Code"}
+                />
                 {
                     isError ?
                         <MessageAlert type={"error"} message={`fetching failed - ${error.message}`} onClose={true} />
                         : <div className="max-w-6xl mx-auto grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {data?.map((subject, index) => {
-                                const active = selectedSubjects.includes(index);
-
+                            {queryData?.map((subject, index) => {
+                                const active = selectedSubjects.includes(subject?._id);
                                 return (
                                     <div
                                         key={subject?._id}
-                                        onClick={() => toggleSubject(index)}
+                                        onClick={() => toggleSubject(subject?._id)}
                                         className={`cursor-pointer rounded-xl border p-4 transition-all md:col-span-1 col-auto 
                                      ${active
-                                                ? "border-indigo-500 bg-indigo-500/10"
+                                                ? "border-indigo-500 bg-sky-500/40"
                                                 : "border-slate-700 bg-slate-800 hover:border-slate-500"
                                             }
                                      `}
@@ -155,7 +205,7 @@ export default function SubjectAddPage() {
                                                     <br />
                                                     <Label css={"mt-3 md:inline w-fit mb-3 mr-2 transform md:scale-45 text-sm scale-10"}
                                                         text={`${subject?.subjetId?.subjectCode}`} />
-                                                    <Label css={"mt-3 md:inline  w-fit mb-3 mr-2 transform md:scale-45 text-sm scale-10"}
+                                                    <Label css={`mt-3 md:inline ${subject?.subjetId?.type === "LAB" ? "bg-gray-900/30" : ""}  w-fit mb-3 mr-2 transform md:scale-45 text-sm scale-10`}
                                                         text={`${subject?.subjetId?.type}`} />
                                                     <span className="  font-semibold text-nowrap text-yellow-700">• Semester {subject?.subjetId?.semester}</span>
                                                 </p>
@@ -170,7 +220,7 @@ export default function SubjectAddPage() {
                                             </div>
 
                                             {active && (
-                                                <CheckCircle className="text-indigo-400" />
+                                                <CheckCircle className="text-green-600" />
                                             )}
                                         </div>
                                     </div>
@@ -189,18 +239,22 @@ export default function SubjectAddPage() {
                             </button>
                         </div>
                         : <div className="max-w-6xl mx-auto mt-10 flex justify-end">
-                            <button
-                                className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition font-medium"
-                            >
-                                Link Selected Subjects
-                            </button>
+                            <MagicButton
+                                text={"Link Selected Subjects"}
+                                submitHandler={async (setOpen) => {
+                                    setOpen(true);
+                                    await new Promise((res, rej) => setTimeout(() => res(), 3000));
+                                    setOpen(false);
+                                }}
+                                css={"text-black transform scale-45"}
+                            />
                         </div>
                 }
-
             </div>
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-1 gap-4 mb-8">
                 <InfoCard icon={BeenhereIcon} label={"Gemna World"} value={`Attendance-bit@gemna.ai`} />
             </div>
+
         </>
 
     );

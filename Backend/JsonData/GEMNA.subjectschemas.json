@@ -1,6 +1,6 @@
 [{
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf14"
+    "$oid": "697a07228b02fdffe82bcf5e"
   },
   "name": "Software Engineering",
   "department": "CS_IT",
@@ -15,7 +15,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf15"
+    "$oid": "697a07228b02fdffe82bcf5f"
   },
   "name": "Data Analytics",
   "department": "CS_IT",
@@ -30,7 +30,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf16"
+    "$oid": "697a07228b02fdffe82bcf60"
   },
   "name": "Computer Networks",
   "department": "CS_IT",
@@ -45,7 +45,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf17"
+    "$oid": "697a07228b02fdffe82bcf61"
   },
   "name": "Software Engineering Lab",
   "department": "CS_IT",
@@ -60,7 +60,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf18"
+    "$oid": "697a07228b02fdffe82bcf62"
   },
   "name": "Data Analytics Lab",
   "department": "CS_IT",
@@ -75,7 +75,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf19"
+    "$oid": "697a07228b02fdffe82bcf63"
   },
   "name": "Computer Networks Lab",
   "department": "CS_IT",
@@ -90,7 +90,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1a"
+    "$oid": "697a07228b02fdffe82bcf64"
   },
   "name": "Constitution of India",
   "department": "CS_IT",
@@ -105,7 +105,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1b"
+    "$oid": "697a07228b02fdffe82bcf65"
   },
   "name": "Big Data",
   "department": "CS_IT",
@@ -120,7 +120,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1c"
+    "$oid": "697a07228b02fdffe82bcf66"
   },
   "name": "Augmented & Virtual Reality",
   "department": "CS_IT",
@@ -135,7 +135,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1d"
+    "$oid": "697a07228b02fdffe82bcf67"
   },
   "name": "Blockchain Architecture Design",
   "department": "CS_IT",
@@ -150,7 +150,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1e"
+    "$oid": "697a07228b02fdffe82bcf68"
   },
   "name": "Data Compression",
   "department": "CS_IT",
@@ -165,7 +165,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf1f"
+    "$oid": "697a07228b02fdffe82bcf69"
   },
   "name": "Statistical Computing",
   "department": "CS_IT",
@@ -180,7 +180,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf20"
+    "$oid": "697a07228b02fdffe82bcf6a"
   },
   "name": "Compiler Design",
   "department": "CS_IT",
@@ -195,7 +195,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf21"
+    "$oid": "697a07228b02fdffe82bcf6b"
   },
   "name": "Computer Graphics",
   "department": "CS_IT",
@@ -210,7 +210,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf22"
+    "$oid": "697a07228b02fdffe82bcf6c"
   },
   "name": "Object Oriented System Design with C++",
   "department": "CS_IT",
@@ -225,7 +225,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf23"
+    "$oid": "697a07228b02fdffe82bcf6d"
   },
   "name": "Machine Learning Techniques",
   "department": "CS_IT",
@@ -240,7 +240,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf24"
+    "$oid": "697a07228b02fdffe82bcf6e"
   },
   "name": "Application of soft computing",
   "department": "CS_IT",
@@ -255,7 +255,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf25"
+    "$oid": "697a07228b02fdffe82bcf6f"
   },
   "name": "Image Processing",
   "department": "CS_IT",
@@ -270,7 +270,7 @@
 },
 {
   "_id": {
-    "$oid": "6979e05d8b02fdffe82bcf26"
+    "$oid": "697a07228b02fdffe82bcf70"
   },
   "name": "Data Warehousing & Data Mining",
   "department": "CS_IT",
