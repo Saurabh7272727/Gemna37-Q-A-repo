@@ -58,7 +58,11 @@ const model = new Schema({
         required: true,
         uppercase: true
     },
-
+    credit: {
+        type: Number,
+        required: true,
+        max: [4, "max credit is 4, please provide valid credit of subject"]
+    },
     attendanceWeight: {
         type: Number,
         default: function () {
@@ -84,5 +88,5 @@ model.pre("findOneAndUpdate", function (next) {
 });
 
 
-const SubjectSchema = mongoose.model("SubjectSchema", model);
+const SubjectSchema = mongoose.model("subjectschema", model);
 export default SubjectSchema;

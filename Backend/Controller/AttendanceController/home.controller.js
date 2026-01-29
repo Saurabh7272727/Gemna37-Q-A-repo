@@ -1,9 +1,6 @@
 import * as z from "zod";
 import { encryptData, decryptData } from "../../components/crypto.js";
 
-// jwt
-import jwt from 'jsonwebtoken';
-
 // redis import
 import redis from "../../service/Redis/Client.js";
 
@@ -41,8 +38,9 @@ const homeController = async (req, res) => {
                 message: "User found in attendance record",
                 status: 200,
                 success: true,
+                StudentAttendanceModel: findUserInAttendanceRecord,
                 sessionToken: encryptData({
-                    ...findUserInAttendanceRecord._id,
+                    id: findUserInAttendanceRecord?._id,
                     expiration: Date.now(),
                     permission: {
                         role: "Student",
@@ -178,8 +176,9 @@ const registerNewUser = async (req, res) => {
                 message: "Student are saved in attendance record",
                 status: 200,
                 success: true,
+                StudentAttendanceModel: saveNewUser,
                 sessionToken: encryptData({
-                    ...saveNewUser._id,
+                    id: saveNewUser?._id,
                     expiration: Date.now(),
                     permission: {
                         role: "Student",

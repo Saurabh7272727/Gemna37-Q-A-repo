@@ -6,19 +6,20 @@ import storage from 'redux-persist/lib/storage';
 import userinfoSlice from './Slices/UserInfoSlice.js';
 import accessSlice from './Slices/AuthSlice.js';
 import ListSliceOdfStudent from './Slices/ListSliceOfStudents.js';
-
+import AttendanceSlice from './Slices/AttendanceSlice.js';
 
 const rootReducer = combineReducers({
     userinfoSlice,
     accessSlice,
-    ListSliceOdfStudent
+    ListSliceOdfStudent,
+    AttendanceSlice
 });
 
 
 const persistConfig = {
     key: 'gemini-ai',
     storage,
-    whitelist: ['accessSlice', 'userinfoSlice', 'ListSliceOdfStudent'],
+    whitelist: ['accessSlice', 'userinfoSlice', 'ListSliceOdfStudent', 'AttendanceSlice'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -25,7 +25,7 @@ app.use(cors({
     origin: ["http://localhost:5173", "https://gemnaworld.vercel.app"],
     methods: ["POST", "GET"],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
@@ -47,5 +47,6 @@ app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
 app.use('/', googleVerificationRouter);
 
-app.use('/api/attendance', homeController)
+app.use('/api/attendance', homeController);
+app.use('/api/subject', subjectRouter)
 export default app;

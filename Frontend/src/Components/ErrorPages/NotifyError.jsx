@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const NotifyError = ({ message }) => {
     const navi = useNavigate();
-    if (Array.isArray(message)) {
+    if (Array.isArray(message?.message)) {
         return createPortal(
             <div
                 className='fixed inset-0 z-[9999] flex items-center justify-center flex-col md:bg-black bg-black/60 backdrop-blur-sm px-3 md:px-6'
@@ -22,7 +22,7 @@ const NotifyError = ({ message }) => {
                     </h4>
                 </div>
                 <ul style={{ paddingLeft: "18px", margin: 0 }}>
-                    {message.map((err, index) => (
+                    {message?.message.map((err, index) => (
                         <li
                             key={index}
                             style={{
@@ -48,7 +48,7 @@ const NotifyError = ({ message }) => {
         )
     }
 
-    return (
+    return createPortal(
         <>
             <div
                 className='fixed inset-0 z-[9999] flex items-center justify-center flex-col md:bg-black bg-black/60 backdrop-blur-sm px-3 md:px-6'>
@@ -83,7 +83,7 @@ const NotifyError = ({ message }) => {
                     Back
                 </button>
             </div>
-        </>
+        </>, document.body
     )
 
 }

@@ -1,0 +1,285 @@
+[{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf5e"
+  },
+  "name": "Software Engineering",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 3,
+  "shortName": "SE",
+  "subjectCode": "BCS601",
+  "type": "THEORY",
+  "credit": 4,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf5f"
+  },
+  "name": "Data Analytics",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 2,
+  "shortName": "DA",
+  "subjectCode": "BIT601",
+  "type": "THEORY",
+  "credit": 4,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf60"
+  },
+  "name": "Computer Networks",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 2,
+  "shortName": "CN",
+  "subjectCode": "BCS603",
+  "type": "THEORY",
+  "credit": 4,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf61"
+  },
+  "name": "Software Engineering Lab",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 1,
+  "shortName": "SE LAB",
+  "subjectCode": "BCS651",
+  "type": "LAB",
+  "credit": 1,
+  "attendanceWeight": 2,
+  "coverImage": "https://tse2.mm.bing.net/th/id/OIP.yK3_m9frkzc0-UXfnHs0eQHaHa?w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf62"
+  },
+  "name": "Data Analytics Lab",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 1,
+  "shortName": "DA LAB",
+  "subjectCode": "BIT651",
+  "type": "LAB",
+  "credit": 1,
+  "attendanceWeight": 2,
+  "coverImage": "https://tse2.mm.bing.net/th/id/OIP.yK3_m9frkzc0-UXfnHs0eQHaHa?w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf63"
+  },
+  "name": "Computer Networks Lab",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 1,
+  "shortName": "CN LAB",
+  "subjectCode": "BCS653",
+  "type": "LAB",
+  "credit": 1,
+  "attendanceWeight": 2,
+  "coverImage": "https://tse2.mm.bing.net/th/id/OIP.yK3_m9frkzc0-UXfnHs0eQHaHa?w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf64"
+  },
+  "name": "Constitution of India",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 2,
+  "shortName": "CI",
+  "subjectCode": "BNC601",
+  "type": "THEORY",
+  "credit": 0,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf65"
+  },
+  "name": "Big Data",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 5,
+  "shortName": "BD",
+  "subjectCode": "BCS061",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf66"
+  },
+  "name": "Augmented & Virtual Reality",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 5,
+  "shortName": "A & VR",
+  "subjectCode": "BCS062",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf67"
+  },
+  "name": "Blockchain Architecture Design",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 7,
+  "shortName": "BAD",
+  "subjectCode": "BCS063",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf68"
+  },
+  "name": "Data Compression",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 8,
+  "shortName": "DC",
+  "subjectCode": "BCS064",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf69"
+  },
+  "name": "Statistical Computing",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 7,
+  "shortName": "SC",
+  "subjectCode": "BCS051",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6a"
+  },
+  "name": "Compiler Design",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 7,
+  "shortName": "CD",
+  "subjectCode": "BIT052",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6b"
+  },
+  "name": "Computer Graphics",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 8,
+  "shortName": "CG",
+  "subjectCode": "BCS053",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6c"
+  },
+  "name": "Object Oriented System Design with C++",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 9,
+  "shortName": "OPPS&C++",
+  "subjectCode": "BCS054",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6d"
+  },
+  "name": "Machine Learning Techniques",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 9,
+  "shortName": "MLT",
+  "subjectCode": "BCS055",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6e"
+  },
+  "name": "Application of soft computing",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 4,
+  "shortName": "ASC",
+  "subjectCode": "BCS056",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf6f"
+  },
+  "name": "Image Processing",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 7,
+  "shortName": "IP",
+  "subjectCode": "BCS057",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+},
+{
+  "_id": {
+    "$oid": "697a07228b02fdffe82bcf70"
+  },
+  "name": "Data Warehousing & Data Mining",
+  "department": "CS_IT",
+  "semester": 6,
+  "weeklyFrequency": 7,
+  "shortName": "DWDM",
+  "subjectCode": "BCS058",
+  "type": "THEORY",
+  "credit": 3,
+  "attendanceWeight": 1,
+  "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+}]
