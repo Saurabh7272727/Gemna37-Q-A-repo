@@ -128,19 +128,24 @@ export default function SubjectAddPage() {
                 setQueryData(baseDataRef.current);
         }
     };
-
-    const submitSelectedSubjectInRedux = async (setOpen) => {
+    const submitSelectedSubjectInRedux = (setOpen) => {
         setOpen(true);
-        await new Promise((res, rej) => setTimeout(() => res(), 3000));
-        const totalSelectedSubject = baseDataRef.current.filter(subject => selectedSubjects.includes(subject?._id));
-        if (!(totalSelectedSubject.length > 14)) {
+
+        const totalSelectedSubject =
+            baseDataRef.current.filter(subject =>
+                selectedSubjects.includes(String(subject?._id))
+            );
+
+        if (totalSelectedSubject.length <= 14) {
             dispatch(AddSelectedSubject(totalSelectedSubject));
             navi('/app/attendence/profile');
         } else {
-            alert(`you have not select the maximum  ${totalSelectedSubject.length}`);
+            alert(`Maximum 14 subjects allowed. You selected ${totalSelectedSubject.length}`);
         }
+
         setOpen(false);
-    }
+    };
+
 
     return (
         <>
