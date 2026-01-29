@@ -42,7 +42,6 @@ app.get('/', (req, res) => {
     response.initialResponse(req, res);
 })
 
-
 app.use('/student', studentUploadRouter);
 app.use('/api/v1/students', VerifyedStudentFetchRouter);
 app.use('/', googleVerificationRouter);

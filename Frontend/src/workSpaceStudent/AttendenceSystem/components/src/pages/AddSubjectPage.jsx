@@ -14,6 +14,7 @@ import BeenhereIcon from '@mui/icons-material/Beenhere';
 import Select from 'react-select';
 import MagicButton from '../../MagicButton.jsx';
 import { AddSelectedSubject } from '../../../../../ReduxStore/Slices/AttendanceSlice.js'
+import { SubjectTeacherRelationArraySchema } from '../../../../Zod/selectedSubjectSchema.js';
 
 export default function SubjectAddPage() {
     const navi = useNavigate();
@@ -130,19 +131,23 @@ export default function SubjectAddPage() {
     };
     const submitSelectedSubjectInRedux = (setOpen) => {
         setOpen(true);
-
         const totalSelectedSubject =
             baseDataRef.current.filter(subject =>
                 selectedSubjects.includes(String(subject?._id))
             );
 
         if (totalSelectedSubject.length <= 14) {
-            dispatch(AddSelectedSubject(totalSelectedSubject));
+            const parsed = SubjectTeacherRelationArraySchema.safeParse(totalSelectedSubject);
+            if (!parsed.success) {
+                alert(`something was wrong with you`);
+                setOpen(false);
+                return;
+            }
+            dispatch(AddSelectedSubject(parsed?.data));
             navi('/app/attendence/profile');
         } else {
             alert(`Maximum 14 subjects allowed. You selected ${totalSelectedSubject.length}`);
         }
-
         setOpen(false);
     };
 
