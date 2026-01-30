@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { StoreAdminContextCom } from './Admin/store/store.jsx';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+
 // redux config;
 import store, { persistor } from './ReduxStore/store.js';
 
@@ -22,19 +23,21 @@ const queryClient = new QueryClient({
     },
   },
 });
-window.__TANSTACK_QUERY_CLIENT__ = queryClient;
+
+if (import.meta.env.NODE_ENV == 'development') {
+  window.__TANSTACK_QUERY_CLIENT__ = queryClient;
+}
+
 
 createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
     <StoreAdminContextCom>
       <Provider store={store}>
         <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-
           <App />
-
         </PersistGate>
       </Provider>
     </StoreAdminContextCom>
   </QueryClientProvider>
+);
 
-)
