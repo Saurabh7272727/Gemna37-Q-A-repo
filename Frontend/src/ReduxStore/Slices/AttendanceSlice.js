@@ -16,7 +16,8 @@ const AttendanceSlice = createSlice({
             state.AttendanceInfo = { ...data };
         },
         AddSelectedSubject: (state, action) => {
-            const data = action.payload;
+            if (!state.SelectedSubjectRecord) state.SelectedSubjectRecord = {};
+            const data = Array.isArray(action.payload) ? action.payload : [];
             data?.forEach((item) => {
                 state.SelectedSubjectRecord[item?._id] = item;
             })
