@@ -132,13 +132,13 @@ export default function SubjectAddPage() {
     const submitSelectedSubjectInRedux = (setOpen) => {
         setOpen(true);
         const totalSelectedSubject =
-            baseDataRef.current.filter(subject =>
-                selectedSubjects.includes(String(subject?._id))
+            baseDataRef?.current?.filter(subject =>
+                selectedSubjects?.includes(String(subject?._id))
             );
 
         if (totalSelectedSubject.length <= 14) {
             const parsed = SubjectTeacherRelationArraySchema.safeParse(totalSelectedSubject);
-            if (!parsed.success) {
+            if (!parsed.success || parsed.data == undefined || parsed.data == null) {
                 alert(`something was wrong with you`);
                 setOpen(false);
                 return;

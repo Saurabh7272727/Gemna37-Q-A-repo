@@ -17,13 +17,13 @@ const AttendanceSlice = createSlice({
         },
         AddSelectedSubject: (state, action) => {
             const data = action.payload;
-            data.forEach((item) => {
-                state.SelectedSubjectRecord[`${item?._id}`] = item;
+            data?.forEach((item) => {
+                state.SelectedSubjectRecord[item?._id] = item;
             })
         },
         deleteSubjectLocal: (state, action) => {
             const id = action.payload;
-            delete state.SelectedSubjectRecord[`${id}`];
+            delete state.SelectedSubjectRecord[id];
         }
     }
 })
