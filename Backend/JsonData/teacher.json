@@ -61,5 +61,12 @@
         "position": "TEACHER",
         "createdAt": "2026-01-27T04:00:00.000Z",
         "updatedAt": "2026-01-27T04:00:00.000Z"
+    },
+    {
+        "name": "Mr. Nirankar Srivastava",
+        "shortName": "NS",
+        "position": "TEACHER",
+        "createdAt": "2026-01-27T04:00:00.000Z",
+        "updatedAt": "2026-01-27T04:00:00.000Z"
     }
 ]

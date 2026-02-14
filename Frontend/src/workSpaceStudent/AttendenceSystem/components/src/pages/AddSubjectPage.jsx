@@ -15,6 +15,7 @@ import Select from 'react-select';
 import MagicButton from '../../MagicButton.jsx';
 import { AddSelectedSubject } from '../../../../../ReduxStore/Slices/AttendanceSlice.js'
 import { SubjectTeacherRelationArraySchema } from '../../../../Zod/selectedSubjectSchema.js';
+import { mappingBranch } from '../../../ApiEndPoints/queryFunctions.js'
 
 export default function SubjectAddPage() {
     const navi = useNavigate();
@@ -28,6 +29,7 @@ export default function SubjectAddPage() {
 
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState();
+    const [teacherAggregation, setTeacherAggregation] = useState([]);
     const options = [
         { value: 'THEORY', label: 'THEORY' },
         { value: 'LAB', label: 'LAB' },
@@ -46,7 +48,6 @@ export default function SubjectAddPage() {
 
     const sessionToken = sessionStorage.getItem('sessionToken');
     const decryptedSession = decryptData(sessionToken);
-
     const getAllSubject = async () => {
         try {
             let token = localStorage.getItem("jwt_token");
@@ -61,7 +62,7 @@ export default function SubjectAddPage() {
                     sessionToken: { ...decryptedSession },
                     queryToken: {
                         semester: Number(userAttendanceInformation?.AttendanceInfo?.semester),
-                        department: "CS_IT"
+                        department: `${mappingBranch.get(userInformation?.ref_id.branch.label)}`
                     }
                 })
             });
@@ -70,11 +71,20 @@ export default function SubjectAddPage() {
             if (!result?.success) {
                 throw new Error(`${result.message}`)
             };
+
+            setTeacherAggregation(() => {
+                if (result?.aggregate && Array.isArray(result.aggregate)) {
+                    return result.aggregate;
+                } else {
+                    return [];
+                }
+            })
             return result.message;
         } catch (error) {
             throw new Error(error.message)
         }
     }
+
 
     //  "is" prefix are mark as return boolean value
     const { isError, error, data, isLoading, isSuccess, isFetchedAfterMount } = useQuery({
@@ -98,6 +108,7 @@ export default function SubjectAddPage() {
     if (isError) {
         console.log(error);
     }
+
 
     if (isLoading) {
         return (
@@ -277,8 +288,20 @@ export default function SubjectAddPage() {
                 <InfoCard icon={BeenhereIcon} label={"Gemna World"} value={`Attendance-bit@gemna.ai`} />
             </div>
 
-        </>
 
+            {(teacherAggregation.length > 0) && <div className="max-w-6xl flex flex-row flex-wrap  mx-auto gap-4 mb-8">
+                {
+                    teacherAggregation?.map((item) => {
+                        return (
+                            <div className="ring-2 ring-blue-600 w-fit px-1 flex flex-none">
+                                <h3 className="text-white">{item?.teacherName}</h3>
+                                <h4>{`(${item?.totalSubjectOfTeacher})`}</h4>
+                            </div>
+                        )
+                    })
+                }
+            </div>}
+        </>
     );
 }
 

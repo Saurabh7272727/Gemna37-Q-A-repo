@@ -44,10 +44,55 @@ const fetchRelatedSubjectByStudent = async (req, res) => {
                 })
                 .lean();
             const filteredRelations = relations.filter(r => r.subjetId);
+
+            const filterdataOnlyID = filteredRelations
+                .map(subject => subject?.idRelation)
+                .filter(id => id !== null && id !== undefined && id !== "");
+
+            let aggregate = undefined;
+
+            if (filterdataOnlyID.length > 0 && Array.isArray(filterdataOnlyID)) {
+                aggregate = await SubjectAndTeacherSessionSchema.aggregate([
+                    {
+                        $match: {
+                            idRelation: { $in: filterdataOnlyID }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "teacherschemas",
+                            localField: "teacherId",
+                            foreignField: "_id",
+                            as: "teacherData"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$teacherData",
+                            preserveNullAndEmptyArrays: false
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: "$teacherData.name",
+                            totalSubjectOfTeacher: { $sum: 1 }
+                        }
+                    },
+                    {
+                        $project: {
+                            teacherName: "$_id",
+                            _id: 0,
+                            totalSubjectOfTeacher: 1
+                        }
+                    }
+                ]);
+
+            }
             return (
                 res.status(200).json({
                     message: filteredRelations,
                     success: true,
+                    aggregate,
                     status: 200
                 })
             )
@@ -66,3 +111,15 @@ const fetchRelatedSubjectByStudent = async (req, res) => {
 
 
 export { fetchRelatedSubjectByStudent };
+
+
+
+
+
+
+
+
+
+
+
+

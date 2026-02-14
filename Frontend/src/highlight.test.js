@@ -1,10 +1,9 @@
-// import { detectLanguage } from './functions/highlight.js';
-
-const { detectLanguage } = require('./functions/highlight.js');
+import { detectLanguage } from './functions/highlight.js';
+import { expect, test } from 'vitest'
 
 
 test('test highlight shot', () => {
-    expect(detectLanguage(`import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+  expect(detectLanguage(`import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const CodeMessage = ({ code, language }) => {

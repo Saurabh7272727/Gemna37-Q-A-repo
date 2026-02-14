@@ -168,12 +168,12 @@
         "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
     },
     {
-        "name": "Object Oriented System Design with C++",
+        "name": "Idea to Business Model",
         "department": "CS_IT",
         "semester": 6,
-        "weeklyFrequency": 9,
-        "shortName": "OPPS&C++",
-        "subjectCode": "BCS054",
+        "weeklyFrequency": 4,
+        "shortName": "IBM",
+        "subjectCode": "BOE061",
         "type": "THEORY",
         "credit": 3,
         "attendanceWeight": 1,
@@ -226,5 +226,41 @@
         "credit": 3,
         "attendanceWeight": 1,
         "coverImage": "https://e7.pngegg.com/pngimages/684/622/png-clipart-logo-subject-english-miscellaneous-blue.png"
+    },
+    {
+        "name": "Placement Preparation Classes (Math)",
+        "department": "CS_IT",
+        "semester": 6,
+        "weeklyFrequency": 2,
+        "shortName": "PPC-Math",
+        "subjectCode": "NAN",
+        "type": "THEORY",
+        "credit": 0,
+        "attendanceWeight": 1,
+        "coverImage": "https://static.vecteezy.com/system/resources/thumbnails/011/492/550/small_2x/soft-skill-development-blue-gradient-concept-icon-in-demand-additional-skill-abstract-idea-thin-line-illustration-time-management-isolated-outline-drawing-vector.jpg"
+    },
+    {
+        "name": "Tech Edge",
+        "department": "CS_IT",
+        "semester": 6,
+        "weeklyFrequency": 4,
+        "shortName": "TE",
+        "subjectCode": "NAN",
+        "type": "THEORY",
+        "credit": 0,
+        "attendanceWeight": 1,
+        "coverImage": "https://static.vecteezy.com/system/resources/thumbnails/011/492/550/small_2x/soft-skill-development-blue-gradient-concept-icon-in-demand-additional-skill-abstract-idea-thin-line-illustration-time-management-isolated-outline-drawing-vector.jpg"
+    },
+    {
+        "name": "Placement Preparation Classes (English)",
+        "department": "CS_IT",
+        "semester": 6,
+        "weeklyFrequency": 2,
+        "shortName": "PPC-English",
+        "subjectCode": "NAN",
+        "type": "THEORY",
+        "credit": 0,
+        "attendanceWeight": 1,
+        "coverImage": "https://static.vecteezy.com/system/resources/thumbnails/011/492/550/small_2x/soft-skill-development-blue-gradient-concept-icon-in-demand-additional-skill-abstract-idea-thin-line-illustration-time-management-isolated-outline-drawing-vector.jpg"
     }
 ]

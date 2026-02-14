@@ -190,8 +190,8 @@ export default function StudentAttendanceForm() {
                         </li>
 
                         <li>
-                            2. <strong>Mobile number verification is mandatory</strong>.
-                            OTP will be sent via <strong>WhatsApp</strong>.
+                            2. <strong>Please Enter Mobile Number, Unregistred Number</strong>.
+                            <strong style={{ color: "red" }}>else you see "something was wrong..."</strong>.
                         </li>
 
                         <li>
