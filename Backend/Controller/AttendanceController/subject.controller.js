@@ -1,5 +1,7 @@
 import payloadSchema from '../ZodSchema/AttendanceSchema/fetchRelatedSubjectSchema.js';
 import SubjectAndTeacherSessionSchema from '../../model/Attendence_Section/SubjectAndTeacherSessionSchema.js';
+import StudentWithSubjectSchema from '../../model/Attendence_Section/StudentWithSubjectSchema.js'
+import { payloadSchemaLinked, checkSchema1 } from '../ZodSchema/AttendanceSchema/linkedSubjectZods.js';
 
 const fetchRelatedSubjectByStudent = async (req, res) => {
 
@@ -19,7 +21,6 @@ const fetchRelatedSubjectByStudent = async (req, res) => {
         const ValidateTheBodyDataBYZOD = payloadSchema.safeParse(bodyData);
         if (!ValidateTheBodyDataBYZOD?.success) {
             const parseJSON = JSON.parse(ValidateTheBodyDataBYZOD?.error?.message);
-
             return (
                 res.status(400).json({
                     message: parseJSON,
@@ -110,7 +111,194 @@ const fetchRelatedSubjectByStudent = async (req, res) => {
 }
 
 
-export { fetchRelatedSubjectByStudent };
+
+const linkTheRelatedSubject = async (req, res) => {
+
+    const bodyData = req.body;
+    const controller = new AbortController();
+
+    // config user disconnect and connection are not proper establish;
+    res.on("close", () => {
+        controller.abort();
+        // console.log("connection was disconnect");
+    })
+
+    req.on('aborted', () => {
+        controller.abort();
+        // console.log("connection was aborted");
+    })
+
+    // end ==============================================================
+
+
+    if (bodyData === undefined || bodyData === null) {
+        return (
+            res.status(401).json({
+                message: "Payload are missing",
+                success: false,
+                status: 401
+            })
+        )
+    }
+
+    try {
+        const parsed = payloadSchemaLinked.safeParse(bodyData);
+        if (!parsed.success) {
+            throw new Error(parsed.error);
+        }
+        const { studentAttendanceId, ArrayOfIDRelation } = parsed.data;
+        const findCurrentUser = await StudentWithSubjectSchema.findOne({ studentAttendanceId: studentAttendanceId }, null, {
+            signal: controller.signal
+        })
+        if (findCurrentUser == undefined || findCurrentUser == null) {
+            const { success, filterRelation } = await ValidateLengthAndCheck(ArrayOfIDRelation);
+            if (success && Array.isArray(filterRelation)) {
+                const insertNewEntry = new StudentWithSubjectSchema({
+                    studentAttendanceId: studentAttendanceId,
+                    subjectList: filterRelation
+                });
+
+                await insertNewEntry.save({ signal: controller.signal });
+                res.status(201).json({
+                    message: `${filterRelation.length} subjects are added on your account`,
+                    success: true,
+                    status: 201
+                })
+                return;
+            }
+        } else {
+            if (!Array.isArray(findCurrentUser?.subjectList) || findCurrentUser?.subjectList.length >= 21
+            ) {
+                res.status(403).json({
+                    message: `You have already 21 subject in account`,
+                    success: false,
+                    status: 403
+                })
+                return;
+            }
+
+            const checkLength = (21 - findCurrentUser?.subjectList.length
+                >= ArrayOfIDRelation.length) ? true : false;
+
+            if (!checkLength) {
+                res.status(403).json({
+                    message: `The maximum subject required 21`,
+                    success: false,
+                    status: 403
+                })
+                return;
+            }
+
+            const { success, filterRelation } = await ValidateLengthAndCheck(ArrayOfIDRelation);
+            if (success && Array.isArray(filterRelation)) {
+                let checkDuplicatedValue = findCurrentUser.subjectList;
+
+                // Here we check SATSS_ID are already not have a part of list , if it's a part of then avoid it and 
+                // check next SASS_ID 
+                let resultAfterValidation = filterRelation.filter((item) => {
+                    return !checkDuplicatedValue.some(saas => item?.SATSS_ID.toString() === saas?.SATSS_ID.toString())
+                });
+
+                // checks , what if all subject relation already have a part of linked list of subject
+                if (!Array.isArray(resultAfterValidation) || resultAfterValidation.length <= 0) {
+                    res.status(403).json({
+                        message: `Request Failed : All subjects are already part of it.. account`,
+                        success: false,
+                        status: 403
+                    })
+                    return;
+                }
+
+                await StudentWithSubjectSchema.updateOne(
+                    { studentAttendanceId },
+                    {
+                        $addToSet: {
+                            subjectList: { $each: resultAfterValidation }
+                        }
+                    },
+                    {
+                        signal: controller.signal
+                    }
+                );
+                res.status(201).json({
+                    message: `${resultAfterValidation.length} subjects are added on your account`,
+                    success: true,
+                    status: 201
+                })
+                return;
+            }
+
+            throw new Error();
+        }
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({
+                message: "Subject already linked",
+                success: false,
+                status: 409
+            });
+        }
+        return res.status(500).json({
+            message: error.message || "Internal server error",
+            success: false,
+            status: 500
+        })
+    }
+}
+
+
+
+async function ValidateLengthAndCheck(ArrayOfIDRelation = [], insert = false) {
+    if (ArrayOfIDRelation.length === 0 || ArrayOfIDRelation.length > 21) {
+        throw new Error("Provide a ArrayOfIDRelation or length are exseed")
+    }
+
+    const lengthArrayOfIDRelation = ArrayOfIDRelation.length;
+    try {
+        let findRelation = await SubjectAndTeacherSessionSchema.find({
+            idRelation: { $in: [...new Set(ArrayOfIDRelation)] }
+        }).select('_id subjetId teacherId idRelation');
+
+        // console.log("Fliter =======>", filterRelation);
+
+        if (Array.isArray(findRelation)
+            && findRelation.length > 0
+            && lengthArrayOfIDRelation === findRelation.length) {
+
+            // Mapped the findRelation in valid Schema =============================================
+            findRelation = findRelation.map((gg) => {
+                return {
+                    idRelation: gg.idRelation.toString(),
+                    subjetId: gg.subjetId.toString(),
+                    teacherId: gg.teacherId.toString(),
+                    _id: gg._id.toString()
+                }
+            })
+
+            const parsed = checkSchema1.safeParse(findRelation);
+            if (!parsed.success)
+                throw parsed.error;
+
+            const filterRelation = findRelation.map((item) => {
+                return { SATSS_ID: item?._id }
+            }).filter(item => item?.SATSS_ID ? true : false);
+
+            if (findRelation.length === filterRelation.length) {
+                return { success: true, filterRelation: filterRelation }
+            }
+
+            throw new Error("Something was wrong on filteration");
+        } else {
+            throw new Error("Duplicate value are founded on paload-idRelation");
+        }
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+
+export { fetchRelatedSubjectByStudent, linkTheRelatedSubject };
 
 
 

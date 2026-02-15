@@ -1,4 +1,6 @@
 import mongoose, { Schema } from "mongoose";
+import './SubjectAndTeacherSessionSchema.js';
+import './StudentAttendenceModel.js';
 
 const model = new Schema({
     studentAttendanceId: {
@@ -13,7 +15,7 @@ const model = new Schema({
         {
             SATSS_ID: {
                 type: Schema.Types.ObjectId,
-                ref: "SubjectAndTeacherSessionSchema",
+                ref: "subjectandteachersessionschema",
                 trim: true,
                 required: true
             }
@@ -25,7 +27,7 @@ const model = new Schema({
         {
             SATSS_ID: {
                 type: Schema.Types.ObjectId,
-                ref: "SubjectAndTeacherSessionSchema",
+                ref: "subjectandteachersessionschema",
                 trim: true,
                 required: true
             },
@@ -51,6 +53,6 @@ const model = new Schema({
 }, { timestamps: true });
 
 
-const StudentWithSubjectSchema = mongoose.model("StudentWithSubjectSchema", model);
+const StudentWithSubjectSchema = mongoose.model("studentwithsubjectschema", model);
 
 export default StudentWithSubjectSchema;

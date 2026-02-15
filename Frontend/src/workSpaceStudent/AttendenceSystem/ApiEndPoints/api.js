@@ -8,7 +8,7 @@ class API {
         this.domain_url = domain_url;
     }
 
-    async postRequest(endpoint, payload) {
+    async postRequest(endpoint, payload, signal = null) {
         if (!endpoint || !this.domain_url || !payload) {
             return {
                 message: "Payload are missing in API class",
@@ -26,7 +26,8 @@ class API {
                     "Content-Type": "application/json",
                     "Authorization": `bearer ${token?.jwt_token}`
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: signal ? signal : undefined
             });
 
             const result = await response.json();

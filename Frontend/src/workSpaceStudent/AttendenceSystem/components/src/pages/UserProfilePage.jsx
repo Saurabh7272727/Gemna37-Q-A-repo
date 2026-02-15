@@ -8,10 +8,11 @@ import SubjectTeacherPreview from '../ui/SubjectTeacherPreview.jsx';
 import EditIcon from '@mui/icons-material/Edit';
 import { deleteSubjectLocal } from '../../../../../ReduxStore/Slices/AttendanceSlice.js';
 import MagicButton from '../../MagicButton.jsx';
-
+import SubjectLinkConfirmationDialog from '../ui/ConfirmationDiaLog.jsx'
 
 export default function UserProfile() {
     const [activeTab, setActiveTab] = useState("linked");
+    const [showConLetter, setShowConLetter] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector(state => state?.userinfoSlice.user.ref_id);
     const selectedSubject = useSelector(state => state?.AttendanceSlice?.SelectedSubjectRecord);
@@ -38,8 +39,11 @@ export default function UserProfile() {
         dispatch(deleteSubjectLocal(subject?._id));
     }
 
-    const submitSelectedSubjectInRedux = (setOpen) => {
+    const submitSelectedSubjectInRedux = async (setOpen) => {
         setOpen(true);
+        await new Promise((res, rej) => setTimeout(() => res(), 2000))
+        setOpen(false);
+        setShowConLetter(true)
     }
 
     return (
@@ -52,6 +56,8 @@ export default function UserProfile() {
                 /> : " "
             }
             <div className="min-h-screen bg-gray-900 text-gray-100 md:p-8">
+                <SubjectLinkConfirmationDialog open={showConLetter}
+                    onClose={setShowConLetter} selectedSubject={selectedSubject} />
                 <div className="max-w-6xl w-[80vw] -z-10 mx-auto bg-gray-800 rounded-2xl shadow-xl md:p-8">
                     <div className="flex flex-col md:flex-row gap-6 items-center">
                         <img
