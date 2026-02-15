@@ -1,36 +1,90 @@
-export default function AttendanceTable() {
-    const subjects = [
-        { name: "DBMS", attended: 18, total: 30, percent: 60, status: "Low" },
-        { name: "Operating Systems", attended: 26, total: 30, percent: 87, status: "Good" },
-        { name: "Computer Networks", attended: 22, total: 30, percent: 73, status: "Medium" },
-    ];
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 
+// Demo initial data (replace later with real API)
+const demoSubjects = [
+    {
+        id: 1,
+        name: "Database Management System",
+        code: "BCS501",
+        faculty: "Dr. Sharma",
+        progress: "75%",
+        status: "Active",
+    },
+    {
+        id: 2,
+        name: "Computer Networks",
+        code: "BCS502",
+        faculty: "Prof. Verma",
+        progress: "60%",
+        status: "Active",
+    },
+];
+
+export default function UserSubjectsTable() {
+    const { data } = useQuery({
+        queryKey: ["user-subjects"],
+        initialData: demoSubjects,
+    });
 
     return (
-        <div className="bg-slate-800 rounded-xl p-4">
-            <h2 className="font-semibold mb-3">Subject-wise Attendance</h2>
-            <table className="w-full text-sm">
-                <thead className="text-slate-400">
-                    <tr>
-                        <th className="text-left">Subject</th>
-                        <th>Attended</th>
-                        <th>Total</th>
-                        <th>%</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {subjects.map((s) => (
-                        <tr key={s.name} className="border-t border-slate-700">
-                            <td>{s.name}</td>
-                            <td className="text-center">{s.attended}</td>
-                            <td className="text-center">{s.total}</td>
-                            <td className="text-center">{s.percent}%</td>
-                            <td className="text-center">{s.status}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="h-fit bg-slate-900 text-white p-0 md:p-2">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-7xl mx-auto"
+            >
+                <h1 className="text-2xl md:text-4xl font-bold mb-6">
+                    User Linked Subjects
+                </h1>
+
+                <div className="overflow-x-auto rounded-2xl shadow-xl">
+                    <table className="min-w-full bg-slate-800 rounded-2xl">
+                        <thead>
+                            <tr className="text-left border-b border-slate-700">
+                                <th className="p-4">Subject</th>
+                                <th className="p-4">Code</th>
+                                <th className="p-4">Faculty</th>
+                                <th className="p-4">Progress</th>
+                                <th className="p-4">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody className=" relative">
+                            {data.map((subject) => (
+                                <tr
+                                    key={subject.id}
+                                    className="border-b relative border-slate-700 hover:bg-slate-700/40 transition"
+                                >
+                                    <td className="p-4 font-semibold sticky left-0 bg-gray-900 md:bg-transparent">{subject.name}</td>
+                                    <td className="p-4 text-gray-300">{subject.code}</td>
+                                    <td className="p-4 text-gray-300">{subject.faculty}</td>
+
+                                    <td className="p-4">
+                                        <div className="w-full bg-slate-700 rounded-full h-3">
+                                            <div
+                                                className="bg-blue-500 h-3 rounded-full"
+                                                style={{ width: subject.progress }}
+                                            />
+                                        </div>
+                                        <span className="text-sm text-gray-400">
+                                            {subject.progress}
+                                        </span>
+                                    </td>
+
+                                    <td className="p-4">
+                                        <span className="px-3 py-1 rounded-full text-sm bg-slate-700">
+                                            {subject.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </motion.div>
         </div>
     );
 }
