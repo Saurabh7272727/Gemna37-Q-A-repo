@@ -46,8 +46,10 @@ export default function Home() {
                             >
                                 Get started
                             </button>
-                            <a href="#" className="text-sm/6 font-semibold text-white">
-                                Learn more <span aria-hidden="true">→</span>
+                            <a
+                                onClick={() => navi('/download/exe/desktop')}
+                                className="text-sm/6 font-semibold text-white cursor-pointer">
+                                Download Desktop App <span aria-hidden="true">→</span>
                             </a>
                         </div>
                     </div>

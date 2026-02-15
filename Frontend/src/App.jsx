@@ -55,6 +55,10 @@ import AddSubjectPage from './workSpaceStudent/AttendenceSystem/components/src/p
 import DashboardLayout from './workSpaceStudent/AttendenceSystem/components/src/layout/DashBoardLayout.jsx';
 import UserProfilePage from './workSpaceStudent/AttendenceSystem/components/src/pages/UserProfilePage.jsx'
 
+
+// new exe file config
+import ExeDownloadPage from './Pages/DestopEXEDWNLO.jsx';
+
 const App = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
@@ -152,6 +156,8 @@ const App = () => {
         <Header renderPart={login} tokenexpire={tokenexpire} />
         <Routes>
           <Route path='/' element={<GemnaLogoDisplay />} />
+          <Route path='/download/exe/desktop' element={<ExeDownloadPage />} />
+
           <Route path='/landing' element={<Landing />} />
           <Route path='/Features' element={
             <Suspense fallback={<LazyLaodingDemo />}>

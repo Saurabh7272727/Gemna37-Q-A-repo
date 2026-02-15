@@ -1,4 +1,5 @@
 import express from 'express';
+import path from "path";
 import studentUploadRouter from './Route/student.upload.image.js';
 import VerifyedStudentFetchRouter from './Route/student.fetchdata.router.js';
 import googleVerificationRouter from './Route/student.auth.google.js';
@@ -27,6 +28,8 @@ app.use(cors({
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.use("/files", express.static(path.join(process.cwd(), "public")));
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
     res.setHeader("Access-Control-Allow-Credentials", "true");
