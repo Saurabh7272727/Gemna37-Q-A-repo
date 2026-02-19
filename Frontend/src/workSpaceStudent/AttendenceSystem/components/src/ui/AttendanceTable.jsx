@@ -34,17 +34,17 @@ export default function UserSubjectsTable() {
                 transition={{ duration: 0.5 }}
                 className="max-w-7xl mx-auto"
             >
-                <h1 className="text-2xl md:text-1xl font-bold mb-6">
-                    Student Subject List
+                <h3 className="md:text-1xl font-bold mb-6">
+                    <span className="text-3xl"> Student Subject List</span>
                     {
                         fetchStatus == 'fetching' &&
-                        <MessageAlert type="success" message="fetching...." onClose={true} />
+                        <MessageAlert type="success" message="fetching...." onClose={false} />
                     }
                     {
                         fetchStatus == 'paused' &&
-                        <h2><MessageAlert type="error" message={`${error?.message || "something was wrong"}`} onClose={true} /></h2>
+                        <h2><MessageAlert type="error" message={`${error?.message || "something was wrong"}`} onClose={false} /></h2>
                     }
-                </h1>
+                </h3>
 
                 <div className="overflow-x-auto rounded-2xl shadow-xl">
                     <table className="min-w-full bg-slate-800 rounded-2xl">

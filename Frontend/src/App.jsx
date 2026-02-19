@@ -184,7 +184,9 @@ const App = () => {
           <Route path='/student' element={<WorkSpace />} />
           <Route path='/gtools/page/*' element={
             <Suspense fallback={<LazyLaodingDemo />}>
-              <GTools />
+              <WorkSpaceContainerSize renderPart={login}>
+                <GTools />
+              </WorkSpaceContainerSize>
             </Suspense>
           } />
           <Route path='/profile/*' element={

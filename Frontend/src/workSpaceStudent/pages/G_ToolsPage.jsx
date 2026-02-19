@@ -130,41 +130,81 @@ const GTools = () => {
                 errorFind.findError && <MessageAlert type={errorFind.type} message={errorFind.message} onClose={true} />
             }
             {
-                !errorFind.findError ? <div className="w-screen md:h-screen h-auto mb-12 md:mb-0 bg-gray-900 mt-[60px] p-6">
-                    <div className="max-w-md mx-auto  bg-gray-900">
+                !errorFind.findError ? <div className="w-full min-h-screen bg-slate-950 pt-[100px] md:p-0 p-8">
+                    <div className="max-w-6xl mx-auto">
 
-                        <div className="text-center mb-8">
-                            <h1 className="text-3xl font-bold text-white mb-2">G-Tools Collection</h1>
-                            <p className="text-white text-sm mb-4">
-                                Your Unified Campus Assistant
+                        {/* HERO HEADER */}
+                        <div className="text-center flex justify-center items-center flex-col">
+                            <h1 className="text-3xl pt-4 md:text-4xl font-bold text-white tracking-tight">
+                                G-Tools Collection
+                            </h1>
+
+                            <p className="text-slate-300 text-sm md:text-base mt-2">
+                                Your Unified Campus Assistant powered by Gemna
                             </p>
-                            <p className="text-gray-200 text-xs">
-                                Smart utilities that power every moment of your college journey
+
+                            <p className="text-slate-500 text-xs mt-2 max-w-lg mx-auto">
+                                Attendance, academics, productivity and campus tools — everything in one intelligent ecosystem.
                             </p>
                         </div>
 
 
-                        <div className=" rounded-2xl shadow-lg p-6 mb-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 overflow-hidden bg-blue-100 rounded-full flex items-center justify-center">
-                                        <img src='../../../insurance_2545838.png' className='w-full h-full object-cover bg-center' alt='verify' />
+                        {/* USER CARD */}
+                        <div className="mt-6 bg-slate-900/70 backdrop-blur border border-slate-800 rounded-2xl shadow-lg">
+                            <div className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 overflow-hidden bg-indigo-500/20 rounded-full flex items-center justify-center">
+                                        <img
+                                            src='../../../insurance_2545838.png'
+                                            className='w-full h-full object-cover'
+                                            alt='verify'
+                                        />
                                     </div>
-                                    <div className='flex justify-center items-center gap-3'>
-                                        <p className="text-lg font-semibold text-gray-500 font-sans">Welcome back ,</p>
-                                        <h2 className="text-lg font-semibold text-gray-200 font-sans">{student ? student : "please check first profile to fetch"}</h2>
+
+                                    <div className='flex flex-wrap items-center gap-2'>
+                                        <p className="text-sm text-slate-400">Welcome back</p>
+                                        <h2 className="text-sm md:text-base font-semibold text-white">
+                                            {student ? student : "please check first profile to fetch"}
+                                        </h2>
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-center">
-                                <p className="text-white text-sm font-medium">
-                                    Let's make today <span className="text-yellow-300">1%</span> better
-                                </p>
+
+                            <div className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-center text-white text-sm py-3 rounded-b-2xl">
+                                Let’s make today <span className="text-yellow-300 font-semibold">1%</span> better
                             </div>
                         </div>
 
-                        {/* Tools Grid */}
-                        <div className="grid grid-cols-2 gap-4">
+
+                        {/* STARTUP VALUE STRIP */}
+                        <div className="mt-6 grid md:grid-cols-3 gap-4 text-center">
+
+                            <div className="bg-slate-900/70 border border-slate-800 rounded-xl py-4">
+                                <p className="text-white text-sm font-semibold">Attendance Automation</p>
+                                <p className="text-slate-500 text-xs mt-1">
+                                    Directly integrated with daily academic workflow
+                                </p>
+                            </div>
+
+                            <div className="bg-slate-900/70 border border-slate-800 rounded-xl py-4">
+                                <p className="text-white text-sm font-semibold">Smart Planning Tools</p>
+                                <p className="text-slate-500 text-xs mt-1">
+                                    Timetable, reminders and subject organization
+                                </p>
+                            </div>
+
+                            <div className="bg-slate-900/70 border border-slate-800 rounded-xl py-4">
+                                <p className="text-white text-sm font-semibold">Gemna Ecosystem</p>
+                                <p className="text-slate-500 text-xs mt-1">
+                                    bit@latest campus productivity platform
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        {/* TOOLS GRID */}
+                        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                             {tools.map((tool, index) => (
                                 <div
                                     key={index}
@@ -175,19 +215,25 @@ const GTools = () => {
                                             })
                                         }
                                     }}
-                                    className={`${tool.color} transform hover:scale-90  rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center space-y-3 hover:shadow-xl transition-shadow duration-300 cursor-pointer`}
+                                    className={`${tool.color} bg-slate-900/60 border border-slate-800 rounded-2xl 
+                    flex flex-col items-center justify-center py-7
+                    hover:bg-slate-800 hover:border-slate-600
+                    hover:shadow-[0_0_0_1px_rgba(99,102,241,0.4)]
+                    transition-all duration-200 cursor-pointer`}
                                 >
                                     <div className={`${tool.color} w-12 h-12 rounded-xl flex items-center justify-center text-white`}>
                                         {tool.icon}
                                     </div>
-                                    <span className="text-sm font-medium text-white text-center">
+
+                                    <span className="text-sm font-medium text-white text-center mt-3">
                                         {tool.name}
                                     </span>
                                 </div>
                             ))}
                         </div>
                     </div>
-                </div> : <MessageAlert type={"warning"} message="service unavailable for logout user" onClose={true} />
+                </div>
+                    : <MessageAlert type={"warning"} message="service unavailable for logout user" onClose={true} />
             }
             <ToastContainer />
         </>

@@ -1,0 +1,148 @@
+[
+    {
+        "MON": [
+            {
+                "subjectName": "Tech Edge",
+                "subjectCode": null
+            },
+            {
+                "subjectName": "Big Data",
+                "subjectCode": "BCS-061"
+            },
+            {
+                "subjectName": "Computer Network",
+                "subjectCode": "BCS-603"
+            },
+            {
+                "subjectName": "Software Engineering",
+                "subjectCode": "BCS-601"
+            },
+            {
+                "subjectName": "Data Analytics",
+                "subjectCode": "BIT-601"
+            },
+            {
+                "subjectName": "PPC-English",
+                "subjectCode": null
+            }
+        ],
+        "TUES": [
+            {
+                "subjectName": "PPC-English",
+                "subjectCode": null
+            },
+            {
+                "subjectName": "Data Analytics",
+                "subjectCode": "BIT-601"
+            },
+            {
+                "subjectName": "Tech Edge",
+                "subjectCode": null
+            },
+            {
+                "subjectName": "Idea to Business Model",
+                "subjectCode": "BOE-061"
+            },
+            {
+                "subjectName": "Computer Network",
+                "subjectCode": "BCS-603"
+            },
+            {
+                "subjectName": "Software Engineering",
+                "subjectCode": "BCS-601"
+            }
+        ],
+        "WED": [
+            {
+                "subjectName": "Big Data",
+                "subjectCode": "BCS-061"
+            },
+            {
+                "subjectName": "Computer Network",
+                "subjectCode": "BCS-603"
+            },
+            {
+                "subjectName": "Data Analytics Lab",
+                "subjectCode": "BIT-651"
+            },
+            {
+                "subjectName": "Software Engineering",
+                "subjectCode": "BCS-601"
+            },
+            {
+                "subjectName": "Data Analytics",
+                "subjectCode": "BIT-601"
+            }
+        ],
+        "THU": [
+            {
+                "subjectName": "Software Engineering",
+                "subjectCode": "BCS-601"
+            },
+            {
+                "subjectName": "Computer Network",
+                "subjectCode": "BCS-603"
+            },
+            {
+                "subjectName": "Big Data",
+                "subjectCode": "BCS-061"
+            },
+            {
+                "subjectName": "Data Analytics",
+                "subjectCode": "BIT-601"
+            },
+            {
+                "subjectName": "Idea to Business Model",
+                "subjectCode": "BOE-061"
+            },
+            {
+                "subjectName": "PPC-Math",
+                "subjectCode": null
+            }
+        ],
+        "FRI": [
+            {
+                "subjectName": "Software Engineering",
+                "subjectCode": "BCS-601"
+            },
+            {
+                "subjectName": "Constitution of India",
+                "subjectCode": "BNC-601"
+            },
+            {
+                "subjectName": "Software Engineering Lab",
+                "subjectCode": "BCS-651"
+            },
+            {
+                "subjectName": "Idea to Business Model",
+                "subjectCode": "BOE-061"
+            },
+            {
+                "subjectName": "Computer Network",
+                "subjectCode": "BCS-603"
+            },
+            {
+                "subjectName": "Data Analytics",
+                "subjectCode": "BIT-601"
+            }
+        ],
+        "SAT": [
+            {
+                "subjectName": "Big Data",
+                "subjectCode": "BCS-061"
+            },
+            {
+                "subjectName": "Idea to Business Model",
+                "subjectCode": "BOE-061"
+            },
+            {
+                "subjectName": "Software Engineering Lab",
+                "subjectCode": "BCS-651"
+            },
+            {
+                "subjectName": "Computer Network Lab",
+                "subjectCode": "BCS-653"
+            }
+        ]
+    }
+]

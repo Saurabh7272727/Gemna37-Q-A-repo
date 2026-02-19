@@ -1,116 +1,292 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import API from '../../../ApiEndPoints/api.js';
+import { useSelector } from "react-redux";
+import MessageAlert from '../../../../../Components/ErrorPages/ErrorMessagePage.jsx';
+import { useNavigate } from "react-router-dom";
+import EmptySubjectsState from '../../../../../Components/ErrorPages/SomethingEmpty.jsx';
+import GemnaTimetablePromo from '../ui/AdsOne.jsx';
 
-// Pure React + Tailwind (NO Next.js, NO shadcn)
-// Works in Vite / CRA / any React setup
+export default function UserSubjectsTable() {
+    const api = new API(import.meta.env.VITE_APP_BACKEND_URL);
+    const attendanceSlice = useSelector(state => state?.AttendanceSlice?.AttendanceInfo);
+    const navi = useNavigate();
+    const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THUSDAY", "FRIDAY", "SATURDAY"];
+    const periods = [1, 2, 3, 4, 5, 6, 7];
+    const [selectedSubject, setSelectedSubject] = useState(null);
+    const [timeTable, setTimeTable] = useState([]);
 
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [])
 
-const sampleCollegeTimetable = {
-    Mon: [
-        { subject: "DBMS", time: "10:00 - 11:00" },
-        { subject: "OS", time: "12:00 - 01:00" },
-    ],
-    Tue: [
-        { subject: "CN", time: "09:00 - 10:00" },
-        { subject: "Maths", time: "01:00 - 02:00" },
-    ],
-};
 
-export default function TimetablePage() {
-    const [customSlots, setCustomSlots] = useState([]);
+    const { data, isLoading, isError, error, isSuccess, fetchStatus } = useQuery({
+        queryKey: ["user-subjects"],
+        queryFn: () => {
+            // fuction define
+            return api.postRequest("/api/subject/get/linked/subject", {
+                studentAttendanceId: attendanceSlice?._id
+            });
+        },
+        gcTime: 5 * 60 * 1000,
+        staleTime: 3 * 60 * 1000,
+        retry: 2,
+    });
 
-    const addSlot = () => {
-        setCustomSlots([
-            ...customSlots,
-            { subject: "New Subject", day: "Mon", time: "10:00 - 11:00" },
-        ]);
-    };
+
+    const localRef = useRef(false);
+
+    if (isSuccess && !localRef.current) {
+        const map = new Map();
+        if (data?.UserData?.subjectCollections.length > 0) {
+            data?.UserData?.subjectCollections?.forEach((item) => {
+                map.set(`${item?.weekDay}${item?.nth_Periode}`, {
+                    id: item?.SATSS_ID,
+                    order: item?.nth_Periode,
+                    save: true
+                })
+            });
+            setTimeTable([...map]);
+        } else {
+            setTimeTable([]);
+        }
+
+        localRef.current = true;
+    }
+
+    const AddnewSchedule = (day, index) => {
+        // { subjectId: sub?._id }
+        if (!(selectedSubject && selectedSubject?.subjectId)) {
+            alert(`First be select the subject , show in left side or upper side`);
+            return;
+        }
+
+        //  id: item?.SATSS_ID,
+        // order: item?.nth_Periode,
+        // save: true
+        setTimeTable((map) => {
+            return [...map, [`${day}${index}`, {
+                id: selectedSubject?.subjectId,
+                order: index,
+                save: true
+            }]]
+        });
+    }
+
+    console.log("timetable =======>", timeTable);
 
     return (
-        <div className="p-4 md:p-8 bg-gray-900 min-h-screen">
-            {/* Header */}
-            <motion.h1
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-2xl md:text-4xl font-bold mb-6"
-            >
-                Student Timetable
-            </motion.h1>
+        <>
+            <GemnaTimetablePromo />
 
-            {/* Tabs */}
-            <div className="flex gap-4 mb-6">
-                <button className="px-5 py-2 rounded-xl bg-black text-white">
-                    College Timetable
-                </button>
-                <button className="px-5 py-2 rounded-xl bg-white shadow">
-                    Custom Timetable
-                </button>
-            </div>
+            <br />
+            {/* <hr /> */}
+            {
+                isLoading &&
+                <MessageAlert type="success" message="loading..." onClose={false} />
+            }
+            {
+                isError &&
+                <MessageAlert type="error" message={error?.message || 'something was wrong..'} onClose={false} />
 
-            {/* College Timetable */}
-            <div className="mb-10">
-                <h2 className="text-xl font-semibold mb-4">College Timetable</h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {days.map((day) => (
-                        <div
-                            key={day}
-                            className="bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition"
-                        >
-                            <div className="font-semibold text-lg mb-4">{day}</div>
-
-                            <div className="space-y-3">
-                                {sampleCollegeTimetable[day]?.length ? (
-                                    sampleCollegeTimetable[day].map((slot, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="p-3 bg-slate-100 rounded-xl flex justify-between"
-                                        >
-                                            <span>{slot.subject}</span>
-                                            <span className="text-sm text-gray-500">
-                                                {slot.time}
-                                            </span>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-gray-400 text-sm">No classes</p>
-                                )}
+            }
+            {
+                ((isSuccess && data?.UserData?.subjectList.length <= 0) || (isSuccess && !data?.success)) &&
+                <div className="min-h-fit bg-slate-900 flex items-center justify-center py-6">
+                    <div className="max-w-xl w-full text-center">
+                        <div className="bg-slate-800 border border-slate-700 rounded-3xl p-10 shadow-2xl">
+                            <div className="mx-auto w-16 h-16 rounded-2xl bg-slate-700 flex items-center justify-center mb-6">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-8 h-8 text-slate-300"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 6v12m6-6H6"
+                                    />
+                                </svg>
                             </div>
+
+                            <h2 className="text-2xl font-semibold text-white mb-3">
+                                No Subjects Linked Yet
+                            </h2>
+
+                            <p className="text-slate-400 mb-8 leading-relaxed">
+                                You haven’t linked any subjects to this student. Link subjects to
+                                enable timetable creation, attendance tracking, and performance
+                                insights.
+                            </p>
+
+                            <button
+                                onClick={() => {
+                                    navi('/app/attendence/subject/link');
+                                }}
+                                className="w-full bg-white text-slate-900 font-medium py-3 rounded-xl hover:bg-slate-200 transition"
+                            >
+                                Link Subjects
+                            </button>
                         </div>
-                    ))}
-                </div>
-            </div>
 
-            {/* Custom Timetable */}
-            <div>
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Create Your Timetable</h2>
-                    <button
-                        onClick={addSlot}
-                        className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-2xl"
-                    >
-                        <Plus size={16} /> Add Slot
-                    </button>
+                        <p className="text-slate-500 text-sm mt-6">
+                            Once subjects are linked, the student timetable and attendance will
+                            appear here automatically.
+                        </p>
+                    </div>
                 </div>
+            }
+            {
+                (isSuccess && data?.UserData?.subjectList.length > 0) &&
+                <div className="w-full h-fit bg-indigo-600/10 flex flex-row items-center 
+                justify-center overflow-x-scroll scrollbar-none mb-2 flex-wrap py-2 space-y-1">
+                    {
+                        [1].map((subject, index) => <h2 key={index} className="md:w-[20%] w-[40%] h-[90%] ml-2 mr-1 ring-1 ring-blue 
+                        text-center flex justify-center items-center">
+                            {"Collection of Subjects Code =>"}{data?.UserData?.subjectList.length}</h2>)
+                    }
+                    {
+                        data?.UserData?.subjectList?.map((subject, index) => <h2 key={index} className="md:w-[20%] w-[40%] h-[90%] ml-2 mr-1 ring-1 ring-blue 
+                        text-center flex justify-center items-center">
+                            {subject?.SATSS_ID?.subjetId?.subjectCode}</h2>)
+                    }
+                </div>
+            }{
+                (data?.UserData?.subjectCollections.length === 0) &&
+                <div className="h-fit w-full flex justify-center items-center">
+                    <EmptySubjectsState subjects={[]} message={'No time table found'} submessage={"Gemna@bit Attendance log"} />
+                </div>
+            }
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {customSlots.map((slot, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition"
-                        >
-                            <div className="font-semibold text-lg mb-2">
-                                {slot.subject}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                                {slot.day} • {slot.time}
-                            </div>
+
+            {
+                (data?.UserData?.subjectList.length > 0) &&
+                <div className="min-h-screen  w-full flex md:flex-row justify-center gap-6 flex-col bg-slate-900 text-white md:p-0 mb-4">
+                    <br />
+
+                    <div className="bg-black backdrop-blur border border-slate-700 rounded-3xl p-5 shadow-xl h-fit md:w-[28%] w-full">
+                        <h2 className="text-xl font-semibold mb-5 tracking-wide">Linked Subjects</h2>
+
+                        <div className="space-y-3 h-[500px] overflow-y-scroll scrollbar-none">
+                            {data?.UserData?.subjectList.map((sub) => (
+                                <div
+                                    key={sub?._id}
+                                    onClick={() => setSelectedSubject({ subjectId: sub?._id })}
+                                    className={`p-4 rounded-2xl cursor-pointer border transition-all duration-200
+                        ${selectedSubject?.subjectId === sub._id
+                                            ? "bg-indigo-600/90 border-indigo-500 shadow-lg scale-[0.9]"
+                                            : "bg-slate-700/70 border-slate-600 hover:bg-slate-700 hover:border-slate-500"
+                                        }`}
+                                >
+                                    <p className="font-semibold text-base">
+                                        {sub?.SATSS_ID?.subjetId.shortName}
+                                    </p>
+
+                                    <p className="text-xs text-slate-300 mt-1">
+                                        {sub?.SATSS_ID?.subjetId.name}
+                                    </p>
+
+                                    <p className="text-xs mt-2 text-slate-400">
+                                        {sub?.SATSS_ID?.subjetId.type} • {sub.SATSS_ID.subjetId?.weeklyFrequency}/week
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+
+                    {/* RIGHT PANEL */}
+                    <div className="bg-black backdrop-blur border border-slate-700 rounded-3xl p-6 shadow-xl overflow-x-auto md:w-[62%] w-full">
+                        <h2 className="text-2xl font-semibold mb-6 tracking-wide">Build Your Weekly Timetable</h2>
+
+                        <div className="min-w-[900px]">
+                            <table className="w-full border-separate border-spacing-y-2">
+                                <thead>
+                                    <tr>
+                                        <th className="text-left p-3 text-slate-400 font-medium">Day / Period</th>
+                                        {periods.map((p) => (
+                                            <th key={p} className="p-3 text-slate-400 font-medium">P{p}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {days.map((day) => (
+                                        <tr key={day} className="h-20 md:h-24 relative">
+
+                                            <td className="p-3 font-semibold sticky left-0 bg-slate-800/70 md:bg-transparent w-12 md:w-fit text-wrap">
+                                                {day}
+                                            </td>
+
+                                            {periods.map((period, index) => {
+
+                                                let findSubject = null;
+                                                if (timeTable.length > 0) {
+                                                    const localMap = new Map([...timeTable]);
+                                                    const nameJJJ = day + (index + 1);
+                                                    const dataSubjectSchedule = localMap.get(`${nameJJJ}`);
+                                                    if (dataSubjectSchedule) {
+                                                        findSubject = data?.UserData?.subjectList.
+                                                            find(sub => sub?._id == dataSubjectSchedule?.id);
+                                                    }
+                                                }
+
+                                                return (
+                                                    <td
+                                                        onClick={() => AddnewSchedule(day, index + 1)}
+                                                        key={index} className="px-2" title={`${findSubject?.SATSS_ID?.subjetId.name || "UNKNOWN"}`}>
+                                                        <div className="h-16 md:h-20 rounded-xl border border-slate-600 
+                                            bg-slate-700/60 hover:bg-slate-700 transition-all duration-200 
+                                            flex items-center justify-center text-center cursor-pointer">
+
+                                                            {
+                                                                findSubject
+                                                                    ? <span className="font-semibold text-sm md:text-base">
+                                                                        {findSubject?.SATSS_ID?.subjetId.shortName}
+                                                                    </span>
+                                                                    : <span
+                                                                        className="text-slate-500 text-sm">
+                                                                        Assign
+                                                                    </span>
+                                                            }
+
+                                                        </div>
+                                                    </td>
+                                                )
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="mt-6 text-sm text-slate-400">
+                            Tip: Select a subject from left and click any slot to assign or modify timetable.
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            }
+        </>
     );
 }
+
+
+
+
+
+
+
+
+// debugger.ddd.updateMany({}, {
+//     $push: {
+//         subjectCollections: {
+//             SATSS_ID: ObjectId("6979e3488b02fdffe82bcf3a"),
+//             priority: "HIGH",
+//             weekDay: "MONDAY",
+//             nth_Periode: 3
+//         }
+//     }
+// })
