@@ -298,7 +298,79 @@ async function ValidateLengthAndCheck(ArrayOfIDRelation = [], insert = false) {
 }
 
 
-export { fetchRelatedSubjectByStudent, linkTheRelatedSubject };
+
+const getAllLinkedSuject = async (req, res) => {
+    const bodyData = req.body;
+
+    if (bodyData == null || bodyData == undefined) {
+        return (
+            res.status(401).json({
+                message: "Payload are missing",
+                success: false,
+                status: 401
+            })
+        )
+    }
+
+    if (!(bodyData?.studentAttendanceId || Object.keys(bodyData).length == 1)) {
+        return (
+            res.status(401).json({
+                message: "Payload are missing (condition)",
+                success: false,
+                status: 401
+            })
+        )
+    }
+
+    try {
+        let data = await StudentWithSubjectSchema
+            .findOne({ studentAttendanceId: bodyData?.studentAttendanceId })
+            .populate({
+                path: "subjectList.SATSS_ID",
+                select: "-_id -idRelation",
+                populate: [
+                    { path: "subjetId" },
+                    { path: "teacherId" }
+                ]
+            })
+            .lean();
+
+
+        if ((data == null || data == undefined)) {
+            return (
+                res.status(404).json({
+                    message: "User are not in list of attendance",
+                    success: false,
+                    status: 404
+                })
+            )
+        }
+
+        if (Object.keys(data).length > 0) {
+            return (
+                res.status(200).json({
+                    message: "successfully found data",
+                    success: true,
+                    status: 200,
+                    UserData: data
+                })
+            )
+        }
+
+        throw new Error("list have no any data");
+    } catch (error) {
+        res.status(500).json({
+            message: error.message || "internal server error",
+            success: false,
+            status: 500
+        })
+    }
+
+
+}
+
+
+export { fetchRelatedSubjectByStudent, linkTheRelatedSubject, getAllLinkedSuject };
 
 
 
