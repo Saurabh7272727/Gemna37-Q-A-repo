@@ -54,7 +54,7 @@ import LandingPageOfHome from './workSpaceStudent/AttendenceSystem/components/La
 import AddSubjectPage from './workSpaceStudent/AttendenceSystem/components/src/pages/AddSubjectPage.jsx';
 import DashboardLayout from './workSpaceStudent/AttendenceSystem/components/src/layout/DashBoardLayout.jsx';
 import UserProfilePage from './workSpaceStudent/AttendenceSystem/components/src/pages/UserProfilePage.jsx'
-
+import TimetablePage from './workSpaceStudent/AttendenceSystem/components/src/pages/TimeTablePage.jsx'
 
 // new exe file config
 import ExeDownloadPage from './Pages/DestopEXEDWNLO.jsx';
@@ -225,6 +225,11 @@ const App = () => {
             <Route path='/app/attendence/profile' element={
               <DashboardLayout>
                 <UserProfilePage />
+              </DashboardLayout>
+            } />
+            <Route path='/app/attendence/timetable' element={
+              <DashboardLayout>
+                <TimetablePage />
               </DashboardLayout>
             } />
           </Route>

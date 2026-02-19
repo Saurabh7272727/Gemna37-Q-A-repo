@@ -24,10 +24,9 @@ const queryClient = new QueryClient({
   },
 });
 
-if (import.meta.env.NODE_ENV == 'development') {
+if (import.meta.env.VITE_APP_NODE_ENV == 'development') {
   window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 }
-
 
 createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>

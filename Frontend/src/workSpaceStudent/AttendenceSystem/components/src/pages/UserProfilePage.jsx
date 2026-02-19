@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { deleteSubjectLocal } from '../../../../../ReduxStore/Slices/AttendanceSlice.js';
 import MagicButton from '../../MagicButton.jsx';
 import SubjectLinkConfirmationDialog from '../ui/ConfirmationDiaLog.jsx'
+import UserSubjectsTable from '../ui/AttendanceTable.jsx';
 
 export default function UserProfile() {
     const [activeTab, setActiveTab] = useState("linked");
@@ -17,6 +18,9 @@ export default function UserProfile() {
     const user = useSelector(state => state?.userinfoSlice.user.ref_id);
     const selectedSubject = useSelector(state => state?.AttendanceSlice?.SelectedSubjectRecord);
     const linkedSubjects = useMemo(() => [] || [], [user, selectedSubject]);
+
+
+
     const unlinkedSubjects = useMemo(() => {
         if (selectedSubject == undefined || selectedSubject == null) {
             return [];
@@ -153,12 +157,11 @@ export default function UserProfile() {
                                 )
                             )}
 
-                            {(activeTab === "linked" ? linkedSubjects : unlinkedSubjects)
-                                .length === 0 && (
-                                    <p className="text-gray-500 col-span-full text-center">
-                                        No subjects found
-                                    </p>
-                                )}
+                            {activeTab === "linked" &&
+                                <div className="  h-fit bg-green-600">
+                                    <UserSubjectsTable />
+                                </div>
+                            }
                         </div>
                         {
                             ((activeTab === 'unlinked') && (!editSelectedSubject)) ? <MagicButton

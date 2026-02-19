@@ -5,6 +5,7 @@ import { CheckCircle, XCircle, CloudUpload, CloudCheck } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import API from '../../../ApiEndPoints/api.js';
 import { useSelector } from "react-redux";
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function SubjectLinkConfirmationDialog({
     open,
@@ -14,7 +15,7 @@ export default function SubjectLinkConfirmationDialog({
 
     const api = new API(import.meta.env.VITE_APP_BACKEND_URL);
     const userAttendanceInfo = useSelector(state => state?.AttendanceSlice.AttendanceInfo);
-
+    const queryClient = useQueryClient()
     let controller = new AbortController();
 
     useLayoutEffect(() => {
@@ -37,6 +38,7 @@ export default function SubjectLinkConfirmationDialog({
         signal: controller.signal,
         onSuccess: (data) => {
             if (data.status === 201) {
+                queryClient.invalidateQueries({ queryKey: ['user-subjects'] })
                 return data;
             } else {
                 throw new Error(data.message);
