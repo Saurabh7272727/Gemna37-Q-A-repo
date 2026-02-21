@@ -42,9 +42,11 @@ export default function UserSubjectsTable() {
         if (data?.UserData?.subjectCollections.length > 0) {
             data?.UserData?.subjectCollections?.forEach((item) => {
                 map.set(`${item?.weekDay}${item?.nth_Periode}`, {
-                    id: item?.SATSS_ID,
-                    order: item?.nth_Periode,
-                    save: true
+                    SATSS_ID: item?.SATSS_ID,
+                    nth_Periode: item?.nth_Periode,
+                    save: true,
+                    priority: item?.priority,
+                    weekDay: item?.weekDay
                 })
             });
             setTimeTable([...map]);
@@ -61,20 +63,49 @@ export default function UserSubjectsTable() {
             alert(`First be select the subject , show in left side or upper side`);
             return;
         }
-
         //  id: item?.SATSS_ID,
         // order: item?.nth_Periode,
         // save: true
+        const findSubjectInformation = data?.UserData?.subjectList.find(item => item._id == selectedSubject?.subjectId)
+        if (!findSubjectInformation) {
+            return alert("subject information are not found, refresh it.....");
+        }
         setTimeTable((map) => {
             return [...map, [`${day}${index}`, {
-                id: selectedSubject?.subjectId,
-                order: index,
-                save: true
+                SATSS_ID: selectedSubject?.subjectId,
+                nth_Periode: index,
+                save: false,
+                priority: findSubjectInformation?.SATSS_ID?.priority,
+                weekDay: day
             }]]
         });
     }
 
-    console.log("timetable =======>", timeTable);
+    const resetHandler = () => {
+        const map = new Map();
+        if (data?.UserData?.subjectCollections.length > 0) {
+            data?.UserData?.subjectCollections?.forEach((item) => {
+                map.set(`${item?.weekDay}${item?.nth_Periode}`, {
+                    SATSS_ID: item?.SATSS_ID,
+                    nth_Periode: item?.nth_Periode,
+                    save: true,
+                    priority: item?.priority,
+                    weekDay: item?.weekDay
+                })
+            });
+            setTimeTable([...map]);
+        } else {
+            setTimeTable([]);
+        }
+    }
+
+    const newEntryHandler = () => {
+        const arrayOf = [...new Map([...timeTable])];
+        let obj = Object.fromEntries(arrayOf)
+        obj = Object.values(obj);
+
+        console.log("data +++++++++++++++++++++++", obj);
+    }
 
     return (
         <>
@@ -198,9 +229,24 @@ export default function UserSubjectsTable() {
                         </div>
                     </div>
 
-                    {/* RIGHT PANEL */}
                     <div className="bg-black backdrop-blur border border-slate-700 rounded-3xl p-6 shadow-xl overflow-x-auto md:w-[62%] w-full">
-                        <h2 className="text-2xl font-semibold mb-6 tracking-wide">Build Your Weekly Timetable</h2>
+                        <h2 className="w-full h-fit flex justify-between flex-row items-center">
+                            <span className="text-2xl font-semibold md:w-fit w-60 rounded-md bg-indigo-500/30 py-1 px-3 ring-1 ring-blue-500 truncate mb-6 tracking-wide">
+
+                                Build Your Weekly Timetable
+                            </span>
+                            <span className="flex justify-center items-center gap-x-3">
+                                <span className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
+                                    onClick={resetHandler}
+                                >Reset..</span>
+                                <span className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
+                                    onClick={() => newEntryHandler()}
+                                >Upload..
+
+                                </span>
+                            </span>
+
+                        </h2>
 
                         <div className="min-w-[900px]">
                             <table className="w-full border-separate border-spacing-y-2">
@@ -224,13 +270,16 @@ export default function UserSubjectsTable() {
                                             {periods.map((period, index) => {
 
                                                 let findSubject = null;
+
                                                 if (timeTable.length > 0) {
                                                     const localMap = new Map([...timeTable]);
                                                     const nameJJJ = day + (index + 1);
                                                     const dataSubjectSchedule = localMap.get(`${nameJJJ}`);
                                                     if (dataSubjectSchedule) {
                                                         findSubject = data?.UserData?.subjectList.
-                                                            find(sub => sub?._id == dataSubjectSchedule?.id);
+                                                            find(sub => sub?._id == dataSubjectSchedule?.SATSS_ID);
+
+                                                        findSubject.save = dataSubjectSchedule.save;
                                                     }
                                                 }
 
@@ -238,13 +287,13 @@ export default function UserSubjectsTable() {
                                                     <td
                                                         onClick={() => AddnewSchedule(day, index + 1)}
                                                         key={index} className="px-2" title={`${findSubject?.SATSS_ID?.subjetId.name || "UNKNOWN"}`}>
-                                                        <div className="h-16 md:h-20 rounded-xl border border-slate-600 
+                                                        <div className={`h-16 md:h-20 rounded-xl border border-slate-600 
                                             bg-slate-700/60 hover:bg-slate-700 transition-all duration-200 
-                                            flex items-center justify-center text-center cursor-pointer">
+                                            flex items-center justify-center text-center cursor-pointer `}>
 
                                                             {
                                                                 findSubject
-                                                                    ? <span className="font-semibold text-sm md:text-base">
+                                                                    ? <span className={`font-semibold text-sm md:text-base ${findSubject.save && "text-green-600 font-bold"}`}>
                                                                         {findSubject?.SATSS_ID?.subjetId.shortName}
                                                                     </span>
                                                                     : <span
@@ -274,19 +323,3 @@ export default function UserSubjectsTable() {
 }
 
 
-
-
-
-
-
-
-// debugger.ddd.updateMany({}, {
-//     $push: {
-//         subjectCollections: {
-//             SATSS_ID: ObjectId("6979e3488b02fdffe82bcf3a"),
-//             priority: "HIGH",
-//             weekDay: "MONDAY",
-//             nth_Periode: 3
-//         }
-//     }
-// })
