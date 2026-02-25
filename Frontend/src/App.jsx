@@ -55,6 +55,7 @@ import AddSubjectPage from './workSpaceStudent/AttendenceSystem/components/src/p
 import DashboardLayout from './workSpaceStudent/AttendenceSystem/components/src/layout/DashBoardLayout.jsx';
 import UserProfilePage from './workSpaceStudent/AttendenceSystem/components/src/pages/UserProfilePage.jsx'
 import TimetablePage from './workSpaceStudent/AttendenceSystem/components/src/pages/TimeTablePage.jsx'
+import TimetableAnalyticsDashboard from './workSpaceStudent/AttendenceSystem/components/src/pages/Analytics.jsx'
 
 // new exe file config
 import ExeDownloadPage from './Pages/DestopEXEDWNLO.jsx';
@@ -232,6 +233,12 @@ const App = () => {
             <Route path='/app/attendence/timetable' element={
               <DashboardLayout>
                 <TimetablePage />
+              </DashboardLayout>
+            } />
+
+            <Route path='/app/attendence/analytics' element={
+              <DashboardLayout>
+                <TimetableAnalyticsDashboard />
               </DashboardLayout>
             } />
           </Route>

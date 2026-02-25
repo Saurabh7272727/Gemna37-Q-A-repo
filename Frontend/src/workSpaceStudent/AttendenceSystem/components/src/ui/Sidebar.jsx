@@ -6,7 +6,7 @@ export default function Sidebar({ expanded, setExpanded }) {
     const navi = useNavigate();
     const items = [
         { icon: <LayoutDashboard />, label: "Dashboard", link: "/app/attendence/verify?college=bit&secure=true" },
-        { icon: <BarChart3 />, label: "Analytics", link: "/" },
+        { icon: <BarChart3 />, label: "Analytics", link: "/app/attendence/analytics" },
         { icon: <User />, label: "Profile", link: "/app/attendence/profile" },
         { icon: <AddLinkIcon />, label: "Link Subject", link: "/app/attendence/subject/link" },
         { icon: <CalendarCheck />, label: "Link Time table", link: "/app/attendence/timetable?page.html" },
