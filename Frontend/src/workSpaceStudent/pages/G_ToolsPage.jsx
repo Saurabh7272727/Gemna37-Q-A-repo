@@ -12,7 +12,7 @@ import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { startTransition } from "react";
-
+import { GitFork } from 'lucide-react';
 
 
 
@@ -53,6 +53,12 @@ const GTools = () => {
             name: 'G-Jira',
             icon: <FaTrello className="text-2xl" />,
             color: 'bg-red-400'
+        },
+        {
+            name: 'Gemna Gitmemo',
+            icon: <GitFork className="text-2xl" />,
+            color: 'bg-red-400',
+            redirect: "http://localhost:5173"
         }
     ];
     const dispatch = useDispatch();
