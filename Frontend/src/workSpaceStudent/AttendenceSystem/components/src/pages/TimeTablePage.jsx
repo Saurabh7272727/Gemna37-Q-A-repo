@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import API from '../../../ApiEndPoints/api.js';
 import { useSelector } from "react-redux";
 import MessageAlert from '../../../../../Components/ErrorPages/ErrorMessagePage.jsx';
@@ -16,6 +16,7 @@ export default function UserSubjectsTable() {
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [timeTable, setTimeTable] = useState([]);
 
+    const queryClient = useQueryClient()
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [])
@@ -99,12 +100,40 @@ export default function UserSubjectsTable() {
         }
     }
 
+
+    const mutaedFunction = useMutation({
+        mutationFn: (payload) => api.postRequest(`/api/subject/post/timetable/${attendanceSlice?._id}`, payload),
+        retry: 1,
+        onSuccess: async (data) => {
+            console.log("Response ===============>", data);
+            if (data?.status === 201) {
+                queryClient.invalidateQueries({ queryKey: ['user-subjects'] })
+                return data;
+            } else {
+                throw new Error(data.message);
+            }
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    })
+
     const newEntryHandler = () => {
         const arrayOf = [...new Map([...timeTable])];
         let obj = Object.fromEntries(arrayOf)
         obj = Object.values(obj);
-
+        mutaedFunction.mutate(obj);
         console.log("data +++++++++++++++++++++++", obj);
+    }
+
+    if (mutaedFunction.status === 'error') {
+        return (
+            <>
+                <div>
+                    Error : {mutaedFunction.error}
+                </div>
+            </>
+        )
     }
 
     return (
@@ -241,8 +270,10 @@ export default function UserSubjectsTable() {
                                 >Reset..</span>
                                 <span className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
                                     onClick={() => newEntryHandler()}
-                                >Upload..
-
+                                >
+                                    {
+                                        mutaedFunction.status == 'pending' ? "uploading..." : "Upload.."
+                                    }
                                 </span>
                             </span>
 

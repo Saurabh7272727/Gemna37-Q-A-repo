@@ -46,6 +46,10 @@ const model = new Schema({
             nth_Periode: {
                 type: Number,
                 required: true,
+            },
+            save: {
+                default: true,
+                type: Boolean
             }
         }
     ]

@@ -2,6 +2,7 @@ import payloadSchema from '../ZodSchema/AttendanceSchema/fetchRelatedSubjectSche
 import SubjectAndTeacherSessionSchema from '../../model/Attendence_Section/SubjectAndTeacherSessionSchema.js';
 import StudentWithSubjectSchema from '../../model/Attendence_Section/StudentWithSubjectSchema.js'
 import { payloadSchemaLinked, checkSchema1 } from '../ZodSchema/AttendanceSchema/linkedSubjectZods.js';
+import { scheduleSubject } from '../ZodSchema/AttendanceSchema/ScheduleSubject.js'
 
 const fetchRelatedSubjectByStudent = async (req, res) => {
 
@@ -370,7 +371,83 @@ const getAllLinkedSuject = async (req, res) => {
 }
 
 
-export { fetchRelatedSubjectByStudent, linkTheRelatedSubject, getAllLinkedSuject };
+
+
+
+const scheduleTheTime = async (req, res) => {
+
+    const body = req.body;
+
+    const { AttendanceId } = req.params;
+
+
+    if (!body || !body.length > 0 || body == null || body == undefined) {
+        return req.status(404).json({
+            message: "payload are missing",
+            success: false,
+            status: 404
+        })
+    };
+
+    let checkList = body.filter(item => !item.save);
+
+    checkList = checkList.map((item) => {
+        return {
+            ...item,
+            save: false
+        }
+    })
+
+    try {
+        const parsed = scheduleSubject.safeParse(checkList);
+
+        if (!parsed.success) {
+            return res.status(403).json({
+                message: "zod validation failed",
+                status: 403,
+                success: false
+            })
+        }
+
+
+        const UserFind = await StudentWithSubjectSchema.updateOne({ studentAttendanceId: AttendanceId }, {
+            $push: {
+                subjectCollections: {
+                    $each: [
+                        ...checkList
+                    ]
+                }
+            }
+        }).lean();
+
+        const { acknowledged } = UserFind;
+
+        console.log("UserFind", UserFind);
+
+        if (acknowledged) {
+            return res.status(201).json({
+                message: "Successfully Update",
+                status: 201,
+                success: true
+            })
+        }
+
+        throw new Error("uncompleted task")
+
+    } catch (error) {
+        return res.status(505).json({
+            message: error.message,
+            status: 505,
+            success: false
+        })
+    }
+
+
+
+}
+
+
+export { fetchRelatedSubjectByStudent, linkTheRelatedSubject, getAllLinkedSuject, scheduleTheTime };
 
 
 
