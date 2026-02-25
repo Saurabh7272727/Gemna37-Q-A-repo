@@ -389,14 +389,12 @@ const scheduleTheTime = async (req, res) => {
         })
     };
 
-    let checkList = body.filter(item => !item.save);
-
-    checkList = checkList.map((item) => {
+    let checkList = body.filter(item => !item.save).map((item) => {
         return {
             ...item,
-            save: false
+            save: true
         }
-    })
+    });
 
     try {
         const parsed = scheduleSubject.safeParse(checkList);
@@ -409,31 +407,51 @@ const scheduleTheTime = async (req, res) => {
             })
         }
 
+        //  ===================================== new code (best to filter exist data) =============================
 
-        const UserFind = await StudentWithSubjectSchema.updateOne({ studentAttendanceId: AttendanceId }, {
-            $push: {
-                subjectCollections: {
-                    $each: [
-                        ...checkList
-                    ]
-                }
-            }
-        }).lean();
-
-        const { acknowledged } = UserFind;
-
-        console.log("UserFind", UserFind);
-
-        if (acknowledged) {
+        const checkWeekDayAndPeriode = await StudentWithSubjectSchema.findOne({ studentAttendanceId: AttendanceId });
+        if (checkWeekDayAndPeriode === null) {
+            return res.status(403).json({
+                message: "Student record are not found",
+                status: 404,
+                success: false
+            })
+        }
+        if (Object.keys(checkWeekDayAndPeriode).length > 0) {
+            const result = checkWeekDayAndPeriode.subjectCollections.filter((item) =>
+                !parsed.data.some((incoming) =>
+                    item.weekDay === incoming.weekDay &&
+                    item.nth_Periode === incoming.nth_Periode
+                ));
+            checkWeekDayAndPeriode.subjectCollections = [...result, ...parsed.data];
+            await checkWeekDayAndPeriode.save();
             return res.status(201).json({
                 message: "Successfully Update",
                 status: 201,
                 success: true
             })
+        } else {
+            const UserFind = await StudentWithSubjectSchema.updateOne({ studentAttendanceId: AttendanceId }, {
+                $push: {
+                    subjectCollections: {
+                        $each: [
+                            ...parsed?.data
+                        ]
+                    }
+                }
+            }).lean();
+
+            const { acknowledged } = UserFind;
+
+            if (acknowledged) {
+                return res.status(201).json({
+                    message: "Successfully Update",
+                    status: 201,
+                    success: true
+                })
+            }
         }
-
         throw new Error("uncompleted task")
-
     } catch (error) {
         return res.status(505).json({
             message: error.message,
@@ -441,9 +459,6 @@ const scheduleTheTime = async (req, res) => {
             success: false
         })
     }
-
-
-
 }
 
 

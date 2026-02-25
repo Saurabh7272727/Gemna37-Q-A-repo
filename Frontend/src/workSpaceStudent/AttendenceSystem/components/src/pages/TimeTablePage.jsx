@@ -15,6 +15,8 @@ export default function UserSubjectsTable() {
     const periods = [1, 2, 3, 4, 5, 6, 7];
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [timeTable, setTimeTable] = useState([]);
+    const localRef = useRef(false);
+    const autoResetAfterCompleteSchedule = useRef();
 
     const queryClient = useQueryClient()
     useEffect(() => {
@@ -36,7 +38,6 @@ export default function UserSubjectsTable() {
     });
 
 
-    const localRef = useRef(false);
 
     if (isSuccess && !localRef.current) {
         const map = new Map();
@@ -105,9 +106,15 @@ export default function UserSubjectsTable() {
         mutationFn: (payload) => api.postRequest(`/api/subject/post/timetable/${attendanceSlice?._id}`, payload),
         retry: 1,
         onSuccess: async (data) => {
-            console.log("Response ===============>", data);
             if (data?.status === 201) {
-                queryClient.invalidateQueries({ queryKey: ['user-subjects'] })
+                await queryClient.invalidateQueries({ queryKey: ['user-subjects'] });
+                let idss;
+                if (idss) {
+                    clearTimeout(idss);
+                }
+                idss = setTimeTable(() => {
+                    autoResetAfterCompleteSchedule.current.click();
+                }, 0)
                 return data;
             } else {
                 throw new Error(data.message);
@@ -123,7 +130,6 @@ export default function UserSubjectsTable() {
         let obj = Object.fromEntries(arrayOf)
         obj = Object.values(obj);
         mutaedFunction.mutate(obj);
-        console.log("data +++++++++++++++++++++++", obj);
     }
 
     if (mutaedFunction.status === 'error') {
@@ -265,7 +271,9 @@ export default function UserSubjectsTable() {
                                 Build Your Weekly Timetable
                             </span>
                             <span className="flex justify-center items-center gap-x-3">
-                                <span className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
+                                <span
+                                    ref={autoResetAfterCompleteSchedule}
+                                    className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
                                     onClick={resetHandler}
                                 >Reset..</span>
                                 <span className="ring-1 cursor-pointer active:bg-indigo-600 ring-blue-600 py-2 px-5 text-center rounded-md bg-indigo-600/30"
@@ -275,6 +283,9 @@ export default function UserSubjectsTable() {
                                         mutaedFunction.status == 'pending' ? "uploading..." : "Upload.."
                                     }
                                 </span>
+                                {
+                                    mutaedFunction.status == 'success' && <span>saved..</span>
+                                }
                             </span>
 
                         </h2>
@@ -298,11 +309,11 @@ export default function UserSubjectsTable() {
                                                 {day}
                                             </td>
 
-                                            {periods.map((period, index) => {
+                                            {periods?.map((period, index) => {
 
                                                 let findSubject = null;
 
-                                                if (timeTable.length > 0) {
+                                                if (timeTable?.length > 0) {
                                                     const localMap = new Map([...timeTable]);
                                                     const nameJJJ = day + (index + 1);
                                                     const dataSubjectSchedule = localMap.get(`${nameJJJ}`);
