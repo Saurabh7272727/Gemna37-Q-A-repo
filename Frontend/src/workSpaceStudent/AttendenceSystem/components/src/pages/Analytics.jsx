@@ -55,7 +55,6 @@ export default function TimetableAnalyticsDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
 
-                {/* Weekly Load */}
                 <div className="bg-white p-4 rounded-2xl shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Weekly Period Load</h2>
                     <ResponsiveContainer width="100%" height={300}>
@@ -70,7 +69,6 @@ export default function TimetableAnalyticsDashboard() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Period Trend */}
                 <div className="bg-white p-4 rounded-2xl shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Monthly Trend</h2>
                     <ResponsiveContainer width="100%" height={300}>
@@ -90,7 +88,6 @@ export default function TimetableAnalyticsDashboard() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Subject Distribution */}
                 <div className="bg-white p-4 rounded-2xl shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Subject Distribution</h2>
                     <ResponsiveContainer width="100%" height={300}>
@@ -108,7 +105,6 @@ export default function TimetableAnalyticsDashboard() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Heat Load */}
                 <div className="bg-white p-4 rounded-2xl shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Daily Load Overview</h2>
                     <ResponsiveContainer width="100%" height={300}>

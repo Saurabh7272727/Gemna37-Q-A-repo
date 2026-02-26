@@ -58,7 +58,8 @@ const GTools = () => {
             name: 'Gemna Gitmemo',
             icon: <GitFork className="text-2xl" />,
             color: 'bg-red-400',
-            redirect: "http://localhost:5173"
+            redirect: "http://localhost:5173",
+            href: "http://localhost:5173"
         }
     ];
     const dispatch = useDispatch();
@@ -217,7 +218,11 @@ const GTools = () => {
                                     onClick={() => {
                                         if (tool.redirect) {
                                             startTransition(() => {
-                                                navi(`${tool.redirect}`);
+                                                if (tool?.href) {
+                                                    window.location.href = `${tool?.href}`
+                                                } else {
+                                                    navi(`${tool.redirect}`);
+                                                }
                                             })
                                         }
                                     }}
