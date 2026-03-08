@@ -107,15 +107,14 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
     const bouncing = useRef(null);
 
     const inputHandler = (e) => {
-
         if (!bouncing.current && state?.data?.socketId) {
-            socket.emit('user_typing', { socketId: state?.data?.socketId });
+            socket.emit('user_typing', { socketId: state?.data?.socketId, email: state?.data.email });
         }
 
         clearTimeout(bouncing.current);
 
         bouncing.current = setTimeout(() => {
-            socket.emit('user_typing_off', { socketId: state?.data?.socketId });
+            socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: state?.data.email });
             bouncing.current = null;
         }, 2000);
 
@@ -124,17 +123,19 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
     };
 
     useEffect(() => {
-        socket.on('receive_user_typing', ({ mode }) => {
-            setMode(mode);
+        socket.on('receive_user_typing', ({ mode, email }) => {
+            if (state?.data.email === email)
+                setMode(mode);
         });
 
-        socket.on('receive_user_typing_off', ({ mode }) => {
-            setMode(false);
+        socket.on('receive_user_typing_off', ({ mode, email }) => {
+            if (state?.data.email === email)
+                setMode(false);
         });
 
         return () => {
             if (bouncing.current)
-                socket.emit('user_typing_off', { socketId: state?.data?.socketId });
+                socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: state?.data.email });
             clearTimeout(bouncing.current);
             bouncing.current = null;
             socket.off('receive_user_typing', ({ mode }) => {
