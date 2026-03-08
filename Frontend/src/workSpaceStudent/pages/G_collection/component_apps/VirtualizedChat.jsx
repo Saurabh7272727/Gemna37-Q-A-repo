@@ -72,13 +72,13 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                     width: '100%',
                     position: 'relative',
                 }}>
-                {rowVirtualizer.getVirtualItems()?.map((virtualRow) => {
+                {rowVirtualizer.getVirtualItems()?.map((virtualRow, index) => {
                     const msg = safeMessages[virtualRow.index];
                     const isCurrentUser = msg?.ref_id?.senderId === currentUserId;
                     return (
                         <>
                             <div
-                                key={msg?._id || virtualRow.key}
+                                key={index}
                                 style={{
                                     position: 'absolute',
                                     top: 0,

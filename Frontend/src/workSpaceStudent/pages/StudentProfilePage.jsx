@@ -13,6 +13,7 @@ import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
 import MessageAlert from '../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { loadUserInformation } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import { ToastContainer } from 'react-toastify';
+import { requestNotificationPermission } from '../../services/notificationService/allowNotificationService.js';
 
 import Cookies from 'js-cookie';
 const StudentProfilePage = ({ renderPart }) => {
@@ -89,7 +90,7 @@ const StudentProfilePage = ({ renderPart }) => {
                             {
                                 loading ? <div>loading...</div> :
                                     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6 text-white relative">
-                                        <ProfileHeader user={demoProfile} />
+                                        <ProfileHeader user={demoProfile} allowNotification={requestNotificationPermission} />
                                         {
                                             Cookies.get("ErrorMessage") && <EditEmailMessage message={`${Cookies.get("ErrorMessage")}`} />
                                         }

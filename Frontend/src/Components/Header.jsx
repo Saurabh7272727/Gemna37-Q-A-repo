@@ -29,7 +29,7 @@ const Header = ({ renderPart, tokenexpire }) => {
     return (
         <>
             {
-                renderPart ? <StudentHeader tokenexpire={tokenexpire} /> :
+                renderPart ? <StudentHeader tokenexpire={tokenexpire} renderPart={renderPart} /> :
                     <header className={`absolute inset-x-0 top-0 z-50 ${pathname == '/landing' ? "bg-gray-900" : ""}`}>
                         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
                             <div className="flex lg:flex-1">

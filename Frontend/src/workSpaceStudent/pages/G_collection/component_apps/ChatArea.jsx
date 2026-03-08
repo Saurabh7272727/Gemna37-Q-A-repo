@@ -35,8 +35,9 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
     const currentStudent = useSelector((state) => state?.userinfoSlice?.user);
     const connectedUser = useSelector((state) => state?.ListSliceOdfStudent?.ConnectedUserList ?? []);
     const dispatch = useDispatch();
-    const ref = useRef()
+    const ref = useRef();
 
+    const [mode, setMode] = useState(false);
     const [state, setState] = useState({
         data: "",
         error: "",
@@ -103,11 +104,44 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
             </>
         )
     }
+    const bouncing = useRef(null);
 
     const inputHandler = (e) => {
+
+        if (!bouncing.current && state?.data?.socketId) {
+            socket.emit('user_typing', { socketId: state?.data?.socketId });
+        }
+
+        clearTimeout(bouncing.current);
+
+        bouncing.current = setTimeout(() => {
+            socket.emit('user_typing_off', { socketId: state?.data?.socketId });
+            bouncing.current = null;
+        }, 2000);
+
         const { name, value } = e.target;
         setInputState(prev => ({ ...prev, [name]: value }));
-    }
+    };
+
+    useEffect(() => {
+        socket.on('receive_user_typing', ({ mode }) => {
+            setMode(mode);
+        });
+
+        socket.on('receive_user_typing_off', ({ mode }) => {
+            setMode(false);
+        });
+
+        return () => {
+            if (bouncing.current)
+                socket.emit('user_typing_off', { socketId: state?.data?.socketId });
+            clearTimeout(bouncing.current);
+            bouncing.current = null;
+            socket.off('receive_user_typing', ({ mode }) => {
+                setMode(mode);
+            });
+        }
+    }, []);
 
     const getSingleMessage = async () => {
         const findPayload = connectedUser.find((item) => item.email === state.data.email);
@@ -152,6 +186,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         } else {
             setMessages(data);
         }
+
     }, [state.data?.email]);
 
     const sendHandler = (e) => {
@@ -245,6 +280,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         socket.on("notification_new_message", handleNewMessage);
         return () => {
             socket.off("notification_new_message", handleNewMessage);
+
         };
     }, [currentStudent?.ref_id?._id, testID]);
 
@@ -323,7 +359,11 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                                         </h2>
                                         <p className="text-xs sm:text-sm text-gray-300 font-medium flex items-center mt-1">
                                             <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
-                                            <span className="truncate">College ID: {state?.data?.collegeID}</span>
+                                            <span className="truncate">
+                                                {
+                                                    mode ? "typing..." : ` College ID: ${state?.data?.collegeID}`
+                                                }
+                                            </span>
                                         </p>
                                     </div>
                                 </div>

@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
-
 import Cookies from 'js-cookie';
 import { decryptData } from '../../Auth/Encryption/jsondataEncryption.js';
 import { accessController } from '../../ReduxStore/Slices/AuthSlice.js';
 import { useDispatch } from 'react-redux';
-import ImageUploadForm from './ImageUploadForm.jsx'
-export default function ProfileHeader({ user }) {
+import ImageUploadForm from './ImageUploadForm.jsx';
+import { Settings } from 'lucide-react';
+import NotificationSettings from './NotificationSetting.jsx';
+
+export default function ProfileHeader({ user, allowNotification }) {
 
     const dispatch = useDispatch();
     const [upload, setUplaod] = useState(false);
     const [preview, setPreview] = useState(false);
+    const [showDialogBoxState, setShowDialogBoxState] = useState(false);
+
     const ImageURLUploadHandler = () => {
         if (upload) {
             Cookies.remove("GASID");
@@ -56,6 +60,17 @@ export default function ProfileHeader({ user }) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    const setShowDialogBox = () => {
+        setShowDialogBoxState(!showDialogBoxState);
+    }
+
+    const features = [
+        "Receive important updates instantly",
+        "Stay informed about new activities and alerts",
+        "Notifications will only be sent to your latest authorized device",
+        "Previous device FCM token will be removed automatically"
+    ];
+
     return (
         <>
             {
@@ -75,9 +90,33 @@ export default function ProfileHeader({ user }) {
                         {user?.ref_id?.imageURL ? <img onClick={preViewHandler} className='h-full w-full border-2 border-blue-500 rounded-full object-cover bg-center' src={`${user?.ref_id?.imageURL}`} alt='profile image loading..' /> : user?.ref_id?.firstName?.charAt(0).toUpperCase()}
                     </div>
                 </div>
-                <div className="mt-12 pl-19" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>
-                    <h2 className="text-xl font-semibold">{capitalizeFirstChar(user?.ref_id?.firstName)} {capitalizeFirstChar(user?.ref_id?.lastName)}</h2>
-                    <p className="text-xl text-gray-400">{capitalizeFirstChar(user?.ref_id?.branch.label)} <sup>{user?.ref_id?.year?.label}</sup></p>
+                <div className="mt-12 pl-19">
+                    <h2 className="text-xl font-semibold" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>{capitalizeFirstChar(user?.ref_id?.firstName)} {capitalizeFirstChar(user?.ref_id?.lastName)}</h2>
+                    <p className="text-xl text-gray-400" title={`${user?.ref_id?.course.label}/${user?.ref_id?.branch?.label}`}>{capitalizeFirstChar(user?.ref_id?.branch.label)} <sup>{user?.ref_id?.year?.label}</sup></p>
+                    <p className=' float-right cursor-pointer' title='setting'
+                        onClick={() => setShowDialogBox()}
+                    ><Settings /></p>
+                    {
+                        showDialogBoxState && <div className='w-full h-fit mt-4'>
+                            <NotificationSettings
+                                onToggle={async (status) => {
+                                    if (status) {
+                                        const runAllowNotificationFunction = async () => {
+                                            const response = await allowNotification();
+                                            if (!response.success) {
+                                                alert(`${response?.message}`);
+                                                return response;
+                                            }
+                                            return response;
+                                        }
+                                        return await runAllowNotificationFunction();
+                                    } else if (status === false) {
+                                        return { success: true };
+                                    }
+                                }}
+                            />
+                        </div>
+                    }
                 </div>
                 <div className="absolute top-5 right-7">
                     <Button onClick={() => {
@@ -88,7 +127,6 @@ export default function ProfileHeader({ user }) {
             {
                 upload && <div className='w-[93%] h-auto md:h-[70]  z-20 flex justify-center items-center bg-gray-900 absolute  text-white'>
                     <ImageUploadForm dropDownBtn={setUplaod} />
-                    {/* <h1>hello world</h1> */}
                 </div>
             }
         </>
