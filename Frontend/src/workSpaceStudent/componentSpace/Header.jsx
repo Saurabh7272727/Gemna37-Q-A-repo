@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { AiOutlineBars } from "react-icons/ai";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react';
@@ -11,7 +11,8 @@ import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-const Header = ({ tokenexpire }) => {
+
+const Header = ({ renderPart, tokenexpire }) => {
     const UserInfomartion = useSelector(state => state?.userinfoSlice?.user);
     const locationData = useLocation();
     const dispatch = useDispatch();
@@ -24,6 +25,8 @@ const Header = ({ tokenexpire }) => {
         { name: 'Marketplace', href: '#' },
         { name: 'Company', href: '#' },
     ]
+
+
 
     const redirectThePage = ({ name }) => {
         navi(`/${name}`);

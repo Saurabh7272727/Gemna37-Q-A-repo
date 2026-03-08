@@ -20,6 +20,10 @@ const StudentSchema = new Schema(
             required: true,
             minlength: 6,
         },
+        FCM_TOKEN: {
+            default: 'token are unregistered',
+            type: String
+        }
     },
     { timestamps: true, strictPopulate: false }
 );

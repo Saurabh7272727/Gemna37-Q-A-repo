@@ -25,9 +25,14 @@ const userinfoSlice = createSlice({
         },
         clearinfoSlice: (state, action) => {
             state.user = {}
+        },
+        updateFCMToken: (state, action) => {
+            state.user.FCM_TOKEN = action.payload;
         }
     }
 })
 
-export const { loadUserInformation, UpdateUserInfo, clearinfoSlice } = userinfoSlice.actions;
+export const { loadUserInformation, UpdateUserInfo, clearinfoSlice,
+    updateFCMToken
+} = userinfoSlice.actions;
 export default userinfoSlice.reducer;

@@ -137,6 +137,14 @@ const connectWithSocket = (server) => {
                 }
             })
 
+            socket.on('user_typing', ({ socketId }) => {
+                io.to(socketId).emit('receive_user_typing', { mode: "typing" })
+            })
+
+            socket.on('user_typing_off', ({ socketId }) => {
+                io.to(socketId).emit('receive_user_typing_off', { mode: "stop_typing" });
+            })
+
             socket.on('disconnect', (reason) => {
                 console.log(`${socket.id} are disconnect ${reason}`);
                 tempStorage.delete(socket.id);
