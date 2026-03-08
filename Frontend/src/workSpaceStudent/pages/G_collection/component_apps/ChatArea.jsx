@@ -122,7 +122,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         setInputState(prev => ({ ...prev, [name]: value }));
     };
 
-    useEffect(() => {
+  useEffect(() => {
         socket.on('receive_user_typing', ({ mode, email }) => {
             if (state?.data.email === email) {
                 setMode(mode);
