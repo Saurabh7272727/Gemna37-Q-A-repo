@@ -137,12 +137,12 @@ const connectWithSocket = (server) => {
                 }
             })
 
-            socket.on('user_typing', ({ socketId }) => {
-                io.to(socketId).emit('receive_user_typing', { mode: "typing" })
+            socket.on('user_typing', ({ socketId, email }) => {
+                io.to(socketId).emit('receive_user_typing', { mode: "typing", email })
             })
 
-            socket.on('user_typing_off', ({ socketId }) => {
-                io.to(socketId).emit('receive_user_typing_off', { mode: "stop_typing" });
+            socket.on('user_typing_off', ({ socketId, email }) => {
+                io.to(socketId).emit('receive_user_typing_off', { mode: "stop_typing", email });
             })
 
             socket.on('disconnect', (reason) => {
