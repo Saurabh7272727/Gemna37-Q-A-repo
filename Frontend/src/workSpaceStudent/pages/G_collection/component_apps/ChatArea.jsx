@@ -122,15 +122,17 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         setInputState(prev => ({ ...prev, [name]: value }));
     };
 
-    useEffect(() => {
+  useEffect(() => {
         socket.on('receive_user_typing', ({ mode, email }) => {
-            if (state?.data.email === email)
+            if (state?.data.email === email) {
                 setMode(mode);
+            }
         });
 
         socket.on('receive_user_typing_off', ({ mode, email }) => {
-            if (state?.data.email === email)
+            if (state?.data.email === email) {
                 setMode(false);
+            }
         });
 
         return () => {
@@ -141,8 +143,13 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
             socket.off('receive_user_typing', ({ mode }) => {
                 setMode(mode);
             });
+            socket.off('receive_user_typing_off', ({ mode, email }) => {
+                if (state?.data.email === email) {
+                    setMode(false);
+                }
+            });
         }
-    }, []);
+    }, [state?.data?.email]);
 
     const getSingleMessage = async () => {
         const findPayload = connectedUser.find((item) => item.email === state.data.email);
