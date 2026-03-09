@@ -1,9 +1,8 @@
 import { Server } from 'socket.io';
 import AuthBYSocket from './AuthBYSocket.js';
-import kv from '../utils/vercel.KV.js';
 import connectionModel from '../model/connection.model.js';
 import messagemodel from '../model/message.model.js';
-
+import { acceptOfflineMessages } from '../service/NotificationSystem/offlineFeature.js';
 
 
 const tempStorage = new Map();
@@ -133,6 +132,16 @@ const connectWithSocket = (server) => {
                         callback({ notify: "successfully send your message first time", index, message: savedataMessage, distination: `${senderId}/${receiverId}`, senderId, receiverId });
                     }
                 } else {
+                    callback({ notify: "something was wrong , don't send any message" });
+                }
+            })
+
+            socket.on('socket_send_payload_offline_user', async (data, callback) => {
+                // callback - function to action on sender device, data = payload
+                try {
+                    const response = await acceptOfflineMessages(data);
+                    callback(response);
+                } catch (error) {
                     callback({ notify: "something was wrong , don't send any message" });
                 }
             })

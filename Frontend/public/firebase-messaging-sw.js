@@ -2,8 +2,8 @@ importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js");
 
 
-// const apikey = import.meta.env.VITE_APP_FIREBASE_API_KEY;
 
+// apikey : apikey forntend per reveal kar sakte haaa...
 firebase.initializeApp({
     apiKey: 'AIzaSyD7HhIbYfXjEsXa-tXhZmLCEDRNTD8tu4o',
     authDomain: "gemna-notification.firebaseapp.com",
@@ -15,7 +15,7 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-    self.registration.showNotification(payload.notification.title, {
-        body: payload.notification.body
+    self.registration.showNotification(payload.data.title, {
+        body: payload.data.body,
     });
 });
