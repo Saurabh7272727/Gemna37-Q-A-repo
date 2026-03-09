@@ -113,7 +113,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         clearTimeout(bouncing.current);
 
         bouncing.current = setTimeout(() => {
-            socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email });
+            socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email});
             bouncing.current = null;
         }, 2000);
 
@@ -136,7 +136,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
 
         return () => {
             if (bouncing.current)
-                socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: state?.data.email });
+                socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email});
             clearTimeout(bouncing.current);
             bouncing.current = null;
             socket.off('receive_user_typing', ({ mode }) => {
