@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import MessageAlert from '../../../../Components/ErrorPages/ErrorMessagePage.jsx';
 import { useMediaQuery } from 'react-responsive';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    FiPaperclip,
     FiImage,
     FiSend,
     FiPhone,
@@ -122,7 +121,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         setInputState(prev => ({ ...prev, [name]: value }));
     };
 
-  useEffect(() => {
+    useEffect(() => {
         socket.on('receive_user_typing', ({ mode, email }) => {
             if (state?.data.email === email) {
                 setMode(mode);
@@ -200,14 +199,58 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
     const sendHandler = (e) => {
         e.stopPropagation()
         if (!state?.data?.socketId) {
-            return alert("user are offline , and do not send any message");
+            if (inputState.message && currentStudent?.ref_id?._id) {
+                let highlight = detectLanguage(inputState?.message);
+                if (setShareCode?.type === 'Code') {
+                    console.log("sending a code.............", 'file ChatArea.jsx');
+                    if (['javascript', "python", 'java', 'c'].includes(highlight)) {
+                        highlight = highlight;
+                        console.log("language =============", highlight);
+                    } else {
+                        highlight = 'plaintext';
+                    }
+                } else {
+                    highlight = 'plaintext';
+                }
+                const payload = {
+                    senderId: currentStudent?.ref_id?._id,
+                    receiverId: state?.data?._id,
+                    message: inputState?.message,
+                    index: messages?.length,
+                    type: setShareCode?.type,
+                    r_email: state?.data?.email.trim(),
+                    language: highlight,
+                    s_fullName: `${currentStudent?.ref_id.firstName} ${currentStudent?.ref_id?.lastName}`
+                }
+
+                socket.emit("socket_send_payload_offline_user", { ...payload }, (data) => {
+                    setInputState({ message: "" });
+                    if (data?.notify === "successfully send your message") {
+                        setMessages((sau) => {
+                            return [...sau, { ref_id: { ...data.message } }]
+                        });
+                    } else if (data?.notify === "successfully send your message first time") {
+                        setMessages((sau) => {
+                            return [...sau, { ref_id: { ...data.message } }]
+                        });
+                        dispatch(testPurpose(data));
+                    } else {
+                        console.log(data, '<==============================================');
+                        alert("Something was wrong -  gemna no responed => ChatArea file");
+                    }
+                    ref.current.focus();
+                });
+
+                return;
+            } else {
+                alert("Empty payload don't be send");
+                return;
+            }
         }
 
         if (inputState.message && state.data.socketId && currentStudent?.ref_id?._id) {
-
             // detect user - select or not code share;
             let highlight = detectLanguage(inputState?.message);
-            console.log("language =============", highlight);
             if (setShareCode?.type === 'Code') {
                 console.log("sending a code.............", 'file ChatArea.jsx');
                 if (['javascript', "python", 'java', 'c'].includes(highlight)) {
@@ -221,7 +264,6 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
             }
 
             // then send payload to socket.io
-
             const payload = {
                 senderId: currentStudent?.ref_id?._id,
                 receiverId: state?.data?._id,
@@ -250,7 +292,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                 ref.current.focus();
             });
         } else {
-            alert("Empty payload don't be send")
+            alert("Empty payload don't be send");
         }
     }
 
