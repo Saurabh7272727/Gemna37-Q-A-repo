@@ -3,33 +3,55 @@ import Mailgen from "mailgen";
 
 const emailSender = async ({ message, reason, title, email }) => {
     try {
-        let mailGenerator = new Mailgen({
+
+        const mailGenerator = new Mailgen({
             theme: "default",
             product: {
-                name: "Gemna notification service",
+                name: "Gemna",
                 link: "https://gemnaworld.vercel.app",
                 logo: "https://th.bing.com/th/id/OIP.z4Y6UwyXNj6eqviWv70RPgHaHa?w=171&h=180&c=7&r=0&o=5&pid=1.7",
+                copyright: `Copyright © ${new Date().getFullYear()} Gemna. All rights reserved.`
             },
         });
 
-        let Info = {
+        const Info = {
             body: {
+                greeting: "Hello",
                 name: email,
-                intro: `${message}`,
-                action: {
-                    instructions:
-                        `${reason}`,
-                    button: {
-                        color: "#22BC66",
-                        text: `${title}`,
-                        link: "https://gemnaworld.vercel.app",
-                    },
+
+                intro: [
+                    `${message}`
+                ],
+
+                table: {
+                    data: [
+                        {
+                            "Notification": "You not enabled a notification on gemnaworld",
+                            "Platform": "Gemna G-Chat",
+                            "Status": "Unread"
+                        }
+                    ]
                 },
-                outro: "If you did not interest this, please ignore this email.",
-            },
+
+                action: {
+                    instructions: reason,
+                    button: {
+                        color: "#5865F2",
+                        text: "Open G-Chat",
+                        link: "https://gemnaworld.vercel.app"
+                    }
+                },
+
+                outro: [
+                    "You're receiving this email because a new message arrived while you were offline.",
+                    "If this wasn't relevant to you, you can safely ignore this email."
+                ],
+
+                signature: "Team Gemna"
+            }
         };
 
-        let emailBody = mailGenerator.generate(Info);
+        const emailBody = mailGenerator.generate(Info);
 
         const config = {
             service: "gmail",
@@ -53,6 +75,7 @@ const emailSender = async ({ message, reason, title, email }) => {
         await transport.sendMail(messageObj);
 
         return true;
+
     } catch (error) {
         console.error("Email sending failed:", error);
         return false;
