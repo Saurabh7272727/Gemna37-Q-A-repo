@@ -79,7 +79,8 @@ const acceptOfflineMessages = async (data) => {
                         userName: s_fullName,
                         messageTitle: message.length > 20 ? "Sending a long message" : message,
                         type: "user by",
-                        FCM_TOKEN: findFCMTOEKN?.FCM_TOKEN
+                        FCM_TOKEN: findFCMTOEKN?.FCM_TOKEN === 'token are unregistered' ||
+                            findFCMTOEKN?.FCM_TOKEN === 'empty' ? null : findFCMTOEKN?.FCM_TOKEN
                     },
                 });
             }
