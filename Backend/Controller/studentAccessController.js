@@ -12,13 +12,14 @@ const UserProfileDetails = async (req, res) => {
         const updatedAt = req.userDetails?.updatedAt;
 
         const etag = updatedAt
-            ? `"${new Date(updatedAt).getTime()}"`
-            : `"default"`;
+            ? `${new Date(updatedAt).getTime()}`
+            : `default`;
 
+        // Browser will be send on second time if api hit with (if-none-match) with time in milisecond - so compare if change 
+        // return updated blog else return Not modifieds
         if (req.headers['if-none-match'] === etag) {
             return res.status(304).end();
         }
-
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('ETag', etag);
         return res.status(200).json({ message: "successfully verify", success: true, data: req.userDetails });
