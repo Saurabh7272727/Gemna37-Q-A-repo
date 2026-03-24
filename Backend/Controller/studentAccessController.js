@@ -1,7 +1,6 @@
 import generateSecureOTP from '../components/uniqueNumberGen.js';
 import fs from 'fs/promises';
 import StudentModel from '../model/student.form.schema.js';
-import cloudinaryUplaod from '../components/cloudinary.js';
 import { v2 as cloudinary } from 'cloudinary';
 const UserProfileDetails = async (req, res) => {
     try {
@@ -10,6 +9,18 @@ const UserProfileDetails = async (req, res) => {
             return res.status(422).json({ message: "unauthorized access con jwt_token", success: false });
         }
         req.userDetails.password = generateSecureOTP();
+        const updatedAt = req.userDetails?.updatedAt;
+
+        const etag = updatedAt
+            ? `"${new Date(updatedAt).getTime()}"`
+            : `"default"`;
+
+        if (req.headers['if-none-match'] === etag) {
+            return res.status(304).end();
+        }
+
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('ETag', etag);
         return res.status(200).json({ message: "successfully verify", success: true, data: req.userDetails });
     } catch (error) {
         console.log(error);

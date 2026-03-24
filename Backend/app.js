@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors({
-    origin: ["http://localhost:5173", "https://gemnaworld.vercel.app"],
+    origin: [`${process.env.FRONTEND_URL}`],
     methods: ["POST", "GET"],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
