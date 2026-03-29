@@ -11,6 +11,8 @@ import { clearinfoSlice } from '../../ReduxStore/Slices/UserInfoSlice.js';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import { useEffect } from 'react';
+import socket from '../../socket_client/socket_client.js';
 
 const Header = ({ renderPart, tokenexpire }) => {
     const UserInfomartion = useSelector(state => state?.userinfoSlice?.user);
@@ -25,6 +27,12 @@ const Header = ({ renderPart, tokenexpire }) => {
         { name: 'Marketplace', href: '#' },
         { name: 'Company', href: '#' },
     ]
+
+    useEffect(() => {
+        socket.on("process-error-501", (data) => {
+            console.log("===============================>", data);
+        })
+    }, [])
 
 
 
