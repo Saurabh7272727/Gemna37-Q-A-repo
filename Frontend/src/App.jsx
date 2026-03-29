@@ -60,11 +60,18 @@ import TimetableAnalyticsDashboard from './workSpaceStudent/AttendenceSystem/com
 // new exe file config
 import ExeDownloadPage from './Pages/DestopEXEDWNLO.jsx';
 
+
+
+
+// net work config
+// import { networkManager } from './functions/networkManager.js';
+
 const App = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.accessSlice.login);
   const loaderchecker = localStorage.getItem("firstTime");
-  const [tokenexpire, setTokenexpire] = useState(false)
+  const [tokenexpire, setTokenexpire] = useState(false);
+  const [getOnline, setOnline] = useState(true);
   if (!loaderchecker) {
     localStorage.setItem("firstTime", true);
   }
@@ -150,11 +157,37 @@ const App = () => {
     }
   }, [login]);
 
+  useEffect(() => {
+    window.addEventListener("online", () => {
+      setOnline(true)
+      console.log("Online");
+    });
+
+    window.addEventListener("offline", () => {
+      setOnline(false);
+      console.log("Offline");
+    });
+
+    return () => {
+      window.removeEventListener('online', () => {
+        setOnline(true)
+      });
+      window.removeEventListener('offline', () => {
+        setOnline(false);
+      });
+    }
+  }, [getOnline])
+
 
   return (
     <>
       <HashRouter>
-        <Header renderPart={login} tokenexpire={tokenexpire} />
+        {
+          getOnline ? <Header renderPart={login} tokenexpire={tokenexpire} /> : <div className='bg-gray-900 text-white content-center w-screen text-right p-5'>
+            <h1>No internet</h1>
+          </div>
+        }
+
         <Routes>
           <Route path='/' element={<GemnaLogoDisplay />} />
           <Route path='/download/exe/desktop' element={<ExeDownloadPage />} />

@@ -18,13 +18,13 @@ file path - Frontend\src\workSpaceStudent\AttendenceSystem\components\src\pages\
 Report ==========> analysis ----------- 29/03/2026 ------ Report
 
 
-0) 11/03/2026 ================> we add in frontend - networkManager file to determine the user are connected to internet or not.
-1) to the Attendnace section student can upload the schedule of attendance - when something are not changed in schedule to send (not modified) , to reduce the response size and HTTP cache
+0) complete ---------- 11/03/2026 ================> we add in frontend - networkManager file to determine the user are connected to internet or not.
+1) pending ------------ to the Attendnace section student can upload the schedule of attendance - when something are not changed in schedule to send (not modified) , to reduce the response size and HTTP cache
 
-2) using javaScript pattern in code file like - signleton, adapter pattern and use full and scalable files codes
+2) complete -------------- using javaScript pattern in code file like - signleton, adapter pattern and use full and scalable files codes
 for modular code base
 
-3) cached system are worked but on upload picture they send cached data not updated
+3) complete ----------- issues -  HTTP/1.1 cached work but - not send updated record of user
 
 
 4) Complete ------- Multi-devices messages tracking system - @gemna.team - PR - 20

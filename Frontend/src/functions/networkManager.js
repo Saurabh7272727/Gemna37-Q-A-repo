@@ -1,6 +1,6 @@
 class NetworkManager {
 
-    constructor() {
+    constructor(state) {
         this.isOnline = navigator.onLine;
         this.listeners();
     }
@@ -13,11 +13,12 @@ class NetworkManager {
 
         window.addEventListener("offline", () => {
             this.isOnline = false;
+            this.state = false;
             console.log("Offline");
         });
     }
 
-    getStatus() {
+    get getStatus() {
         return this.isOnline;
     }
 }
