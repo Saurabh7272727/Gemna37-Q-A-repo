@@ -9,22 +9,25 @@ const UserProfileDetails = async (req, res) => {
             return res.status(422).json({ message: "unauthorized access con jwt_token", success: false });
         }
         req.userDetails.password = generateSecureOTP();
-        const updatedAt = req.userDetails?.updatedAt;
+        const updatedAt = req.updatedAt;
+        if (updatedAt) {
+            // Browser will be send on second time if api hit with (if-none-match) with time in milisecond - so compare if change
+            // return updated blog else return Not modifieds
+            const etag = updatedAt
+                ? `${new Date(updatedAt).getTime()}`
+                : `default`;
+            if (req.headers['if-none-match'] === etag) {
+                return res.status(304).end();
+            }
 
-        const etag = updatedAt
-            ? `${new Date(updatedAt).getTime()}`
-            : `default`;
-
-        // Browser will be send on second time if api hit with (if-none-match) with time in milisecond - so compare if change 
-        // return updated blog else return Not modifieds
-        if (req.headers['if-none-match'] === etag) {
-            return res.status(304).end();
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('ETag', etag);
+            return res.status(200).json({ message: "successfully verify", success: true, data: req.userDetails });
+        } else {
+            return res.status(404).json({ message: 'user deatils are not found', success: false });
         }
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('ETag', etag);
-        return res.status(200).json({ message: "successfully verify", success: true, data: req.userDetails });
+
     } catch (error) {
-        console.log(error);
         return res.status(422).json({ message: error, success: false });
     }
 }
@@ -72,7 +75,7 @@ const UplaodImageHandler = async (req, res) => {
             res.status(401).json({ message: `UnAuthorized access`, success: false });
             return;
         }
-        res.status(201).json({ message: `Successfully uploaded profile image`, success: true, imageURL: req.imageURL });
+        res.status(201).json({ message: `Successfully uploaded profile image`, status: 201, success: true, imageURL: req.imageURL });
     } catch (error) {
         await cloudinary.uploader.destroy(destroyID);
         res.status(501).json({ message: `Internal server error ${error.message}`, success: false });

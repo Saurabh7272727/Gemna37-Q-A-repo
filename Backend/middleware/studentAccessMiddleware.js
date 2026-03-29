@@ -2,6 +2,7 @@ import StudentModelMain from '../model/Students.js';
 import jwt from 'jsonwebtoken'
 import { decryptData } from '../components/crypto.js';
 import fs from 'fs/promises';
+import StudentModel from '../model/student.form.schema.js';
 
 const UserAccessMiddleware = async (req, res, next) => {
     try {
@@ -27,6 +28,8 @@ const UserAccessMiddleware = async (req, res, next) => {
 
         const findById = await StudentModelMain.findOne({ _id: id }).populate("ref_id");
 
+        const findgemidlog = await StudentModel.findById({ _id: findById.ref_id._id }, { _id: 0, updatedAt: 1 });
+
         if (!findById) {
             return res.status(422).json({ message: "unauthorized access findById", success: false });
         }
@@ -35,12 +38,14 @@ const UserAccessMiddleware = async (req, res, next) => {
 
         if (password === "gemna.ai_fork_()&^^^^") {
             req.userDetails = findById;
+            req.updatedAt = findgemidlog ? findgemidlog.updatedAt : null;
             next();
         } else {
             if (!checkPassword) {
                 return res.status(422).json({ message: "unauthorized access checkPassword", success: false });
             }
             req.userDetails = findById;
+            req.updatedAt = findgemidlog ? findgemidlog.updatedAt : null;
             if (checkPassword) {
                 next();
             }
@@ -57,6 +62,7 @@ const UserAccessMiddleware = async (req, res, next) => {
             console.log("45", error)
             return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
         }
+
         return res.status(422).json({ message: `server error Error-Code 422 ${error}`, success: false });
     }
 }
