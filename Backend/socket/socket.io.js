@@ -45,13 +45,12 @@ const connectWithSocket = (server) => {
             }
         });
 
+        // chating module ........
         io.on("connection", async (socket) => {
             console.log(`user info ${socket.id}`);
             tempStorage.set(socket.id, socket.user);
 
             await socket.join(`${socket?.user?.ref_id?.branch?.value}/${socket?.user?.ref_id?.year?.value}`)
-
-
             io.to(`${socket?.user?.ref_id?.branch?.value}/${socket?.user?.ref_id?.year?.value}`).emit(
                 'newUserAreConnect', { onlineUsers: [...tempStorage] }
             );
