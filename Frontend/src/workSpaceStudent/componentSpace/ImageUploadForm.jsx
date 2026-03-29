@@ -105,6 +105,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
                 dispatch(updateUserImage({ _id: User_ID, imageURL }))
                 setLoading(false);
             }
+
             setSelectedImage(null);
             setPreviewUrl('');
             if (fileInputRef.current) {
@@ -113,7 +114,7 @@ const ImageUploadForm = ({ dropDownBtn, setError }) => {
 
         } catch (error) {
             if (error) {
-                console.log(error);
+                console.log("image upload error ======================================>", error);
                 setLoading(false);
                 Cookies.set("ErrorMessage", "Please provide under 3.8MB size of image");
                 const messageW = new Message({ message: "image size are too long", success: false });

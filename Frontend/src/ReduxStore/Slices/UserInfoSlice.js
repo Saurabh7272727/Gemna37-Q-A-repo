@@ -21,6 +21,7 @@ const userinfoSlice = createSlice({
             }
         },
         UpdateUserInfo: (state, action) => {
+            delete state.user.ref_id.imageURL
             state.user.ref_id.imageURL = action.payload;
         },
         clearinfoSlice: (state, action) => {
