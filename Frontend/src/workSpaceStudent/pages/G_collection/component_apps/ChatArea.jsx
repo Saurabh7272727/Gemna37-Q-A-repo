@@ -113,7 +113,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         clearTimeout(bouncing.current);
 
         bouncing.current = setTimeout(() => {
-            socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email});
+            socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email });
             bouncing.current = null;
         }, 2000);
 
@@ -136,7 +136,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
 
         return () => {
             if (bouncing.current)
-                socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email});
+                socket.emit('user_typing_off', { socketId: state?.data?.socketId, email: currentStudent?.email });
             clearTimeout(bouncing.current);
             bouncing.current = null;
             socket.off('receive_user_typing', ({ mode }) => {
@@ -184,7 +184,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         staleTime: 1 * 60 * 1000
     });
 
-    const { isLoading, isError, error, data, isSuccess } = query;
+    const { isLoading, isError, error, data, isSuccess, fetchStatus } = query;
 
     useEffect(() => {
         if (state.data?.email) {
@@ -346,6 +346,15 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
             <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
                 <h1>Error - {String(error)}</h1><br />
                 <p>Note : Message not found</p>
+            </div>
+        )
+    }
+
+    if (fetchStatus === 'paused') {
+        return (
+            <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
+                <h1>Reason - SomeThing was wrong</h1><br />
+                <p>Please check your connection</p>
             </div>
         )
     }
