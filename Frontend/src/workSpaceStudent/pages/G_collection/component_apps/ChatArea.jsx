@@ -334,6 +334,15 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         };
     }, [currentStudent?.ref_id?._id, testID]);
 
+    if (fetchStatus === 'paused') {
+        return (
+            <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
+                <h1>Reason - SomeThing was wrong</h1><br />
+                <p>Please check your connection</p>
+            </div>
+        )
+    }
+
     if (isLoading) {
         return (
             <div className='w-full h-full flex justify-center items-center text-white'>Loading....</div>
@@ -350,14 +359,7 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
         )
     }
 
-    if (fetchStatus === 'paused') {
-        return (
-            <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
-                <h1>Reason - SomeThing was wrong</h1><br />
-                <p>Please check your connection</p>
-            </div>
-        )
-    }
+
 
     const showPopBoxDotted = () => {
         setPopBox(!popBox);

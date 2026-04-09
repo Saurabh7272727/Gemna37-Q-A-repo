@@ -96,6 +96,7 @@ const Header = ({ renderPart, tokenexpire }) => {
                                     dispatch(accessController(false));
                                     dispatch(clearTheList());
                                     dispatch(clearinfoSlice());
+                                    socket.disconnect();
                                     sessionStorage.clear();
                                     navi('/');
                                 }}>

@@ -119,22 +119,42 @@ class SocketSingleton {
         if (!group) {
             throw new Error("group are required");
         }
-        // Function - Return the user those are online and have same branch/year/course means 3 field have same values
+
         try {
             const users = await redis.smembers(`branch${group}:gemna`);
+
+            if (!users || users.length === 0) return [];
+            const pipeline = redis.pipeline();
+
+            /*
             const result = []
             for (let email of users) {
                 const user = await redis.hgetall(`online${group}:${email}`);
                 result.push(user);
             }
-            return result ? [...result] : [];
+            */
+
+            users.forEach((email) => {
+                pipeline.hgetall(`online${group}:${email}`);
+            });
+
+            // Execute pipeline
+            const response = await pipeline.exec();
+
+            const result = response
+                .map(([err, data]) => {
+                    if (err) return null;
+                    return data;
+                })
+                .filter((user) => user && Object.keys(user).length > 0);
+            return result;
+
         } catch (error) {
             return [];
         }
     }
 
     async getSocketID(email) {
-
         if (!email) {
             throw new Error("email are required to find all sockets id's connections");
         }
