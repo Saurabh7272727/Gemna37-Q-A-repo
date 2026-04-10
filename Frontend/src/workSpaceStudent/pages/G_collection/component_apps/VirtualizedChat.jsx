@@ -4,15 +4,15 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { motion } from "framer-motion";
 import CodeIcon from '@mui/icons-material/Code';
 import CodeShareCard from './ShowCodeInBlackBox.jsx';
+import SelectMessagePortal from '../../../componentSpace/SelectMessagePortal.jsx';
+import { SlidersHorizontal, Minimize } from 'lucide-react';
 
-
-const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBox }) => {
+const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBox, chatOpenedUserImageUrl, currentUserImageUrl }) => {
     const parentRef = useRef(null);
     const messagesEndRef = useRef();
     const [detailsCot, setDetailsCot] = useState({ id: "" });
     const safeMessages = Array.isArray(messages) ? messages : [];
     const [showcodeblack, ShowCodeInBlackBox] = useState({ show: false, message: "", id: "" });
-
 
 
     // implement virtualization window => to optimize message cost on node creation;
@@ -151,7 +151,7 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                                         </motion.div>
                                     </div> :
                                         <div
-                                            className={`h-auto max-w-[75%]  md:max-w-[60%] w-fit break-words overflow-wrap-anywhere rounded-2xl px-4 py-3 ${isCurrentUser
+                                            className={`max-h-auto max-w-[75%] mb-3  md:max-w-[60%] w-fit break-words overflow-wrap-anywhere rounded-2xl px-4 py-3 ${isCurrentUser
                                                 ? "bg-gray-800 text-white rounded-br-none"
                                                 : "bg-gray-600 text-white rounded-bl-none"
                                                 }`}
@@ -168,24 +168,29 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
                                                 })}
 
                                                 <span onClick={(e) => {
-                                                    console.log("message -id ", messages[virtualRow.index]._id);
                                                     e.stopPropagation();
                                                     setDetailsCot({ id: messages[virtualRow.index]?.ref_id?._id });
                                                 }}
                                                     className='pl-[40%] text-white font-bold cursor-pointer active:text-blue-600'>
-                                                    <HiOutlineDotsVertical />
+                                                    {
+                                                        detailsCot.id === safeMessages[virtualRow.index]?.ref_id?._id ? <Minimize className='text-blue-900' /> : <SlidersHorizontal className='text-[10px]' />
+                                                    }
+
                                                 </span>
                                             </div>
                                         </div>
                                 }
 
-
-                                {detailsCot.id === safeMessages[virtualRow.index]?.ref_id?._id &&
-                                    <div className={`${isCurrentUser ? "text-gray-500 bg-gray-800 rounded-br-none translate-x-[-30px] rounded-2xl md:pr-7" : "text-gray-400 bg-gray-800 rounded-br-none translate-x-[-30px] rounded-2xl md:pr-7"}`}>
-                                        <p className='text-xs pt-2'>type - {safeMessages[virtualRow.index]?.ref_id?.type}</p>
-                                        <p className='text-xs'>Message Date - {timeGetter(safeMessages[virtualRow.index]?.ref_id?.createdAt)}</p>
-                                        <p className='text-xs'>Week day - {WeekDay(safeMessages[virtualRow.index]?.ref_id?.createdAt)}</p>
-                                    </div>}
+                                {
+                                    detailsCot.id === safeMessages[virtualRow.index]?.ref_id?._id &&
+                                    <SelectMessagePortal safeMessages={safeMessages[virtualRow.index]?.ref_id}
+                                        isCurrentUser={isCurrentUser}
+                                        timeGetter={timeGetter}
+                                        WeekDay={WeekDay}
+                                        senderImageUrl={currentUserImageUrl}
+                                        receiverImageUrl={chatOpenedUserImageUrl}
+                                    />
+                                }
                             </div>
 
                         </>
@@ -198,5 +203,7 @@ const VirtualizedChat = ({ currentUserId, messages = [], showPopBoxDotted, popBo
         </div>
     );
 };
+
+
 
 export default VirtualizedChat;

@@ -161,17 +161,14 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                     setMessages(result?.data);
                     return result?.data;
                 } else {
-                    localStorage.clear();
                     navi(-1);
-                    throw new Error('Failed to fetch messages');
+                    throw new Error(`${result.message}`);
                 }
             } else {
                 setMessages([]);
-                console.log("147 chatArea - waiting....")
                 return [];
             }
         } catch (error) {
-            console.log("152 chatArea  ", error)
             navi('/error_page');
         }
     }
@@ -351,9 +348,10 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
 
 
     if (isError) {
+        // console.log(error.message)
         return (
             <div className='w-full h-full flex justify-center flex-col-reverse items-center text-white'>
-                <h1>Error - {String(error)}</h1><br />
+                <h1>Error - {String(error.message)}</h1><br />
                 <p>Note : Message not found</p>
             </div>
         )
@@ -461,6 +459,8 @@ const ChatArea = ({ idByProps = false, renderPart }) => {
                                 messages={messages}
                                 showPopBoxDotted={showPopBoxDotted}
                                 popBox={popBox}
+                                chatOpenedUserImageUrl={state?.data?.imageURL}
+                                currentUserImageUrl={currentStudent?.ref_id?.imageURL}
                             />
                         </div>
 
