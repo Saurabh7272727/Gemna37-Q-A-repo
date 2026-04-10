@@ -77,7 +77,6 @@ const emailSender = async ({ message, reason, title, email }) => {
         return true;
 
     } catch (error) {
-        console.error("Email sending failed:", error);
         return false;
     }
 };

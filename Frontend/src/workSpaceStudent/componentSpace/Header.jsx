@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import { useEffect } from 'react';
 import socket from '../../socket_client/socket_client.js';
+import { Bell, BellPlus } from 'lucide-react';
 
 const Header = ({ renderPart, tokenexpire }) => {
     const UserInfomartion = useSelector(state => state?.userinfoSlice?.user);
@@ -45,18 +46,29 @@ const Header = ({ renderPart, tokenexpire }) => {
             <div className='w-screen h-[60px] bg-gray-900 fixed top-0 flex justify-center
          gap-x-20 items-center z-30
         '>
+
                 <nav className='md:w-[70%] w-[100%] md:h-[80%] h-full bg-gray-900 text-white md:rounded-lg
             flex md:justify-around items-center justify-between md:px-0 px-4
             '>
+
                     <h1 onClick={() => navi('/landing')} className='text-white cursor-pointer font-medium bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg'>Gemna.ai</h1>
                     {tokenexpire && <div className="inline-flex items-center md:px-3 px-1 py-1 rounded-full bg-gradient-to-r from-red-500 to-red-600 shadow-sm">
                         <div className="w-1.5 h-1.5 bg-white rounded-full mr-2 animate-pulse"></div>
                         <span className="text-xs font-semibold text-white tracking-wide">TOKEN EXPIRE - GAS</span>
                     </div>}
-                    <button onClick={() => setMobileMenuOpen(true)}><AiOutlineBars className='w-[60px] h-[30px] text-white cursor-pointer' /></button>
+
+                    <div className='flex justify-center items-center space-x-3'>
+                        <div>
+                            <BellPlus className='text-white bg-gray-800 cursor-pointer text-2xl rounded-full ring-1 ring-blue-500s' />
+                        </div>
+                        <button onClick={() => setMobileMenuOpen(true)}>
+                            <AiOutlineBars className='w-[60px] h-[30px] text-white cursor-pointer' />
+                        </button>
+                    </div>
                 </nav>
                 <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="">
                     <div className="fixed inset-0 z-50" />
+
                     <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
                         <div className="flex items-center justify-between">
                             <a href="#" className="-m-1.5 p-1.5">

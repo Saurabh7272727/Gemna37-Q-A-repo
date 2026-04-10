@@ -3,7 +3,7 @@ import emailSender from "../../Email/userNotifyEmailSchema.js";
 import admin from "../../NotificationSystem/firebase.js";
 
 const NotificationFunction = inngest.createFunction(
-    { id: "notification_sender", retries: 1 },
+    { id: "notification_sender", retries: 1, idempotency: 'event.data.email' },
     { event: "phase_1_notify" },
     async ({ event, step }) => {
         const { FCM_TOKEN, userName, messageTitle, type, email } = event.data;
@@ -43,7 +43,6 @@ const NotificationFunction = inngest.createFunction(
                     await admin.messaging().send(message);
                     return true;
                 } catch (error) {
-                    console.error("FCM error:", error);
                     return false;
                 }
             }

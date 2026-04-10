@@ -28,3 +28,15 @@ for modular code base
 
 
 4) Complete ------- Multi-devices messages tracking system - @gemna.team - PR - 20
+
+
+
+New feature introduction -------------------------- 10/04/26
+
+1) Add Idempotency on remainder to send when user are no enabled the notification setting - 
+   old - send email on every messages , that's happen with any user(receiver) 
+   updated - only send email on 24 hours periode in onces - so reduce cost per send sending email cost, and memory process, and queue members
+
+
+2) @gemna.team add new feature that user can delete old messages and edit the message but limiation with edit have to edit only 2 hours old messages according to sending timestamp --------- policy of the gemna auth service(GAS);
+
