@@ -4,9 +4,8 @@ import connectionModel from '../model/connection.model.js'
 
 
 const fetchActiveUsers = async (req, res) => {
-    // console.log(req.userDetails);
     try {
-        if (req?.userDetails) {
+        if (Object.keys(req?.userDetails).length > 0) {
             const findAllActiveUser = await StudentModel.find({
                 "course.value": `${req.userDetails.ref_id.course.value}`,
                 "branch.value": `${req.userDetails.ref_id.branch.value}`,
@@ -15,13 +14,14 @@ const fetchActiveUsers = async (req, res) => {
             }).sort({ rollNumber: 1 });
 
             if (findAllActiveUser) {
-                return res.status(200).json({ message: "find active students", success: true, data: [...findAllActiveUser] })
+                return res.status(200).json({ message: "find active students", success: true, data: [...findAllActiveUser], status: 200 })
             }
         }
+        return res.status(204).json({ message: "No content found related with you", success: false, status: 204 });
     } catch (error) {
         if (error) {
             console.log("Error on controller 8 ", error);
-            return res.status(401).json({ message: "Internal server Error log- 22", success: false });
+            return res.status(401).json({ message: "Internal server Error log- 22", success: false, status: 401 });
         }
     }
 
@@ -29,8 +29,8 @@ const fetchActiveUsers = async (req, res) => {
 
 
 const fetchAllConnections = async (req, res) => {
-    if (!req?.userDetails?.email) {
-        return res.status(402).json({ message: "unauthorized access", success: false });
+    if (!req?.userDetails?.ref_id.email) {
+        return res.status(402).json({ message: "unauthorized access", success: false, status: 402 });
     }
 
 
@@ -46,33 +46,38 @@ const fetchAllConnections = async (req, res) => {
             type: 'direct'
         }).sort({ updatedAt: -1 }).populate('member_one').populate('member_two');
 
-        return res.status(200).json({ message: "get are successfully", success: true, data: findAllconnections })
+        return res.status(200).json({ message: "get are successfully", success: true, data: findAllconnections, status: 200 })
     } catch (error) {
-        return res.status(402).json({ message: `Data fetching Error - ${error.message}`, success: false });
+        return res.status(402).json({ message: `Data fetching Error - ${error.message}`, success: false, status: 402 });
     }
 
 }
 
 const fetchAllMessage = async (req, res) => {
-    if (!req?.userDetails?.email) {
-        return res.status(402).json({ message: "unauthorized access", success: false });
-    }
 
     const { message, message2 } = req.params;
+    if (!req?.userDetails?.ref_id.email) {
+        return res.status(402).json({ message: "unauthorized access, user are not found", success: false, status: 402 });
+    }
+
     try {
+        const currentUserIds = [
+            String(req?.userDetails?.ref_id._id || ''),
+        ];
+        if (!currentUserIds.includes(String(message)) && !currentUserIds.includes(String(message2))) {
+            return res.status(402).json({ message: "unauthorized access", success: false, status: 402 });
+        }
+
         // new code
         const findAllconnections = await connectionModel.findOne({
             $or: [
-                { id: `${message}/${message2}` },
-                { id: `${message2}/${message}` }
+                { id: `${currentUserIds[0]}/${message2}` },
+                { id: `${message2}/${currentUserIds[0]}` }
             ]
         }).populate('messages.ref_id');
-
-        // fix - this code is bug & not relay
-        // const findAllconnections = await connectionModel.findOne({ id: `${message}/${message2}` }).populate('messages.ref_id');
-        return res.status(200).json({ message: "get are successfully", success: true, data: findAllconnections?.messages, id: findAllconnections?._id })
+        return res.status(200).json({ message: "get are successfully", success: true, data: findAllconnections?.messages, id: findAllconnections?._id, status: 200 })
     } catch (error) {
-        return res.status(402).json({ message: `Data fetching Error - ${error.message}`, success: false });
+        return res.status(402).json({ message: `Data fetching Error - ${error.message}`, success: false, status: 402 });
     }
 }
 

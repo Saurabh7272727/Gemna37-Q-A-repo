@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 import generatePdfBuffer from '../pdf.generation.js';
+import { env } from '../../config/env.js';
+import { logger } from '../../observability/logger.js';
 
 const emailSender = async (email, messages, OTP, person) => {
     try {
@@ -44,15 +46,15 @@ const emailSender = async (email, messages, OTP, person) => {
             port: 465,
             secure: true,
             auth: {
-                user: process.env.NAME,
-                pass: process.env.PASSWORD
+                user: env.email.name,
+                pass: env.email.password
             },
         };
 
         const transport = nodemailer.createTransport(config);
 
         const message = {
-            from: process.env.NAME,
+            from: env.email.name,
             to: email,
             subject: `Gemna.AI Email Service(GES) ${messages}`,
             html: emailBody,
@@ -69,6 +71,7 @@ const emailSender = async (email, messages, OTP, person) => {
 
         return person;
     } catch (error) {
+        logger.error('Primary email send failed', { message: error.message, email });
         return false;
     }
 

@@ -3,6 +3,7 @@ import connectionModel from '../../model/connection.model.js';
 import messagemodel from '../../model/message.model.js';
 import { inngest } from '../Inngest/client.js';
 import StudentModelMain from '../../model/Students.js';
+import { logger } from '../../observability/logger.js';
 
 
 const acceptOfflineMessages = async (data) => {
@@ -87,7 +88,7 @@ const acceptOfflineMessages = async (data) => {
             return { notify: "successfully send your message first time", index, message: savedataMessage, distination: createNewConnection?.id, senderId, receiverId };
         }
     } catch (error) {
-        console.log("Error on offlinefeature file ===============>", error);
+        logger.error('Offline notification flow failed', { message: error.message });
         throw new Error(error.message);
     }
 }

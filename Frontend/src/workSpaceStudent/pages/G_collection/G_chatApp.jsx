@@ -288,7 +288,7 @@ const G_chatApp = ({ renderPart }) => {
                                         <PulseLoadingSpinner /><br />
                                         <h2 className="text-white font-medium flex justify-center items-center shadow-xls gap-2 mx-auto">
                                             Geman.ai feels to connect<AiFillFire className="text-red-500" />
-                                            <p>v-0.0.01</p>
+                                            <p>v-2.0.1</p>
                                         </h2>
                                         <p className='text-white font-medium text-sm flex justify-center items-center shadow-xls gap-2 mx-auto'>start chatting with friends</p>
                                     </div>

@@ -1,15 +1,12 @@
 import { v2 as cloudinary } from 'cloudinary';
-//CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@dqbjfmyce
-import dotenv from 'dotenv';
-dotenv.config();
+import { env } from '../config/env.js';
+import { logger } from '../observability/logger.js';
 
 const cloudinaryUplaod = async (image_path) => {
-
-    // Configuration
     cloudinary.config({
-        cloud_name: process.env.CLOUD_NAME,
-        api_key: process.env.CLOUD_API_KEY,
-        api_secret: process.env.CLOUD_SECRET_KEY
+        cloud_name: env.cloudinary.cloudName,
+        api_key: env.cloudinary.apiKey,
+        api_secret: env.cloudinary.apiSecret
     });
 
     const options = {
@@ -23,6 +20,7 @@ const cloudinaryUplaod = async (image_path) => {
         const { url, public_id } = result;
         return { message: "upload", status: 202, success: true, cloudinary_url: url, public_id };
     } catch (error) {
+        logger.error('Cloudinary upload failed', { message: error.message, imagePath: image_path });
         return { message: "something was wrong", status: 505, success: false };
     }
 

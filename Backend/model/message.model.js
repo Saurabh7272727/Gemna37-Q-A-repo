@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 
-const messageschema = new Schema(new mongoose.Schema({
+const messageschema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
@@ -33,7 +33,7 @@ const messageschema = new Schema(new mongoose.Schema({
         enum: [true, false],
         default: false,
     }
-}, { timestamps: true }));
+}, { timestamps: true });
 
 const messagemodel = mongoose.model("messagemodel", messageschema);
 

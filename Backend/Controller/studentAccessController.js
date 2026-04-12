@@ -4,11 +4,13 @@ import StudentModel from '../model/student.form.schema.js';
 import { v2 as cloudinary } from 'cloudinary';
 const UserProfileDetails = async (req, res) => {
     try {
+        if (!req.headers.authorization) {
+            return res.status(422).json({ message: "authorization token are missing, add authorization header", success: false });
+        }
         const jwt_token = req.headers.authorization.split(" ")[1];
         if (!jwt_token) {
             return res.status(422).json({ message: "unauthorized access con jwt_token", success: false });
         }
-        req.userDetails.password = generateSecureOTP();
         const updatedAt = req.updatedAt;
         if (updatedAt) {
             // Browser will be send on second time if api hit with (if-none-match) with time in milisecond - so compare if change
@@ -75,6 +77,7 @@ const UplaodImageHandler = async (req, res) => {
             res.status(401).json({ message: `UnAuthorized access`, success: false });
             return;
         }
+
         res.status(201).json({ message: `Successfully uploaded profile image`, status: 201, success: true, imageURL: req.imageURL });
     } catch (error) {
         await cloudinary.uploader.destroy(destroyID);

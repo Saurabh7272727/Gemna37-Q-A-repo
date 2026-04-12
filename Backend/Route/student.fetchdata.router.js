@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import { fetchActiveUsers, fetchAllConnections, fetchAllMessage } from '../Controller/student.fetchdata.controller.js';
 import { UserAccessMiddleware } from '../middleware/studentAccessMiddleware.js';
 import StudentModelMain from '../model/Students.js';
+import { logger } from '../observability/logger.js';
 const router = new Router();
 
 
@@ -21,12 +22,21 @@ router.post('/connection/notification/update/token', UserAccessMiddleware, async
     }
 
     const { userId, token } = bodyData;
+    const authenticatedUserId = String(req.userDetails?._id || '');
 
     if (!userId || !token) {
         return res.status(401).json({
             message: "payload are missing (userId or token)",
             success: false,
             status: 404
+        });
+    }
+
+    if (String(userId) !== authenticatedUserId) {
+        return res.status(403).json({
+            message: 'You can update the notification token only for the authenticated account',
+            success: false,
+            status: 403
         });
     }
 
@@ -56,8 +66,8 @@ router.post('/connection/notification/update/token', UserAccessMiddleware, async
 
         throw new Error('somrthing was wrong');
     } catch (error) {
-        console.log("error ==========================>", error);
-        return res.status(505).json({
+        logger.error('Failed to update notification token', { message: error.message, userId });
+        return res.status(500).json({
             message: error.message || "enternal server error",
             success: false,
             status: 505
@@ -79,6 +89,15 @@ router.post('/connection/notification/disabled', UserAccessMiddleware, async (re
 
     try {
         const { userId } = bodyData;
+        const authenticatedUserId = String(req.userDetails?._id || '');
+
+        if (!userId || String(userId) !== authenticatedUserId) {
+            return res.status(403).json({
+                message: 'You can disable notifications only for the authenticated account',
+                success: false,
+                status: 403
+            });
+        }
 
         const user = await StudentModelMain.findByIdAndUpdate(
             userId,

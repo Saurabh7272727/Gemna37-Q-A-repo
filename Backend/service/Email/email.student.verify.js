@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
+import { env } from '../../config/env.js';
+import { logger } from '../../observability/logger.js';
 
 const emailSender = async (email, otp, message) => {
     try {
@@ -36,15 +38,15 @@ const emailSender = async (email, otp, message) => {
             port: 465,
             secure: true,
             auth: {
-                user: process.env.NAME,
-                pass: process.env.PASSWORD,
+                user: env.email.name,
+                pass: env.email.password,
             },
         };
 
         const transport = nodemailer.createTransport(config);
 
         const messageObj = {
-            from: process.env.NAME,
+            from: env.email.name,
             to: email,
             subject: `Gemna.AI OTP Verification - ${otp}`,
             html: emailBody,
@@ -54,7 +56,7 @@ const emailSender = async (email, otp, message) => {
 
         return true;
     } catch (error) {
-        console.error("Email sending failed:", error);
+        logger.error('OTP email sending failed', { message: error.message, email });
         return false;
     }
 };

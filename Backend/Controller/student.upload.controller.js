@@ -3,60 +3,70 @@ import cloudinaryUplaod from '../components/cloudinary.js';
 import fs from 'fs/promises';
 import { stdentResponseSheet } from '../ResponseStructure/studentResponseSheet.js';
 import { ValidDateOCRData } from '../components/ValidDateOCRData.js';
-import emailSender from '../service/Email/email.genration.js';
 import emailSenderOfOTP from '../service/Email/email.student.verify.js';
 import generateSecureOTP from '../components/uniqueNumberGen.js';
 import StudentModel from '../model/student.form.schema.js';
 import StudentOtpLog from '../model/otp.student.schema.js';
 import StudentModelMain from '../model/Students.js';
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
 import { inngest } from './../service/Inngest/client.js';
+import { env } from '../config/env.js';
+import { logger } from '../observability/logger.js';
 
 
-dotenv.config();
 const studentUplaodController = async (req, res) => {
-    const { time, image, image_format, image_size } = req.body;
-
-    const { url } = req;
-    const abortController = new AbortController();
-
-    req.on('close', () => {
-        console.log('Client disconnected');
-        abortController.abort(); // Cancel async operation
-    });
-    if (abortController.signal.aborted) {
-        return res.end();
-    }
-    const result = await uploadImageINGemna(req.body);
-
-    if (!result.success) {
-        return res.status(result.status).json({ url, ...result });
-    }
-
-    const cloud = await cloudinaryUplaod(result.upload_path);
-    const { message, status, success, cloudinary_url, public_id } = cloud;
-
     try {
-        if (success) {
-            return res.status(result.status).json({ url, ...result, cloudinary_url, public_id });
-        } else {
-            fs.unlink(result.upload_path);
-            const response = stdentResponseSheet.studentResponse(
-                //message, status, status_message, success, redirect_path
-                "Error: upload again",
-                422, null, false, '/gemna.error'
-            )
-            await cloudinary.uploader.destroy(public_id);
-            return res.status(response.status).json(response);
+        const { time, image, image_format, image_size } = req.body;
+
+        const { url } = req;
+        const abortController = new AbortController();
+
+        req.on('close', () => {
+            logger.warn('Client disconnected during student image upload');
+            abortController.abort(); // cancel ongoing async task
+        });
+
+
+
+        const result = await uploadImageINGemna(req.body);
+
+        if (abortController.signal.aborted) {
+            return; // stop processing
         }
-    } catch (error) {
-        await cloudinary.uploader.destroy(public_id);
+        if (!result.success) {
+            return res.status(result.status).json({ url, ...result });
+        }
+
+        const cloud = await cloudinaryUplaod(result.upload_path);
+        const { message, status, success, cloudinary_url, public_id } = cloud;
+        const uploadFailureResponse = stdentResponseSheet.studentResponse(
+            "Error: upload again",
+            422, null, false, '/gemna.error'
+        );
+
+        try {
+            if (success) {
+                return res.status(result.status).json({ url, ...result, cloudinary_url, public_id });
+            } else {
+                await cloudinary.uploader.destroy(public_id);
+                return res.status(uploadFailureResponse.status).json(uploadFailureResponse);
+            }
+        } catch (error) {
+            await cloudinary.uploader.destroy(public_id);
+            return res.status(uploadFailureResponse.status).json(uploadFailureResponse);
+        } finally {
+            await fs.unlink(result.upload_path).catch(() => null);
+        }
+    } catch (err) {
+        const response = stdentResponseSheet.studentResponse(
+            //message, status, status_message, success, redirect_path
+            `${err.message || 'Internal server error, uploading error'}`,
+            422, null, false, '/gemna.error'
+        )
         return res.status(response.status).json(response);
-    } finally {
-        fs.unlink(result.upload_path);
     }
+
 
 }
 
@@ -74,7 +84,7 @@ const gemidUploadedImageProcess = async (req, res) => {
 
     const ID = setTimeout(async () => {
         if (!res.headersSent) {
-            console.log("abort the mission due to timeout");
+            logger.warn('GEMID OCR process timed out');
             abort.abort();
             const result = stdentResponseSheet.studentResponse(
                 // message, status, status_message, success, redirect_path
@@ -122,8 +132,11 @@ const gemidUploadedImageProcess = async (req, res) => {
     } catch (error) {
 
         const d = await cloudinary.uploader.destroy(req?.body.public_id);
-        console.log(d, req?.body.cloudinary_url);
-        console.log(error)
+        logger.error('GEMID OCR processing failed', {
+            message: error.message,
+            cloudinaryUrl: req?.body.cloudinary_url,
+            destroyResult: d,
+        });
         return res.status(505).json(stdentResponseSheet.studentResponse(
             // message, status, status_message, success, redirect_path
             "GEMID are not found (catch)", 500, null, false, '/geman.error'
@@ -141,12 +154,11 @@ const registerationGEMID = async (req, res) => {
 
     const abortController = new AbortController();
     req.on('close', () => {
-        console.log('Client disconnected');
+        logger.warn('Client disconnected during registration');
         abortController.abort(); // Cancel async operation
     });
-
     if (abortController.signal.aborted) {
-        return res.end();
+        return; // stop processing
     }
 
     try {
@@ -168,7 +180,7 @@ const registerationGEMID = async (req, res) => {
             submitLastModel.createdAt ==
             submitLastModel.updatedAt;
 
-        console.log("Find Error ====================", isNew);
+        logger.info('Student registration record stored', { isNew, studentId: String(submitLastModel._id) });
 
         const otp = generateSecureOTP();
 
@@ -207,7 +219,7 @@ const registerationGEMID = async (req, res) => {
         return res.status(500).json({
             message: error.message,
             success: false,
-            status: "SERVER_ERROR",
+            status: 500,
         });
     }
 
@@ -216,10 +228,10 @@ const registerationGEMID = async (req, res) => {
 const getAllGemIdLog = async (req, res) => {
     try {
         const result = await StudentModel.find();
-        res.status(200).json({ message: "All student list", success: true, data: result });
+        res.status(200).json({ message: "All student list", success: true, data: result, status: 200 });
         return;
     } catch (error) {
-        res.status(200).json({ message: error.message, success: false });
+        res.status(500).json({ message: error.message, success: false, status: 500 });
     }
 
 }
@@ -227,43 +239,47 @@ const getAllGemIdLog = async (req, res) => {
 
 const verifyEmailAddress = async (req, res) => {
     const { email } = req.body;
-    if (!email.endsWith("@gmail.com")) {
-        res.status(501).json({ message: "email are wrong format, check again", success: false });
+
+    if (!email || !email.endsWith("@gmail.com") || email.length > 60) {
+        res.status(501).json({ message: "email are wrong format, check again", success: false, status: 501 });
         return;
     }
     try {
         const findEmailInOtpSchema = await StudentOtpLog.findOne({ email: email });
         if (findEmailInOtpSchema) {
-            res.cookie("id", findEmailInOtpSchema._id);
-            res.status(202).json({ message: "Already otp are send on email", success: true, token: { id: findEmailInOtpSchema._id, email } });
+            res.cookie("id", findEmailInOtpSchema._id, {
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: env.isProduction,
+            });
+            res.status(202).json({ message: "Already otp are send on email", success: true, token: { id: findEmailInOtpSchema._id, email }, status: 202 });
             return;
         }
     } catch (error) {
-        res.status(404).json({ message: "something was wrong in catch", success: false });
+        res.status(404).json({ message: "something was wrong in catch", success: false, status: 404 });
         return;
     }
 
     try {
         const OTP = generateSecureOTP();
-        const returnData = await emailSenderOfOTP(email, "Gemna.ai email verification OTP", OTP);
+        const returnData = await emailSenderOfOTP(email, OTP, "Gemna.ai email verification OTP");
         if (returnData === false) {
-            res.status(501).json({ message: "email service are not work", success: false });
+            res.status(501).json({ message: "email service are not work", success: false, status: 501 });
             return;
         }
         const saveDataBase = new StudentOtpLog({ OTP, email });
         const data_id = await saveDataBase.save();
-        res.cookie("id", data_id);
-        res.status(202).json({ message: "send otp on email", success: true, token: { id: data_id._id, email } });
+        res.cookie("id", data_id, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: env.isProduction,
+        });
+        res.status(202).json({ message: "send otp on email", success: true, token: { id: data_id._id, email }, status: 202 });
         return;
     } catch (error) {
-        res.status(501).json({ message: "something was wrong in second catch", success: false });
+        res.status(501).json({ message: "something was wrong in second catch", success: false, status: 501 });
         return;
     }
-
-
-
-
-
 }
 
 const OtpVerificationHandler = async (req, res) => {
@@ -273,23 +289,23 @@ const OtpVerificationHandler = async (req, res) => {
 
 
         if (!password || !OTP || !email || !id) {
-            res.status(404).json({ message: "invalid request", success: false });
+            res.status(404).json({ message: "invalid request", success: false, status: 404 });
             return;
         }
         if (OTP.length !== 6) {
-            res.status(404).json({ message: "invalid request", success: false });
+            res.status(404).json({ message: "invalid request", success: false, status: 404 });
             return;
         }
 
         const checkOTP = await StudentOtpLog.findOne({ OTP: OTP, _id: id });
         if (!checkOTP) {
-            res.status(404).json({ message: "Otp are not match", success: false });
+            res.status(404).json({ message: "Otp are not match", success: false, status: 404 });
             return;
         }
 
         const findStudent = await StudentModel.findOne({ email: email });
         if (!findStudent) {
-            res.status(404).json({ message: "invalid user request", success: false });
+            res.status(404).json({ message: "invalid user request", success: false, status: 404 });
             return;
         }
 
@@ -312,15 +328,15 @@ const OtpVerificationHandler = async (req, res) => {
                 password: password,
                 name: `${findStudent.firstName} ${findStudent.lastName}`,
                 imageURL: findStudent?.imageURL
-            }
+            }, status: 202
         })
     } catch (error) {
-        console.log(error.message.slice(0, 6));
+        logger.warn('OTP verification failed', { message: error.message });
         if (error.message.slice(0, 6) === 'E11000') {
-            res.status(404).json({ message: "Your account is already set up! Please sign in using your email and password.", success: false });
+            res.status(404).json({ message: "Your account is already set up! Please sign in using your email and password.", success: false, status: 404 });
             return;
         }
-        res.status(404).json({ message: "Something was wrong internally", success: false });
+        res.status(404).json({ message: "Something was wrong internally", success: false, status: 404 });
         return;
     }
 }
@@ -333,54 +349,61 @@ const LoginHandler = async (req, res) => {
             const findUserInStudentMain = await StudentModelMain.findOne({ email: email, _id: id }).populate("ref_id");
 
             if (!findUserInStudentMain) {
-                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
+                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false, status: 404 })
             }
 
             const checkPassword = await findUserInStudentMain.comparePassword(password);
 
             if (!checkPassword) {
-                return res.status(404).json({ message: "check your email or password are wrong", success: false })
+                return res.status(404).json({ message: "check your email or password are wrong", success: false, status: 404 })
             }
 
-            const jwt_token = jwt.sign({ id: findUserInStudentMain._id, password: password }, process.env.JWT_SECURE, { expiresIn: "4h" });
+            const jwt_token = jwt.sign(
+                { id: findUserInStudentMain._id, credentialHash: findUserInStudentMain.password },
+                env.jwtSecret,
+                { expiresIn: "4h" }
+            );
 
             if (!jwt_token) {
                 throw new Error("jsonwebtoken are not response");
             }
 
             return res.status(202).json({
-                message: "successfully login", success: true, jwt_token: jwt_token
+                message: "successfully login", success: true, jwt_token: jwt_token, status: 202
             });
 
         } else if (email && password) {
             let findUserInStudentMain = await StudentModelMain.findOne({ email: email }).maxTimeMS(30000);
 
             if (!findUserInStudentMain) {
-                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false })
+                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false, status: 404 })
             }
 
             findUserInStudentMain = await StudentModelMain.findOne({ email: email }).populate("ref_id");
 
             const checkPassword = await findUserInStudentMain.comparePassword(password);
-            console.log(checkPassword);
             if (!checkPassword) {
-                return res.status(404).json({ message: "check your email or password are wrong", success: false })
+                return res.status(404).json({ message: "check your email or password are wrong", success: false, status: 404 })
             }
 
-            const jwt_token = jwt.sign({ id: findUserInStudentMain._id, password: password }, process.env.JWT_SECURE, { expiresIn: "2h" });
+            const jwt_token = jwt.sign(
+                { id: findUserInStudentMain._id, credentialHash: findUserInStudentMain.password },
+                env.jwtSecret,
+                { expiresIn: "2h" }
+            );
             if (!jwt_token) {
                 throw new Error("jsonwebtoken are not response");
             }
 
             return res.status(202).json({
-                message: "successfully login", success: true, jwt_token: jwt_token
+                message: "successfully login", success: true, jwt_token: jwt_token, status: 202
             });
 
         }
 
-        return res.status(403).json({ message: "Server are not responed", success: false });
+        return res.status(403).json({ message: "Server are not responed", success: false, status: 403 });
     } catch (error) {
-        return res.status(404).json({ message: `Internal server error : ${error.message}`, success: false })
+        return res.status(404).json({ message: `Internal server error : ${error.message}`, success: false, status: 404 })
     }
 }
 

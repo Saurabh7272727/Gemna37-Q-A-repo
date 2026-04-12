@@ -4,6 +4,8 @@ import connectionModel from '../model/connection.model.js';
 import messagemodel from '../model/message.model.js';
 import { acceptOfflineMessages } from '../service/NotificationSystem/offlineFeature.js';
 import { SocketSingleton } from '../module/socket.signleton.js'
+import { env } from '../config/env.js';
+import { logger } from '../observability/logger.js';
 
 
 const connectWithSocket = (server) => {
@@ -11,7 +13,7 @@ const connectWithSocket = (server) => {
         const io = new Server(server, {
             cors: {
                 origin: [
-                    "http://localhost:5173", process.env.FRONTEND_URL
+                    "http://localhost:5173", env.frontendUrl
                 ],
                 methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
                 credentials: true,
@@ -30,15 +32,15 @@ const connectWithSocket = (server) => {
             const token = socket.handshake.auth.token;
             if (!token || token == null || token == undefined) {
                 const err = new Error("User are not valid");
-                next(err);
+                return next(err);
             }
             const verify = await AuthBYSocket(token);
             if (verify.success) {
                 socket.user = verify.findUser;
-                next()
+                return next()
             } else {
                 const err = new Error("User are not valid");
-                next(err);
+                return next(err);
             }
         });
 
@@ -69,7 +71,17 @@ const connectWithSocket = (server) => {
 
             socket.on('socket_send_payload', async (data, callback) => {
                 const { senderId, receiverId, message, index, socketId, type, r_email, language } = data;
-                const findKey = await socketSingleton.getSocketID(r_email.trim());
+                const authenticatedSenderId = String(socket.user?.ref_id?._id || '');
+
+                if (!senderId || String(senderId) !== authenticatedSenderId) {
+                    logger.warn('Blocked socket message with mismatched sender', {
+                        senderId,
+                        authenticatedSenderId,
+                    });
+                    return callback({ notify: 'sender validation failed' });
+                }
+
+                const findKey = await socketSingleton.getSocketID(r_email?.trim());
                 if (findKey.length > 0 && Array.isArray(findKey)) {
                     const findConnectionfirst = await connectionModel.findOne({ id: `${senderId}/${receiverId}` });
                     const findConnectionSecond = await connectionModel.findOne({ id: `${receiverId}/${senderId}` });
@@ -157,6 +169,7 @@ const connectWithSocket = (server) => {
                     const response = await acceptOfflineMessages(data);
                     callback(response);
                 } catch (error) {
+                    logger.error('Offline socket message handler failed', { message: error.message });
                     callback({ notify: "something was wrong , don't send any message" });
                 }
             })
@@ -170,6 +183,11 @@ const connectWithSocket = (server) => {
             })
 
             socket.on('disconnect', async (reason) => {
+                logger.info('Socket disconnected', {
+                    socketId: socket.id,
+                    reason,
+                    userId: String(socket?.user?.ref_id?._id || ''),
+                });
                 const permission_to_delete = await socketSingleton.deleteUser(socket?.user?.ref_id.email, socket.id, socket?.user)
                 if (permission_to_delete) {
                     const localdata = await socketSingleton.getAllOnlineUser(`${socket.user?.ref_id.course.value}${socket.user?.ref_id.branch.value}${socket.user?.ref_id.year.value}`);
@@ -182,6 +200,7 @@ const connectWithSocket = (server) => {
 
         return io;
     } catch (error) {
+        logger.error('Socket server bootstrap failed', { message: error.message });
         throw new Error(`Error-socket.io  ${error}`)
     }
 }
