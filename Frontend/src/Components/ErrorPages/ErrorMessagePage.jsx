@@ -1,8 +1,12 @@
 // src/components/MessageAlert.jsx
 import React from "react";
 import { FaCheckCircle, FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 const MessageAlert = ({ type = "info", message = "Something happened!", onClose }) => {
+
+    const { messageServer } = useParams();
+
     const getStyles = () => {
         switch (type) {
             case "success":
@@ -32,7 +36,7 @@ const MessageAlert = ({ type = "info", message = "Something happened!", onClose 
     return (
         <div className={`flex transform translate-y-[20px] mb-10 items-center gap-3 p-4 md:mt-10 mt-[100px] mx-1 border rounded-xl shadow-sm ${getStyles()} max-w-md mx-auto`}>
             {getIcon()}
-            <p className="flex-1 font-medium">{message}</p>
+            <p className="flex-1 font-medium">{messageServer ? messageServer : message}</p>
             {
                 onClose && <div className={`${getStyles()}`}>Warning</div>
             }

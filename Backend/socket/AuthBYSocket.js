@@ -2,15 +2,16 @@
 import { decryptData } from '../components/crypto.js';
 import jwt from 'jsonwebtoken';
 import StudentModelMain from '../model/Students.js';
+import { env } from '../config/env.js';
 const AuthBYSocket = async (token) => {
     try {
         const token_by_de = decryptData(token);
 
         const { role, jwt_token } = token_by_de;
-        const arr = ['student'];
+        const arr = ['student', 'teacher'];
 
         if (arr.includes(role)) {
-            const check = jwt.verify(jwt_token, process.env.JWT_SECURE);
+            const check = jwt.verify(jwt_token, env.jwtSecret);
             if (check) {
                 const findUser = await StudentModelMain.findOne({ _id: check.id }).populate("ref_id");
                 if (findUser) {

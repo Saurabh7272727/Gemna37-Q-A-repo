@@ -18,6 +18,7 @@ import WorkSpace from './workSpaceStudent/WorkSpace.jsx';
 import { decryptData } from './Auth/Encryption/jsondataEncryption.js';
 const StudentProfilePage = lazy(() => import('./workSpaceStudent/pages/StudentProfilePage.jsx'));
 const GTools = lazy(() => import('./workSpaceStudent/pages/G_ToolsPage.jsx'))
+import MessageAlert from './Components/ErrorPages/ErrorMessagePage.jsx'
 
 // Routes handler : saurabh sharma
 
@@ -278,7 +279,7 @@ const App = () => {
 
           <Route path='/auth/google/verification' element={<GoogleStyleAuthPage />} />
           <Route path='/success/google/*' element={<Login />} />
-          <Route path='/error/google/auth' element={<div className='pt-[100px]'>Verification failed -- Email not fouund</div>} />
+          <Route path='/error/google/auth/:messageServer' element={<MessageAlert type={'warning'} onClose={true} />} />
           <Route path='*' element={<Error404Page />} />
         </Routes>
         <Footer renderPart={login} />

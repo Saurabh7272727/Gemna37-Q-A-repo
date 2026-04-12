@@ -48,57 +48,57 @@ const SelectMessagePortal = ({ safeMessages, timeGetter, WeekDay, isCurrentUser,
                     <div className="flex w-full max-w-full h-full bg-gray-950 text-white rounded-md shadow-lg overflow-hidden">
 
                         {
-                            isCurrentUser ?
-                                <div className="w-1/3 bg-gray-900 flex flex-col items-center justify-center p-6 relative">
+                            !isCurrentUser ?
+                                <div className="w-1/3 h-full min-h-1 bg-gray-900 flex flex-col items-center justify-center p-6 relative">
 
                                     <div className="flex flex-col items-center">
                                         <img
-                                            src={senderImageUrl ?? ""}
+                                            src={senderImageUrl}
                                             alt="S"
-                                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                                            className="w-12 h-[80%] rounded-full object-cover border-2 border-gray-700"
                                         />
                                         <span className="text-xs text-gray-400 mt-2">Sender</span>
                                     </div>
 
                                     <div className="flex flex-col items-center my-6">
-                                        <div className="w-[2px] h-10 bg-gradient-to-b from-gray-700 to-transparent"></div>
+                                        <div className="w-[4px] h-3 bg-gradient-to-b from-gray-700 to-transparent"></div>
                                         <div className="text-gray-500 text-xl animate-bounce">↓</div>
-                                        <div className="w-[2px] h-10 bg-gradient-to-t from-gray-700 to-transparent"></div>
+                                        <div className="w-[4px] h-3 bg-gradient-to-t from-gray-700 to-transparent"></div>
                                     </div>
 
                                     <div className="flex flex-col items-center">
                                         <img
-                                            src={receiverImageUrl ?? ""}
+                                            src={receiverImageUrl}
                                             alt="R"
-                                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                                            className="w-12 h-[80%] rounded-full object-cover border-2 border-gray-700"
                                         />
                                         <span className="text-xs text-gray-400 mt-2">Receiver</span>
                                     </div>
 
                                 </div>
                                 :
-                                <div className="w-1/3 bg-gray-900 flex flex-col items-center justify-center p-6 relative">
+                                <div className="w-1/3 h-full min-h-1 bg-gray-900 flex flex-col items-center justify-center p-6 relative">
 
                                     <div className="flex flex-col items-center">
                                         <img
                                             src={receiverImageUrl}
                                             alt="S"
-                                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                                            className="w-12 h-[80%] rounded-full object-cover border-2 border-gray-700"
                                         />
                                         <span className="text-xs text-gray-400 mt-2">Sender</span>
                                     </div>
 
                                     <div className="flex flex-col items-center my-6">
-                                        <div className="w-[2px] h-10 bg-gradient-to-b from-gray-700 to-transparent"></div>
+                                        <div className="w-[4px] h-2 bg-gradient-to-b from-gray-700 to-transparent"></div>
                                         <div className="text-gray-500 text-xl animate-bounce">↓</div>
-                                        <div className="w-[2px] h-10 bg-gradient-to-t from-gray-700 to-transparent"></div>
+                                        <div className="w-[4px] h-2 bg-gradient-to-t from-gray-700 to-transparent"></div>
                                     </div>
 
                                     <div className="flex flex-col items-center">
                                         <img
                                             src={senderImageUrl}
                                             alt="R"
-                                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                                            className="w-12 h-[80%] rounded-full object-cover border-2 border-gray-700"
                                         />
                                         <span className="text-xs text-gray-400 mt-2">Receiver</span>
                                     </div>

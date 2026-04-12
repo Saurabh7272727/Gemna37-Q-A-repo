@@ -1,6 +1,11 @@
 node_modules
 .env
+Backend/logs
+backend/logs
 
 ./sample_test/dist
 
 ./Backend/serviceAccount.json
+./Backend/JsonData
+./Backend/test.js
+./Backend/test2.js
