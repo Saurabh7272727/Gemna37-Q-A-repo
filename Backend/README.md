@@ -1,4 +1,4 @@
-# Gemna Backend
+# Gemna Backend @gemna.team
 
 Backend service for the Gemna platform. This service handles student onboarding, authentication, attendance workflows, real-time chat, notifications, background events, and runtime observability.
 
