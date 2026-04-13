@@ -7,24 +7,29 @@ import { env } from '../config/env.js';
 import { getRequestContext } from './requestContext.js';
 
 const { combine, timestamp, errors, json, colorize, printf } = winston.format;
+
+const platform = env.plateform?.toLowerCase();
+
+const isLocal = platform === 'localhost';
+const isRender = platform === 'render';
+const isVercel = platform === 'vercel';
+
+const enableFileLogging = isLocal || isRender;
+
 const logDirectory = path.resolve(process.cwd(), env.logDirectory);
 
-fs.mkdirSync(logDirectory, { recursive: true });
+if (enableFileLogging) {
+    fs.mkdirSync(logDirectory, { recursive: true });
+}
 
 const sensitiveKeyPattern = /(authorization|password|secret|token|cookie|privatekey|api[-_]?key)/i;
 
 const sanitizeValue = (value, key = '') => {
-    if (value === null || value === undefined) {
-        return value;
-    }
+    if (value === null || value === undefined) return value;
 
-    if (sensitiveKeyPattern.test(key)) {
-        return '[REDACTED]';
-    }
+    if (sensitiveKeyPattern.test(key)) return '[REDACTED]';
 
-    if (Array.isArray(value)) {
-        return value.map((entry) => sanitizeValue(entry));
-    }
+    if (Array.isArray(value)) return value.map((entry) => sanitizeValue(entry));
 
     if (value instanceof Error) {
         return {
@@ -36,7 +41,7 @@ const sanitizeValue = (value, key = '') => {
 
     if (typeof value === 'object') {
         return Object.fromEntries(
-            Object.entries(value).map(([nestedKey, nestedValue]) => [nestedKey, sanitizeValue(nestedValue, nestedKey)])
+            Object.entries(value).map(([k, v]) => [k, sanitizeValue(v, k)])
         );
     }
 
@@ -76,9 +81,9 @@ const consoleFormat = combine(
     errors({ stack: true }),
     enrichLogFormat(),
     printf(({ timestamp: time, level, message, requestId, method, path, traceId, ...meta }) => {
-        const contextParts = [requestId, method, path, traceId].filter(Boolean);
-        const metaString = Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : '';
-        return `${time} ${level}: ${message}${contextParts.length > 0 ? ` [${contextParts.join(' | ')}]` : ''}${metaString}`;
+        const ctx = [requestId, method, path, traceId].filter(Boolean);
+        const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+        return `${time} ${level}: ${message}${ctx.length ? ` [${ctx.join(' | ')}]` : ''}${metaStr}`;
     })
 );
 
@@ -94,25 +99,30 @@ const transports = [
         level: env.logLevel,
         format: env.enableConsoleJsonLogs ? fileFormat : consoleFormat,
     }),
-    new DailyRotateFile({
-        dirname: logDirectory,
-        filename: 'application-%DATE%.log',
-        datePattern: 'YYYY-MM-DD',
-        maxSize: env.logMaxSize,
-        maxFiles: env.logMaxFiles,
-        level: env.logLevel,
-        format: fileFormat,
-    }),
-    new DailyRotateFile({
-        dirname: logDirectory,
-        filename: 'error-%DATE%.log',
-        datePattern: 'YYYY-MM-DD',
-        maxSize: env.logMaxSize,
-        maxFiles: env.logMaxFiles,
-        level: 'error',
-        format: fileFormat,
-    }),
 ];
+
+if (enableFileLogging) {
+    transports.push(
+        new DailyRotateFile({
+            dirname: logDirectory,
+            filename: 'application-%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
+            maxSize: env.logMaxSize,
+            maxFiles: env.logMaxFiles,
+            level: env.logLevel,
+            format: fileFormat,
+        }),
+        new DailyRotateFile({
+            dirname: logDirectory,
+            filename: 'error-%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
+            maxSize: env.logMaxSize,
+            maxFiles: env.logMaxFiles,
+            level: 'error',
+            format: fileFormat,
+        })
+    );
+}
 
 export const logger = winston.createLogger({
     level: env.logLevel,
