@@ -344,7 +344,12 @@ const OtpVerificationHandler = async (req, res) => {
 
 const LoginHandler = async (req, res) => {
     const { email, id, name, password } = req.body;
+
     try {
+        if (String(email).length > 254 || String(password).length < 8) {
+            logger.warn('user are try to login with incorrect payload', { message: 'user are not found, check the email and password' });
+            return res.status(404).json({ message: "user are not found, check the email and password", success: false, status: 404 })
+        }
         if (email && password && name && id) {
             const findUserInStudentMain = await StudentModelMain.findOne({ email: email, _id: id }).populate("ref_id");
 
@@ -376,14 +381,14 @@ const LoginHandler = async (req, res) => {
             let findUserInStudentMain = await StudentModelMain.findOne({ email: email }).maxTimeMS(30000);
 
             if (!findUserInStudentMain) {
-                return res.status(404).json({ message: "check your email or password are wrong(not found)", success: false, status: 404 })
+                return res.status(404).json({ message: "user are not found, check the email and password", success: false, status: 404 })
             }
 
             findUserInStudentMain = await StudentModelMain.findOne({ email: email }).populate("ref_id");
 
             const checkPassword = await findUserInStudentMain.comparePassword(password);
             if (!checkPassword) {
-                return res.status(404).json({ message: "check your email or password are wrong", success: false, status: 404 })
+                return res.status(404).json({ message: "user are not found, check the email and password", success: false, status: 404 })
             }
 
             const jwt_token = jwt.sign(

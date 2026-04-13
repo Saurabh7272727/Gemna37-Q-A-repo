@@ -48,7 +48,7 @@ const UserAccessMiddleware = async (req, res, next) => {
 
         const checkToken = jwt.verify(jwt_token, env.jwtSecret);
         if (!checkToken) {
-            return res.status(422).json({ message: "Token are expired - 2 hours. for continue re-login", success: false, status: 422 });
+            return res.status(422).json({ message: "Token are expired - 4 hours. for continue re-login", success: false, status: 422 });
         }
 
         const { id, password, provider, credentialHash } = checkToken;
