@@ -72,7 +72,7 @@ export const env = {
     environment,
     isProduction: environment === 'production',
     isDevelopment: environment === 'development',
-    plateform: "localhost",
+    plateform: process.env.plateform,
     port: toNumber(process.env.PORT, 3000),
     backendUrl,
     frontendUrl,
