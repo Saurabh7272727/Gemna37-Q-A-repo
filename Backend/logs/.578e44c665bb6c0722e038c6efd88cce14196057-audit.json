@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\saura\\OneDrive\\Desktop\\Gemna(loop)\\backend\\logs\\.578e44c665bb6c0722e038c6efd88cce14196057-audit.json",
+    "files": [
+        {
+            "date": 1775975986077,
+            "name": "C:\\Users\\saura\\OneDrive\\Desktop\\Gemna(loop)\\backend\\logs\\error-2026-04-12.log",
+            "hash": "80fcc6d9c47c4a92da2c66dcd0b83a7b782fdcd97613a698fcd4d6b242b3a5b6"
+        }
+    ],
+    "hashType": "sha256"
+}
